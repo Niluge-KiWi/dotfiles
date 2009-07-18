@@ -121,7 +121,7 @@ alias siteuplait='sudo'
 # unless we are in /usr or /lib (lots of file in there...)
 cd() {
     builtin cd "$@"
-    if [ -z $(echo "$PWD" | grep "/usr\|/lib") ]; then
+    if [ -z $(echo "$PWD" | grep "/usr\|/lib") ] && [ "$PWD" != "$HOME" ]; then
 	ls
     fi
 }
