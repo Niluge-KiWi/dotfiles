@@ -91,6 +91,8 @@ alias gba='git branch -a'
 alias gc='git commit'
 alias gcm='git commit -m'
 alias gd='git diff'
+alias gf='git fetch'
+alias gu='gf && gr'
 alias gl='git pull'
 alias gp='git push'
 alias gr='git rebase origin/master'
@@ -121,6 +123,7 @@ alias siteuplait='sudo'
 # unless we are in /usr or /lib (lots of file in there...)
 cd() {
     builtin cd "$@"
+    # pas réussi à faire ça en un seul test...
     if [ -z $(echo "$PWD" | grep "/usr\|/lib") ] && [ "$PWD" != "$HOME" ]; then
 	ls
     fi
