@@ -1,0 +1,855 @@
+;; -*- coding: utf-8 -*-
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(column-number-mode t)
+ '(inhibit-startup-echo-area-message (user-login-name))
+ '(inhibit-startup-screen t)
+ '(initial-scratch-message nil)
+ '(menu-bar-mode nil)
+ '(scroll-bar-mode nil)
+ '(show-paren-mode t)
+ '(tool-bar-mode nil)
+ '(transient-mark-mode nil)
+ '(global-font-lock-mode t))
+
+(setq inhibit-splash-screen t)
+
+;;library path : used for require, load-library, autoload ...
+;; search in each subdir of ~/.emacs.d/
+(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
+    (let* ((my-lisp-dir "~/.emacs.d/")
+	   (default-directory my-lisp-dir))
+      (setq load-path (cons my-lisp-dir load-path))
+      (normal-top-level-add-subdirs-to-load-path)))
+
+;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/" ))
+
+;; default to better frame titles
+(setq frame-title-format
+      (concat  "%b - emacs@" system-name))
+
+
+(require 'tramp)
+
+;; Color Themes
+;;(require 'color-theme)
+;;(color-theme-initialize)
+(require 'zenburn)
+(color-theme-zenburn)
+
+;; sqlplus mode pour oracle
+(require 'sqlplus)
+(add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
+
+(autoload 'whizzytex-mode
+"whizzytex"
+"WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
+
+;;mode ido
+(require 'ido)
+(ido-mode 1)
+
+(require 'php-mode)
+(add-hook 'php-mode-hook
+	  '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
+
+
+;; pour gérer les lignes trop longues
+;;  "<smeuuh> lll pour local longlines, et ll pour global long lines"
+(define-globalized-minor-mode ll
+  longlines-mode
+  (lambda () (longlines-mode t)))
+;;local longlines
+(defalias 'lll 'longlines-mode)
+;;adapt filling to window size
+(setq longlines-wrap-follows-window-size t)
+
+
+;; Toggle between PHP & HTML mode.  Useful when working on
+;; php files, that can been intertwined with HTML code
+;; adapted from JonathanArnoldDotEmacs
+(defun toggle-php-html-mode ()
+  (interactive)
+  "Toggle mode between PHP & HTML modes"
+  (cond ((string-match "HTML" mode-name)
+         (php-mode))
+        ((string= mode-name "PHP")
+         (html-mode))))
+
+(global-set-key [f5] 'toggle-php-html-mode)
+
+
+;; ess Emacs Speaks Statistics
+;;(require 'ess-site)
+
+;;icomplete : completion for commands that don't use ido (like help)
+(icomplete-mode 1)  
+
+;;pas de curseur clignotant
+(blink-cursor-mode -1)
+
+
+;;paredit
+(autoload 'paredit-mode "paredit"
+  "Minor mode for pseudo-structurally editing Lisp code."
+  t)
+;;undefine keys I use
+(eval-after-load 'paredit
+  '(progn
+     (define-key paredit-mode-map (kbd "M-<down>")
+       nil)
+     (define-key paredit-mode-map (kbd "M-<up>")
+       nil)
+     (define-key paredit-mode-map (kbd "M-\"")
+       nil)
+     (define-key paredit-mode-map (kbd "M-q")
+       'paredit-backward-kill-word)))
+;;toggle paredit with f6
+(global-set-key (kbd "<f6>") 'paredit-mode)
+
+
+;;Latex mode
+;;don't ask to cache preamble
+(setq preview-auto-cache-preamble t)
+;;indent when pressing RET
+(setq TeX-newline-function 'newline-and-indent)
+
+
+;;-------C mode
+(setq c-default-style "linux")
+;;(setq-default c-basic-offset 4)
+(setq-default c-basic-offset 8)
+
+;;'electric' indentation : indent on newline
+(add-hook 'c-mode-common-hook (lambda ()
+                                (define-key c-mode-base-map "\C-m"
+                                  'c-context-line-break)))
+;--------shell
+(setq-default comint-scroll-to-bottom-on-input (quote all))
+(setq-default comint-move-point-for-output t)
+(ansi-color-for-comint-mode-on)
+
+;--------compilation
+
+
+;;make compile window disappear after successful compilation
+(setq compilation-finish-function
+      (lambda (buf str)
+	(if (string-match "*Compilation*" (buffer-name buf))
+	    (if (string-match "abnormally" str)
+		(message "There were errors :-(")
+	      ;;no errors, make the compilation window go away in 2 second
+	      (run-at-time 2 nil
+			   (lambda (buf)
+			     (delete-windows-on buf)
+			     (bury-buffer buf))
+			   buf)
+	      (message "No errors :-)")))))
+
+;;my-compile is smarter about how to display the new buffer
+(defun display-buffer-by-splitting-largest (buffer force-other-window)
+  "Display buffer BUFFER by splitting the largest buffer vertically, except if
+  there is already a window for it."
+  (or (get-buffer-window buffer)
+      (let ((new-win
+	     (with-selected-window (get-largest-window)
+	       (split-window-vertically))))
+	(set-window-buffer new-win buffer)
+	new-win)))
+
+(defun my-compile ()
+  "Ad-hoc display of compilation buffer."
+  (interactive)
+  (let ((display-buffer-function 'display-buffer-by-splitting-largest))
+    (call-interactively 'compile)))
+
+;;misc compilation settings
+(setq-default
+ compile-command "make"
+ compilation-read-command nil
+ compilation-scroll-output 'first-error
+ compilation-ask-about-save nil
+ compilation-window-height 5
+ compilation-auto-jump-to-first-error t)
+
+;;compilation by C-c C-c in modes that don't shadow it
+(global-unset-key (kbd "C-M-c"))
+(global-set-key (kbd "C-M-c C-M-c") 'my-compile)
+;; ;;force the binding in programming modes
+;; (defun unset-c-c () (local-unset-key (kbd "C-c C-c")))
+;; (add-hook 'c-mode-common-hook 'unset-c-c)
+;; (add-hook 'LaTeX-mode-hook 'unset-c-c)
+;; (add-hook 'bibtex-mode-hook 'unset-c-c)
+;; (add-hook 'makefile-mode-hook 'unset-c-c)
+
+ 
+
+
+;;dictionnaire francais
+;;(ispell-change-dictionary "francais")
+;;(ispell-change-dictionary "american")
+
+;;supprimer la sélection quand on tape
+(delete-selection-mode 1)
+
+;;qwerty du pauvre
+(global-set-key (kbd "M-é") 'split-window-vertically)
+(global-set-key (kbd "M-\"") 'split-window-horizontally)
+(global-set-key (kbd "M-&") 'delete-other-windows)
+(global-set-key (kbd "M-à") 'delete-window)
+
+
+;;make tab the ultimate completion key
+(defmacro ad-add-advice-to-key (key expr)
+  "Around advice the key KEY with expression EXPR. KEY should be
+a key in the format accepted by key-binding and such, and EXPR an
+expression of the same type as those required by around advices"
+  `(add-hook 'pre-command-hook
+	     (lambda ()
+	       (when (equal (this-command-keys-vector) ,key)
+		 (ad-add-advice this-command
+				'(azerrswdf ;arbitrary advice name
+				  nil	    ;not protected
+				  t	    ;activated
+				  (lambda ()
+				    ,expr
+				    (ad-unadvise this-command)))
+				'around
+				'last)
+		 (ad-activate this-command)))))
+
+(ad-add-advice-to-key [9]
+		      (let ((p (point)))
+			ad-do-it
+			(when (and (not (minibuffer-window-active-p (minibuffer-window)))
+				   (= p (point))
+				   (not (bolp))
+				   (looking-at "\\_>"))
+			  (dabbrev-expand nil))))
+
+
+;;Emacs is a text editor, make sure your text files end in a newline
+(setq require-final-newline 't)
+
+
+;;fix emacs insane scrolling : don't visually move the cursor.
+;;not perfect, has some bugs
+(require 'scroll-in-place)
+
+;;browse kill ring to look for forgotten copy/paste
+(require 'browse-kill-ring)(global-set-key (kbd "C-c k") 'browse-kill-ring)
+
+
+
+;--------raccourcis claviers en plus
+(defun reload-config ()
+  (interactive)
+  (load-file "~/.emacs"))
+(global-set-key "\C-x\C-r" 'reload-config)
+
+;;C-< et M-< pour aller au début et à la fin d'un buffer
+(global-set-key [(meta <)] 'beginning-of-buffer)
+(global-set-key [(control <)] 'end-of-buffer)
+
+
+;;I just want C-x k to kill the buffer instead of just prompting me
+;;for it like ido does
+(global-set-key (kbd "C-x k") (lambda ()
+                                (interactive) (kill-buffer (current-buffer))))
+;;like C-x k, but nicer :-)
+(global-set-key (kbd "C-x l") 'bury-buffer)
+;;could not live without
+(global-set-key (kbd "M-q") 'backward-kill-word)
+
+;;rebind previous M-q binding to M-s
+(global-set-key (kbd "M-s") 'fill-paragraph)
+;;nice to have, coherent with other keybindings, and bound to nothing
+;;by default, so ...
+(global-set-key (kbd "M-n") 'scroll-up)
+(global-set-key (kbd "M-p") 'scroll-down)
+;;M-g defaults to a prefix, I just rebind next/previous error and bind
+;;M-g to goto
+(global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "C-c n") 'next-error)
+(global-set-key (kbd "C-c p") 'previous-error)
+;;TODO : change c-mode horrible commenting method
+(global-set-key (kbd "C-c u") 'uncomment-region)
+(global-set-key (kbd "C-c c") 'comment-region)
+;;handy, but buggy on terminals
+(global-set-key (kbd "C-,") 'undo)
+
+;;C-c left/right to undo/redo changes in window configuration
+(winner-mode 1)
+
+;;move between windows with meta-keypad
+(windmove-default-keybindings 'meta)
+
+
+;; pour éviter que ada-mode me pique le raccourci clavier
+(add-hook 'ada-mode-hook (lambda ()
+			   (local-unset-key (kbd "<C-tab>"))))
+
+;;fast switching between two buffers
+(global-set-key [\s-tab] (lambda ()
+                           (interactive)
+                           (switch-to-buffer (other-buffer))))
+(global-set-key [\C-tab] 'next-buffer)
+(global-set-key [\C-\S-iso-lefttab] 'previous-buffer)
+;;make use of that useless key to do something useful. This can fail,
+;;so protect
+(condition-case err
+    (global-set-key (kbd "²") (lambda () (interactive) (insert "\\")))
+  (error
+   (message "Failed to bind key to \\. Live with it.")))
+
+;;zap to char -> zap up to char
+;;found at emacs wiki, added the repeat part
+(defun zap-up-to-char (arg char)
+  "Kill up to, but not including ARGth occurrence of CHAR.
+Case is ignored if `case-fold-search' is non-nil in the current buffer.
+Goes backward if ARG is negative; error if CHAR not found.
+Ignores CHAR at point."
+  (interactive "p\ncZap up to char: ")
+  (let ((direction (if (>= arg 0) 1 -1)))
+    (kill-region (point)
+		 (progn
+		   (forward-char direction)
+		   (unwind-protect
+		       (search-forward (char-to-string char) nil nil arg)
+		     (backward-char direction))
+		   (point))))
+  ;;repeat same key to repeat command. adapted code found in kmacro
+  (message "Press %s to repeat" (char-to-string char))
+  (if (equal char (read-event))
+      (zap-up-to-char arg char)
+    (setq unread-command-events (list last-input-event))))
+
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
+;;zap to isearch
+(defun zap-to-isearch ()
+  (interactive)
+  (kill-region isearch-opoint isearch-other-end)
+  (isearch-done)
+  (if (> isearch-other-end isearch-opoint)
+      (backward-word)
+    (forward-word)))
+
+(define-key isearch-mode-map (kbd "M-z") 'zap-to-isearch)
+
+;;misc functions
+(defun indent-whole-buffer ()
+  "indent whole buffer"
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;macros
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;macros on alt-gr + some key
+;;use M-x insert-kbd-macro to insert the definition of the macro
+;;you just typed
+(setq latex-macros
+      '(
+	;;F : frac
+	("đ" "\\frac{}{}\C-b\C-b\C-b")
+	;;Q : section
+	("@" "\\section{}\C-b")
+	;;S : subsection
+	("ß" "\\subsection{}\C-b")
+	;;D : subsubsection
+	("ð" "\\subsubsection{}\C-b")
+	;;C : cite
+	("¢" "\\cite{}\C-b")
+	;;R : ref
+	("¶" "\\ref{}\C-b")
+	;;E : end
+	("€" "\\end{}\C-b")
+	;;B : begin
+	("”" "\\begin{}\C-b")
+	;;I : item
+	("→" "\\item ")
+	))
+
+(setq c-common-macros
+      '(
+	;;F : for
+	("‘" [?f ?o ?r ?\( ?i ?  ?= ? ?0 ?\; ?  ?i ?  ?< ?  ?n
+		 ?\; ?  ?i ?+ ?+ ?\) ?  ?\{ return tab return ?\} ?\C-p
+		 ?\C-p ?\C-a ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f
+		 ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-d])
+	))
+
+(defun apply-macro-binding (list)
+  "Takes a list ((key macro) ...) and binds macro to key.
+key is any argument that can be given to global-set-key"
+  (mapcar (lambda (el)
+	    (local-set-key (nth 0 el) (nth 1 el)))
+	  list))
+
+(add-hook 'LaTeX-mode-hook
+	  (lambda ()
+	    (interactive)
+	    (apply-macro-binding latex-macros)))
+(add-hook 'c-mode-common-hook
+	  (lambda ()
+	    (interactive)
+	    (apply-macro-binding c-common-macros)))
+
+(put 'downcase-region 'disabled nil)
+(put 'upcase-region 'disabled nil)
+
+
+
+;; widen window : widen selected window
+(require 'widen-window)
+(global-widen-window-mode t)
+;; et on ajoute les fonctions utilisées par windmove, comme ça on a tout ce qu'il faut!
+(add-to-list 'ww-advised-functions 'windmove-up)
+(add-to-list 'ww-advised-functions 'windmove-down)
+(add-to-list 'ww-advised-functions 'windmove-right)
+(add-to-list 'ww-advised-functions 'windmove-left)
+
+
+
+;;;;;;;;;;;;;
+;; ERCCCCC ;;
+;;;;;;;;;;;;;
+
+(require 'erc)
+
+
+;;--------------------
+;; Helper functions
+;;--------------------
+
+;;notification
+(setq do-not-disturb nil)
+;;set this if you don't want to be disturbed by notifications
+;;(setq do-not-disturb t)
+(defun notify (title message)
+  "Notify user by graphical display"
+  (unless do-not-disturb
+    (shell-command-to-string (format
+			      "notify-send %s %s"
+			      (shell-quote-argument (concat "" title))
+			      (shell-quote-argument (concat "" message))))))
+
+;;ERC tray. Needs tray_daemon, http://smeuuh.free.fr/tray_daemon/
+;;defined in emacs_perso : list of regexps for which we don't blink
+;;the tray icon
+(setq erc-tray-inhibit-one-activation nil)
+(setq erc-tray-ignored-channels nil)
+(setq erc-tray-state nil)
+(defun erc-tray-change-state-aux (arg)
+  "Enables or disable blinking, depending on arg (non-nil or nil)"
+  (unless (eq erc-tray-state arg)
+    (shell-command-to-string
+     (concat "echo " (if arg "B" "b") " > /tmp/tray_daemon_control"))
+    (setq erc-tray-state arg)))
+(defun erc-tray-change-state (arg)
+  "Enables or disable blinking, depending on arg (t or nil).
+Additional support for inhibiting one activation (quick hack)"
+  (if erc-tray-inhibit-one-activation
+      (setq erc-tray-inhibit-one-activation nil)
+    (erc-tray-change-state-aux arg)))
+
+
+;;--------------------
+;;Settings
+;;--------------------
+(setq erc-modules '(autojoin button completion irccontrols list
+			     log match menu move-to-prompt
+			     netsplit networks noncommands
+			     readonly ring scrolltobottom
+			     services stamp track smiley
+			     autoaway truncate))
+
+;;301 : "x is away"
+;;305 306 : away messages
+(setq ;;erc-hide-list '("301" "305" "306")
+      erc-server-reconnect-attempts t
+      erc-prompt ">"
+      erc-minibuffer-ignored t
+      erc-query-display 'buffer
+      erc-auto-query 'bury
+      erc-current-nick-highlight-type 'all
+      erc-interpret-mirc-color t
+      erc-log-channels-directory "~/.erclogs"
+      erc-log-write-after-insert t
+      erc-log-write-after-send t
+      erc-log-file-coding-system 'utf-8
+      erc-generate-log-file-name-function 'erc-generate-log-file-name-short
+      erc-prompt-for-nickserv-password nil
+      erc-prompt-for-password nil
+      erc-track-enable-keybindings nil
+      erc-track-exclude-server-buffer t
+      erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "305" "306" "333" "353")
+      erc-track-position-in-mode-line t
+      erc-track-showcount t
+      erc-track-switch-direction 'leastactive
+      erc-track-visibility 'visible
+      erc-timestamp-only-if-changed-flag t
+      erc-timestamp-format "%H:%M"
+      erc-hide-timestamps t
+      erc-pcomplete-order-nickname-completions t
+      erc-insert-timestamp-function 'erc-insert-timestamp-right
+      ;;erc-header-line-format "%n on %t (%m,%l) %o"
+      erc-auto-discard-away t
+      erc-autoaway-idle-seconds (* 60 30)
+      erc-autoaway-message "Away"
+      erc-truncate-buffer-on-save t)
+
+(add-to-list 'auto-coding-alist '("\\.erclogs/.*\\.txt" . utf-8))
+
+
+;;--------------------
+;;Unread messages bar
+;;--------------------
+(eval-after-load 'erc-track
+  '(progn
+     (defun erc-bar-move-back (n)
+       "Moves back n message lines. Ignores wrapping, and server messages."
+       (interactive "nHow many lines ? ")
+       (re-search-backward "^.*<.*>" nil t n))
+
+     (defun erc-bar-update-overlay ()
+       "Update the overlay for current buffer, based on the content of
+erc-modified-channels-alist. Should be executed on window change."
+       (interactive)
+       (let* ((info (assq (current-buffer) erc-modified-channels-alist))
+	      (count (cadr info)))
+	 (if (and info (> count erc-bar-threshold))
+	     (save-excursion
+	       (end-of-buffer)
+	       (when (erc-bar-move-back count)
+		 (let ((inhibit-field-text-motion t))
+		   (move-overlay erc-bar-overlay
+				 (line-beginning-position)
+				 (line-end-position)
+				 (current-buffer)))))
+	   (delete-overlay erc-bar-overlay))))
+
+     (defvar erc-bar-threshold 1
+       "Display bar when there are more than erc-bar-threshold unread messages.")
+     (defvar erc-bar-overlay nil
+       "Overlay used to set bar")
+     (setq erc-bar-overlay (make-overlay 0 0))
+     (overlay-put erc-bar-overlay 'face '(:underline "black"))
+     ;;put the hook before erc-modified-channels-update
+     (defadvice erc-track-mode (after erc-bar-setup-hook
+				      (&rest args) activate)
+       ;;remove and add, so we know it's in the first place
+       (remove-hook 'window-configuration-change-hook 'erc-bar-update-overlay)
+       (add-hook 'window-configuration-change-hook 'erc-bar-update-overlay))
+     (add-hook 'erc-send-completed-hook (lambda (str)
+					  (erc-bar-update-overlay)))))
+
+
+;;--------------------
+;;channel change commands
+;;--------------------
+(defun irc-dwim (arg)
+  "Runs IRC (by function irc, to be written for your particular servers)
+  if it is not running, use erc-track to switch to last modified
+  chan if it is."
+  (interactive "p")
+  (require 'erc-track)
+  (if (erc-buffer-list)
+      (my-track-switch-buffer arg)
+    (irc)))
+(global-set-key [f9] 'irc-dwim)
+
+(defun my-track-switch-buffer (arg)
+  "If there are unread messages, switch to them. Else, switch to latest seen non-erc buffer.
+Differs a bit from erc's implementation : robust to buffer kills and stuff like that"
+  (interactive "p")
+  (if erc-modified-channels-alist
+      (erc-track-switch-buffer arg)
+    (let ((blist (buffer-list)))
+      (while blist
+	(unless (or (eq 'erc-mode (buffer-local-value 'major-mode (car blist)))
+		    (minibufferp (car blist)))
+	  (switch-to-buffer (car blist))
+	  (setq blist nil))
+	(setq blist (cdr blist))))))
+
+
+;;--------------------
+;; Tray control
+;;--------------------
+;; (defun erc-buffer-visible (buffer)
+;;   "Returns nil when the buffer `buffer' is not visible.
+;; Currently returns nil when the selected window does not display the buffer."
+;;   ;;(not (eq t (frame-visible-p (selected-frame)))))
+;;   ;;TODO: need to parse the window-tree and return nil when the buffer is not displayed in any window
+;;   (eq (get-buffer-window buffer) (selected-window)))
+;;useless : erc-buffer-visible already exists... to test
+(defun erc-tray-update-state ()
+  "Update the state of the tray icon. Blink when some new event
+appears when you're not looking. Events are changes to
+erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
+  (interactive)
+  ;;stop blinking tray when there're no channels in list
+  (unless erc-modified-channels-alist
+    (erc-tray-change-state nil))
+  ;;maybe make tray blink
+  ;;filter list according to erc-tray-ignored-channels, 
+  ;;and to displayed buffers
+  (let ((filtered-list erc-modified-channels-alist))
+    (mapc (lambda (el)
+	    (mapc (lambda (reg)
+		    (when (string-match reg (buffer-name (car el)))
+		      (setq filtered-list
+			    (remove el filtered-list))))
+		  erc-tray-ignored-channels)
+	    (when (erc-buffer-visible (car el))
+	      (setq filtered-list
+		    (remove el filtered-list))))
+	  filtered-list)
+    (when filtered-list
+      (erc-tray-change-state t))))
+
+;;blink if away and activity
+(add-hook 'erc-track-list-changed-hook 'erc-tray-update-state)
+
+;;stop blinking whenever frame is set visible
+(add-hook 'erc-mode-hook (lambda ()
+			   (interactive)
+			   (define-key special-event-map [make-frame-visible]
+			     (lambda () (interactive)
+			       (erc-bar-update-overlay)
+			       (erc-tray-change-state nil)
+			       (erc-modified-channels-update)))))
+
+
+;;--------------------
+;; Notification control
+;;--------------------
+(defun erc-notify-if-hl (matched-type nick msg)
+  "Notify whenever someone highlights you and you're away"
+  (when (and (eq matched-type 'current-nick)
+	     (not (erc-buffer-visible nick)))
+    (notify (format "HL de %s" (erc-extract-nick nick))
+	    msg)))
+;;notify if away and highlighted
+(add-hook 'erc-text-matched-hook 'erc-notify-if-hl)
+
+
+;; not used yet
+(defun my-notify-JOIN (proc parsed)
+  "Display notification of user connections on bitlbee"
+  (let ((nick (erc-extract-nick (erc-response.sender parsed)))
+	(chan (erc-response.contents parsed)))
+    (when (string= chan "&bitlbee")
+      (notify nick "Connexion MSN")))
+  nil)
+;;notify if someone joins on bitlbee
+(add-hook 'erc-server-JOIN-functions 'my-notify-JOIN)
+
+(defun my-notify-PRIVMSG (proc parsed)
+  "Popup whenever someone privmsgs you and you're not seeing it"
+  (let ((nick (car (erc-parse-user (erc-response.sender parsed))))
+	(target (car (erc-response.command-args parsed)))
+	(msg (erc-response.contents parsed)))
+    (when (and (string= target (erc-current-nick))
+	       (not (erc-buffer-visible nick))
+	       (not (erc-is-message-ctcp-and-not-action-p msg)))
+      ;;prevents from blinking on messages for which there is already
+      ;;a notification
+      ;; (setq erc-tray-inhibit-one-activation t)
+      (notify (format "PM de %s" nick)
+	      msg)))
+  nil)
+;;notify if away and pmed
+(add-hook 'erc-server-PRIVMSG-functions 'my-notify-PRIVMSG)
+
+
+;;--------------------
+;;notify in query buffers when someone appears/disappears
+;;--------------------
+(erc-define-catalog
+ 'english
+ '((my_notify_join      . "%n is back")
+   (my_notify_quit      . "%n is gone")))
+
+(defun my-notify-in-privmsg-JOIN (proc parsed)
+  (let* ((nick (erc-extract-nick (erc-response.sender parsed)))
+	 (buff (erc-get-buffer nick proc)))
+    (when buff
+      (erc-display-message
+       parsed 'notice buff
+       'my_notify_join ?n nick)))
+  nil)
+(add-hook 'erc-server-JOIN-functions 'my-notify-in-privmsg-JOIN)
+
+(defun my-notify-in-privmsg-QUIT (proc parsed)
+  (let* ((nick (erc-extract-nick (erc-response.sender parsed)))
+	 (buff (erc-get-buffer nick proc)))
+    (when buff
+      (erc-display-message
+       parsed 'notice buff
+       'my_notify_quit ?n nick)))
+  nil)
+(add-hook 'erc-server-QUIT-functions 'my-notify-in-privmsg-QUIT)
+
+
+;;--------------------
+;;prompts for commands
+;;--------------------
+(defun erc-query-prompt ()
+  "Prompts for someone to query"
+  (interactive)
+  (let ((completion-ignore-case t))
+    (let ((server (erc-server-buffer))
+	  (target (completing-read "Query sur: "
+				   (erc-get-server-nickname-alist)
+				   nil ;;no predicate, require match
+				   t)))
+      (erc-query target server))))
+(defun erc-whois-prompt ()
+  "Prompt for someone to do whois on"
+  (interactive)
+  (let ((completion-ignore-case t))
+    (let ((target (completing-read "Whois sur: "
+				   (erc-get-server-nickname-alist)
+				   nil ;;no predicate, require match
+				   t)))
+      (erc-cmd-WHOIS target))))
+
+(defun erc-names-prompt ()
+  "Get names of channel, either using /names or blist if using bitlbee"
+  (interactive)
+  (if (string-match "&bitlbee" (buffer-name))
+      (erc-send-message "root: blist")
+    (erc-channel-names)))
+
+;;--------------------
+;; Setting away
+;;--------------------
+(require 'erc-autoaway)
+(defun erc-toggle-away ()
+  "Toggles away status in ERC."
+  (interactive)
+  (if (erc-away-time)
+      (erc-autoaway-set-back)
+    (erc-autoaway-set-away erc-autoaway-idle-seconds)))
+
+;;--------------------
+;; Toggle tracking
+;;--------------------
+(defvar erc-track-exclude '())
+(defun toggle-channel-track ()
+  "Toggle exclude status of current channel"
+  (interactive)
+  (let ((name (buffer-name (current-buffer))))
+    (if (member name
+		erc-track-exclude)
+	(progn
+	  (setq erc-track-exclude (remove name erc-track-exclude))
+	  (message "Tracking on"))
+      (progn
+	(add-to-list 'erc-track-exclude name)
+	(message "Tracking off")))))
+
+
+;;--------------------
+;; browse url before point with just a keystroke
+;;--------------------
+(require 'thingatpt)
+(defun browse-url-before-point ()
+  (interactive)
+  (save-excursion
+    (save-match-data
+      (if (re-search-backward thing-at-point-url-regexp 0 t)
+	  (browse-url (match-string 0))
+	(message "Pas d'URL dans le buffer")))))
+
+;;--------------------
+;; logs & view logs
+;;--------------------
+(defun erc-generate-log-file-name-like-xchat (buffer target nick server port)
+  "Generates a log-file name like one generated by xchat.
+This results in a file name of the form network-(#channel|nick).log.
+This function is a possible value for `erc-generate-log-file-name-function'."
+  (require 'erc-networks)
+  (let* ((network (or (with-current-buffer buffer (erc-network-name)) server))
+	 (file (concat
+		network
+		"-"
+		(or target network)
+		".log")))
+    ;; we need a make-safe-file-name function.
+    (convert-standard-filename file)))
+(setq erc-generate-log-file-name-function 'erc-generate-log-file-name-like-xchat)
+
+(defun erc-browse-log ()
+  (interactive)
+  (find-file (erc-current-logfile))
+  (end-of-buffer))
+
+
+;;--------------------
+;; Setup keys
+;;--------------------
+(defun erc-setup-my-commands ()
+  (interactive)
+  (global-set-key [escape] 'irc-dwim)
+  (local-set-key (kbd "C-c C-a") 'erc-toggle-away)
+  (local-set-key (kbd "C-c C-u") 'browse-url-before-point)
+  (local-set-key (kbd "C-c C-q") 'erc-query-prompt)
+  (local-set-key (kbd "C-c C-n") 'erc-names-prompt)
+  (local-set-key (kbd "C-c C-w") 'erc-whois-prompt)
+  (local-set-key (kbd "C-c C-l") 'erc-browse-log))
+(add-hook 'erc-mode-hook 'erc-setup-my-commands)
+
+;; I don't know why, something messes up with erc-bol, so I'm redefining it
+(defun erc-bol ()
+  "Move `point' to the beginning of the current line.
+
+This places `point' just after the prompt, or at the beginning of the line."
+  (interactive)
+  ;;was (forward-line 0)
+  (beginning-of-line)
+  (when (get-text-property (point) 'erc-prompt)
+    (goto-char erc-input-marker))
+  (point))
+
+
+;;read personal info (ERC stuff)
+(load-file "~/.emacs.d/perso.el")
+
+;;Highlights spaces at the end of lines
+(setq show-trailing-whitespace t)
+
+
+
+;; kde
+
+;;cmake
+; Add cmake listfile names to the mode list.
+(setq auto-mode-alist
+	  (append
+	   '(("CMakeLists\\.txt\\'" . cmake-mode))
+	   '(("\\.cmake\\'" . cmake-mode))
+	   auto-mode-alist))
+
+(autoload 'cmake-mode "~/.emacs.d/cmake-mode.el" t)
+
+
+;; uniquify.el is a helper routine to help give buffer names a better unique name.
+(when (load "uniquify" 'NOERROR)
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+  ;(setq uniquify-buffer-name-style 'post-forward)
+  )
+
+;; winner-mode:
+;; allows to “undo” (and “redo”) changes in the window configuration with the key commands ‘C-c left’ and ‘C-c right’
+(winner-mode t)
