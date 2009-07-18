@@ -1,5 +1,12 @@
 ## .bashrc perso (versionné) ##
 
+## How to use : add this to .bashrc
+
+# ## ajouts communs à toutes mes installations (versionné) ##
+# if [ -f ~/.bash_perso ]; then
+#    . ~/.bash_perso
+# fi
+
 ## from debian ##
 
 # If not running interactively, don't do anything
@@ -82,6 +89,7 @@ alias svndiff='diff -b -u -p "$@"'
 alias gb='git branch'
 alias gba='git branch -a'
 alias gc='git commit'
+alias gcm='git commit -m'
 alias gd='git diff'
 alias gl='git pull'
 alias gp='git push'
