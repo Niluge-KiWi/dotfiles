@@ -93,7 +93,7 @@ alias gcm='git commit -m'
 alias gd='git diff'
 alias gl='git pull'
 alias gp='git push'
-alias gr='git rebase origin master'
+alias gr='git rebase origin/master'
 alias gst='git status | less'
 
 #M-q = delete backward
