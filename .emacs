@@ -51,8 +51,20 @@
 
 ;;mode ido
 (require 'ido)
-(ido-mode 1)
+(ido-mode t)
+(setq ido-enable-flex-matching t)
 
+
+;; cancel and redo windows configurations
+(require 'winner)
+(setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
+
+(global-set-key (kbd "<C-s-left>") 'winner-undo)
+(global-set-key (kbd "<C-s-right>") 'winner-redo)
+(winner-mode t) ;; turn on the global minor mode
+
+
+;; un bout de php
 (require 'php-mode)
 (add-hook 'php-mode-hook
 	  '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
@@ -408,14 +420,13 @@ key is any argument that can be given to global-set-key"
 
 
 ;; widen window : widen selected window
-(require 'widen-window)
-(global-widen-window-mode t)
-;; et on ajoute les fonctions utilisées par windmove, comme ça on a tout ce qu'il faut!
-(add-to-list 'ww-advised-functions 'windmove-up)
-(add-to-list 'ww-advised-functions 'windmove-down)
-(add-to-list 'ww-advised-functions 'windmove-right)
-(add-to-list 'ww-advised-functions 'windmove-left)
-
+;; (require 'widen-window)
+;; (global-widen-window-mode t)
+;; ;; et on ajoute les fonctions utilisées par windmove, comme ça on a tout ce qu'il faut!
+;; (add-to-list 'ww-advised-functions 'windmove-up)
+;; (add-to-list 'ww-advised-functions 'windmove-down)
+;; (add-to-list 'ww-advised-functions 'windmove-right)
+;; (add-to-list 'ww-advised-functions 'windmove-left)
 
 
 ;;;;;;;;;;;;;
@@ -829,6 +840,9 @@ This places `point' just after the prompt, or at the beginning of the line."
 (setq show-trailing-whitespace t)
 
 
+;; un peu de mercurial 
+(require 'mercurial)
+
 
 ;; kde
 
@@ -849,6 +863,9 @@ This places `point' just after the prompt, or at the beginning of the line."
   (setq uniquify-buffer-name-style 'forward)
   ;(setq uniquify-buffer-name-style 'post-forward)
   )
+
+;; Join this line to previous and fix up whitespace at join.
+(global-set-key (kbd "C-c j") 'join-line)
 
 ;; winner-mode:
 ;; allows to “undo” (and “redo”) changes in the window configuration with the key commands ‘C-c left’ and ‘C-c right’
