@@ -1,5 +1,6 @@
-#include <gtk/gtk.h>
 #include <glib.h>
+#include <gtk/gtk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -8,7 +9,11 @@
 #include <sys/stat.h>
 
 GtkStatusIcon *status;
-char *icon = "icon.png";
+char *icon_normal = "icon_blue.png";
+char *icon_beeping = "icon_red.png";
+GdkPixbuf *pixbuf_normal;
+GdkPixbuf *pixbuf_beeping;
+
 char *fifo = "/tmp/tray_daemon_control";
 int fifo_fd;
 gint timeout_callback( gpointer data ) {
@@ -17,10 +22,10 @@ gint timeout_callback( gpointer data ) {
 		switch(command)
 		{
 		case 'b':
-			gtk_status_icon_set_blinking(status, FALSE);
+			gtk_status_icon_set_from_pixbuf(status, pixbuf_normal);
 			break;
 		case 'B':
-			gtk_status_icon_set_blinking(status, TRUE);
+			gtk_status_icon_set_from_pixbuf(status, pixbuf_beeping);
 			break;
 		case 'v':
 			gtk_status_icon_set_visible(status, FALSE);
@@ -53,9 +58,12 @@ int main(int argc, char **argv)
 
 	//init GTK
 	gtk_init(&argc, &argv);
-	status = gtk_status_icon_new_from_file (icon);
+	GError *error = NULL;
+	pixbuf_normal = gdk_pixbuf_new_from_file(icon_normal, &error);
+	pixbuf_beeping = gdk_pixbuf_new_from_file(icon_beeping, &error);
+	status = gtk_status_icon_new_from_pixbuf (pixbuf_normal);
 	gtk_status_icon_set_visible(status, TRUE);
-	gtk_timeout_add(500, timeout_callback, NULL);
+	gtk_timeout_add(200, timeout_callback, NULL);
 	gtk_main();
 	close(fifo_fd);
 	return 0;
