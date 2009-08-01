@@ -524,7 +524,7 @@ Additional support for inhibiting one activation (quick hack)"
       erc-hide-timestamps nil
       erc-pcomplete-order-nickname-completions t
       ;;erc-header-line-format "%n on %t (%m,%l) %o"
-      erc-auto-discard-away t
+      erc-auto-discard-away nil
       erc-autoaway-idle-seconds (* 60 30)
       erc-autoaway-message "Away"
       erc-fill-variable 'erc-fill-static
