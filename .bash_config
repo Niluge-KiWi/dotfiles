@@ -129,3 +129,7 @@ cd() {
 	ls
     fi
 }
+
+
+# un copy par ssh
+# tar cvf - /tarred_up_director | ssh -l root Linux_Server 'cd /tmp ; tar xf -' 
