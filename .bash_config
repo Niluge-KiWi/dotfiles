@@ -70,7 +70,7 @@ fi
 # alias d'éditeurs (from smeuuh)
 alias e='emacs'
 alias enw='emacs -nw'
-alias ec='emacsclient --no-wait -a emacs'
+alias ec='emacsclient -a emacs -c'
 alias re='emacsclient -t'
 #export EDITOR='emacsclient -a emacs'
 
