@@ -72,7 +72,7 @@ alias e='emacs'
 alias enw='emacs -nw'
 alias ec='emacsclient -a emacs -c'
 alias re='emacsclient -t'
-#export EDITOR='emacsclient -a emacs'
+export EDITOR='emacsclient -a emacs -c'
 
 # gdb
 alias gdb='gdb --args'
