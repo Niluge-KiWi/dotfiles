@@ -34,8 +34,16 @@
 
 ;; font
 ;;TODO: do it when loading emacsclient, because currently we have to reload the config on the first emacsclient launch...
-(if (eq window-system 'x)
-  (set-default-font "Monospace-10"))
+;;TODO: trouver autrechose, car freeze emacs 5s au démarrage...
+;; (if (eq window-system 'x)
+;;   (set-default-font "Monospace-10"))
+
+
+;; Se limiter à des lignes de 80 caractères dans les modes textes (y
+;; compris le mode LaTeX) :
+;; cf. http://www-verimag.imag.fr/~moy/emacs/#autofill
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
 
 (require 'tramp)
 
@@ -137,8 +145,8 @@
 
 ;;-------C mode
 (setq c-default-style "linux")
-;;(setq-default c-basic-offset 4)
-(setq-default c-basic-offset 8)
+(setq-default c-basic-offset 4)
+;;(setq-default c-basic-offset 8)
 
 ;;'electric' indentation : indent on newline
 (add-hook 'c-mode-common-hook (lambda ()
@@ -206,9 +214,35 @@
  
 
 
-;;dictionnaire francais
+;; dictionnaires francais et anglais
+
+
 ;;(ispell-change-dictionary "francais")
 ;;(ispell-change-dictionary "american")
+
+;;M-x flyspell-auto-correct-word: automatically correct word.
+;;M-x flyspell-correct-word (or mouse-2): popup correct words.
+
+;;(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checking" t)
+;;(autoload 'global-flyspell-mode "flyspell" "On-the-fly spelling" t)
+;;(global-flyspell-mode t)
+(require 'flyspell)
+(defun flyspell-french ()
+  (interactive)
+  (flyspell-mode t)
+  (ispell-change-dictionary "francais")
+  (flyspell-buffer))
+(defun flyspell-english ()
+  (interactive)
+  (flyspell-mode t)
+  (ispell-change-dictionary "english")
+  (flyspell-buffer))
+
+;;  (flyspell-buffer))
+;;(autoload 'flyspell-danish)
+
+
+
 
 ;;supprimer la sélection quand on tape
 (delete-selection-mode 1)
