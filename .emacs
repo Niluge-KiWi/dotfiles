@@ -948,12 +948,29 @@ This places `point' just after the prompt, or at the beginning of the line."
 
 
 
-;; gestion des window
+;;--------------------
+;; Window management
+;;--------------------
 
+;;
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
+;;
+;; window numbering
+;;
+;; window-numbering-mode assigns a number to each window in a Emacs frame,
+;; so you can reach any window with just one command (M-1 ... M-0)
+;;
+;; If you want to affect the numbers, use window-numbering-before-hook or window-numbering-assign-func.
+;; For instance, to always assign the calculator window the number 9, add the following to your .emacs file:
+;; (setq window-numbering-assign-func
+;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
+
+(require 'window-numbering)
+(window-numbering-mode t)
 
 
 ;; des tests pour gérer les buffers par frame
