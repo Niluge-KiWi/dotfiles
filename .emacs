@@ -143,15 +143,28 @@
 (setq TeX-newline-function 'newline-and-indent)
 
 
-;;-------C mode
+;;-------C/C++ mode
 (setq c-default-style "linux")
 (setq-default c-basic-offset 4)
-;;(setq-default c-basic-offset 8)
+
+(defun my-c-indent-setup ()
+  (c-set-style "linux")
+  (setq-default c-basic-offset 4))
+  ;;(setq-default c-basic-offset 8))
+(add-hook 'c-mode-hook 'my-c-indent-setup)
+(add-hook 'c++-mode-hook 'my-c-indent-setup)
 
 ;;'electric' indentation : indent on newline
 (add-hook 'c-mode-common-hook (lambda ()
                                 (define-key c-mode-base-map "\C-m"
                                   'c-context-line-break)))
+
+;;------java mode
+(defun my-java-indent-setup ()
+  (c-set-style "java")
+  (setq c-basic-offset 4))
+(add-hook 'java-mode-hook 'my-java-indent-setup t)
+
 ;--------shell
 (setq-default comint-scroll-to-bottom-on-input (quote all))
 (setq-default comint-move-point-for-output t)
@@ -934,6 +947,13 @@ This places `point' just after the prompt, or at the beginning of the line."
 (winner-mode t)
 
 
+
+;; gestion des window
+
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 
 ;; des tests pour gérer les buffers par frame
