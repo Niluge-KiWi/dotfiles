@@ -70,7 +70,7 @@ fi
 # alias d'éditeurs (from smeuuh)
 alias e='emacs'
 alias enw='emacs -nw'
-alias ec='emacsclient -a emacs -c'
+alias ec='emacsclient -a "" -c >/dev/null'
 alias re='emacsclient -t'
 export EDITOR='emacsclient -a emacs -c'
 
@@ -98,6 +98,7 @@ alias gl='git pull'
 alias gp='git push'
 alias gr='git rebase origin/master'
 alias gst='git status | less'
+alias gk='gitk --all&'
 
 #M-q = delete backward
 bind '"\eq":backward-kill-word'
