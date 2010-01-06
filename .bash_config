@@ -114,7 +114,7 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 
-alias g='grep -nri --color'
+alias g='grep -nriI --color'
 
 # useless mais bon
 alias jacadi='sudo'
