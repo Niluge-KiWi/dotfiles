@@ -32,6 +32,14 @@
 (setq frame-title-format
       (concat  "%b - emacs@" system-name))
 
+
+;; Color Themes
+;;(require 'color-theme)
+;;(color-theme-initialize)
+(require 'zenburn)
+(color-theme-zenburn)
+
+
 ;; font
 ;;TODO: do it when loading emacsclient, because currently we have to reload the config on the first emacsclient launch...
 ;;TODO: trouver autrechose, car freeze emacs 5s au démarrage...
@@ -45,13 +53,9 @@
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 
+;; remote access
 (require 'tramp)
 
-;; Color Themes
-;;(require 'color-theme)
-;;(color-theme-initialize)
-(require 'zenburn)
-(color-theme-zenburn)
 
 ;; sqlplus mode pour oracle
 (require 'sqlplus)
@@ -61,13 +65,39 @@
 "whizzytex"
 "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
 
+
 ;;mode ido
 (require 'ido)
-(ido-mode t)
-(setq ido-enable-flex-matching t)
+(setq ido-create-new-buffer 'always
+      ido-enable-flex-matching t
+      ;;ido-max-prospects 12
+      ido-max-window-height 1)
+(ido-mode 1)
+(ido-everywhere 1)
+;;ido M-x mode #http://www.emacswiki.org/emacs/InteractivelyDoThings#toc6
+(setq ido-execute-command-cache nil)
+(defun ido-execute-command ()
+  (interactive)
+  (call-interactively
+   (intern
+    (ido-completing-read
+     "M-x "
+     (progn
+       (unless ido-execute-command-cache
+	 (mapatoms (lambda (s)
+		     (when (commandp s)
+		       (setq ido-execute-command-cache
+			     (cons (format "%S" s) ido-execute-command-cache))))))
+       ido-execute-command-cache)))))
+;;not used by default
+;; (add-hook 'ido-setup-hook
+;; 	  (lambda ()
+;; 	    (setq ido-enable-flex-matching t)
+;; 	    (global-set-key (kbd "M-x") 'ido-execute-command)))
 
 
-;; cancel and redo windows configurations
+
+;; Cancel and redo windows configurations
 (require 'winner)
 (setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
 
@@ -165,10 +195,13 @@
   (setq c-basic-offset 4))
 (add-hook 'java-mode-hook 'my-java-indent-setup t)
 
-;--------shell
-(setq-default comint-scroll-to-bottom-on-input (quote all))
-(setq-default comint-move-point-for-output t)
-(ansi-color-for-comint-mode-on)
+
+;--------python
+(defadvice run-python (after run-python-revert-patch)
+  "revert patch which removes '' from sys.path"
+  (python-send-string "import sys
+sys.path.insert(0, '')"))
+(ad-activate 'run-python)
 
 
 ;--------compilation
@@ -248,7 +281,7 @@
 (defun flyspell-english ()
   (interactive)
   (flyspell-mode t)
-  (ispell-change-dictionary "english")
+  (ispell-change-dictionary "british")
   (flyspell-buffer))
 
 ;;  (flyspell-buffer))
@@ -484,6 +517,8 @@ key is any argument that can be given to global-set-key"
 ;; (add-to-list 'ww-advised-functions 'windmove-down)
 ;; (add-to-list 'ww-advised-functions 'windmove-right)
 ;; (add-to-list 'ww-advised-functions 'windmove-left)
+
+
 
 
 ;;;;;;;;;;;;;
@@ -909,6 +944,15 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;read personal info (ERC stuff)
 (load-file "~/.emacs.d/perso.el")
 
+;;--------------------
+;; ERC end
+;;--------------------
+
+
+
+
+
+
 ;;Highlights spaces at the end of lines
 (setq show-trailing-whitespace t)
 
@@ -945,7 +989,6 @@ This places `point' just after the prompt, or at the beginning of the line."
 (winner-mode t)
 
 
-
 ;;--------------------
 ;; Window management
 ;;--------------------
@@ -969,6 +1012,71 @@ This places `point' just after the prompt, or at the beginning of the line."
 
 (require 'window-numbering)
 (window-numbering-mode t)
+
+
+
+;;--------------------
+;; Shells in emacs
+;;--------------------
+
+(setq comint-scroll-to-bottom-on-input 'all)
+(setq comint-move-point-for-output t)
+
+;;shell
+
+;;dirtrack
+(setq dirtrack-list '("^\\([^@]*\\)@\\([^:]*\\):\\([^$]*\\)" 3))
+(add-hook 'shell-mode-hook 'dirtrack-mode)
+
+
+;;--------------------
+;; org-mode
+;;--------------------
+
+(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
+;; (add-hook 'org-mode-hook 'org-indent-mode)
+(require 'remember)
+(add-hook 'remember-mode-hook 'org-remember-apply-template)
+(global-set-key (kbd "C-c l") 'org-store-link)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c b") 'org-iswitchb)
+(global-set-key (kbd "C-c r") 'remember)
+					;bindings
+(add-hook 'org-load-hook
+	  (lambda ()
+	    ;change becase meta-{up,down,right,left} is already used to change selected window
+	    (define-key org-mode-map (kbd "<M-left>") 'nil)
+	    (define-key org-mode-map (kbd "<M-up>") 'nil)
+	    (define-key org-mode-map (kbd "<M-right>") 'nil)
+	    (define-key org-mode-map (kbd "<M-down>") 'nil)
+	    (define-key org-mode-map (kbd "<C-S-left>") 'org-metaleft)
+	    (define-key org-mode-map (kbd "<C-S-up>") 'org-metaup)
+	    (define-key org-mode-map (kbd "<C-S-right>") 'org-metaright)
+	    (define-key org-mode-map (kbd "<C-S-down>") 'org-metadown)
+	    ;add
+	    (define-key org-mode-map (kbd "C-c C-r") 'org-refile)
+	    ;just remove
+	    (define-key org-mode-map (kbd "<C-tab>") nil)
+	    (define-key org-mode-map (kbd "<S-up>") nil)
+	    (define-key org-mode-map (kbd "<S-down>") nil)
+	    (define-key org-mode-map (kbd "<S-right>") nil)
+	    (define-key org-mode-map (kbd "<S-left>") nil)
+	    )
+)
+					;settings
+(setq
+ org-agenda-files (list "~/.emacs.d/org/todo.org")
+ org-default-notes-file "~/.emacs.d/org/notes.org"
+ org-log-done 'time
+)
+
+
+
+
+;;;;;;;;;;;
+;; TESTS ;;
+;;;;;;;;;;;
 
 
 ;; des tests pour gérer les buffers par frame
