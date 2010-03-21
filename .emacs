@@ -1026,7 +1026,6 @@ This places `point' just after the prompt, or at the beginning of the line."
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c b") 'org-iswitchb)
 (global-set-key (kbd "C-c r") 'remember)
 					;bindings
 (add-hook 'org-load-hook
@@ -1044,10 +1043,6 @@ This places `point' just after the prompt, or at the beginning of the line."
 	    (define-key org-mode-map (kbd "C-c C-r") 'org-refile)
 	    ;just remove
 	    (define-key org-mode-map (kbd "<C-tab>") nil)
-	    (define-key org-mode-map (kbd "<S-up>") nil)
-	    (define-key org-mode-map (kbd "<S-down>") nil)
-	    (define-key org-mode-map (kbd "<S-right>") nil)
-	    (define-key org-mode-map (kbd "<S-left>") nil)
 	    )
 )
 					;settings
