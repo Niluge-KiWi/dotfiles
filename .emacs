@@ -17,6 +17,8 @@
  '(global-font-lock-mode t))
 
 (setq inhibit-splash-screen t)
+;;pas de curseur clignotant
+(blink-cursor-mode -1)
 
 ;;library path : used for require, load-library, autoload ...
 ;; search in each subdir of ~/.emacs.d/
@@ -25,8 +27,6 @@
 	   (default-directory my-lisp-dir))
       (setq load-path (cons my-lisp-dir load-path))
       (normal-top-level-add-subdirs-to-load-path)))
-
-;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/" ))
 
 ;; default to better frame titles
 (setq frame-title-format
@@ -47,23 +47,10 @@
 ;;   (set-default-font "Monospace-10"))
 
 
-;; Se limiter à des lignes de 80 caractères dans les modes textes (y
-;; compris le mode LaTeX) :
-;; cf. http://www-verimag.imag.fr/~moy/emacs/#autofill
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 
 ;; remote access
 (require 'tramp)
-
-
-;; sqlplus mode pour oracle
-(require 'sqlplus)
-(add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
-
-(autoload 'whizzytex-mode
-"whizzytex"
-"WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX" t)
 
 
 ;;mode ido
@@ -78,38 +65,26 @@
 (setq ido-execute-command-cache nil)
 (defun ido-execute-command ()
   (interactive)
-  (call-interactively
-   (intern
-    (ido-completing-read
-     "M-x "
-     (progn
-       (unless ido-execute-command-cache
-	 (mapatoms (lambda (s)
-		     (when (commandp s)
-		       (setq ido-execute-command-cache
-			     (cons (format "%S" s) ido-execute-command-cache))))))
-       ido-execute-command-cache)))))
+  (let ((ido-enable-flex-matching nil)) ;; too disturbing with too much results
+       (call-interactively
+	(intern
+	 (ido-completing-read
+	  "M-x "
+	  (progn
+	    (unless ido-execute-command-cache
+	      (mapatoms (lambda (s)
+			  (when (commandp s)
+			    (setq ido-execute-command-cache
+				  (cons (format "%S" s) ido-execute-command-cache))))))
+	    ido-execute-command-cache))))))
 ;;not used by default
 ;; (add-hook 'ido-setup-hook
 ;; 	  (lambda ()
-;; 	    (setq ido-enable-flex-matching t)
 ;; 	    (global-set-key (kbd "M-x") 'ido-execute-command)))
 
+;;icomplete : completion for commands that don't use ido (like help)
+(icomplete-mode 1)
 
-
-;; Cancel and redo windows configurations
-(require 'winner)
-(setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
-
-(global-set-key (kbd "<C-s-left>") 'winner-undo)
-(global-set-key (kbd "<C-s-right>") 'winner-redo)
-(winner-mode t) ;; turn on the global minor mode
-
-
-;; un bout de php
-(require 'php-mode)
-(add-hook 'php-mode-hook
-	  '(lambda () (define-abbrev php-mode-abbrev-table "ex" "extends")))
 
 
 ;; pour gérer les lignes trop longues
@@ -122,55 +97,53 @@
 ;;adapt filling to window size
 (setq longlines-wrap-follows-window-size t)
 
+;; Se limiter à des lignes de 80 caractères dans les modes textes (y
+;; compris le mode LaTeX) :
+;; cf. http://www-verimag.imag.fr/~moy/emacs/#autofill
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-;; Toggle between PHP & HTML mode.  Useful when working on
-;; php files, that can been intertwined with HTML code
-;; adapted from JonathanArnoldDotEmacs
-(defun toggle-php-html-mode ()
-  (interactive)
-  "Toggle mode between PHP & HTML modes"
-  (cond ((string-match "HTML" mode-name)
-         (php-mode))
-        ((string= mode-name "PHP")
-         (html-mode))))
 
-(global-set-key [f5] 'toggle-php-html-mode)
 
 
 ;; ess Emacs Speaks Statistics
 ;;(require 'ess-site)
 
-;;icomplete : completion for commands that don't use ido (like help)
-(icomplete-mode 1)  
-
-;;pas de curseur clignotant
-(blink-cursor-mode -1)
+;; sqlplus mode pour oracle
+(require 'sqlplus)
+(add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
 
 
-;;paredit
-(autoload 'paredit-mode "paredit"
-  "Minor mode for pseudo-structurally editing Lisp code."
-  t)
-;;undefine keys I use
-(eval-after-load 'paredit
-  '(progn
-     (define-key paredit-mode-map (kbd "M-<down>")
-       nil)
-     (define-key paredit-mode-map (kbd "M-<up>")
-       nil)
-     (define-key paredit-mode-map (kbd "M-\"")
-       nil)
-     (define-key paredit-mode-map (kbd "M-q")
-       'paredit-backward-kill-word)))
-;;toggle paredit with f6
-(global-set-key (kbd "<f6>") 'paredit-mode)
 
 
-;;Latex mode
+;;paredit :: not used, deactivated
+;; (autoload 'paredit-mode "paredit"
+;;   "Minor mode for pseudo-structurally editing Lisp code."
+;;   t)
+;; ;;undefine keys I use
+;; (eval-after-load 'paredit
+;;   '(progn
+;;      (define-key paredit-mode-map (kbd "M-<down>")
+;;        nil)
+;;      (define-key paredit-mode-map (kbd "M-<up>")
+;;        nil)
+;;      (define-key paredit-mode-map (kbd "M-\"")
+;;        nil)
+;;      (define-key paredit-mode-map (kbd "M-q")
+;;        'paredit-backward-kill-word)))
+;; ;;toggle paredit with f6
+;; (global-set-key (kbd "<f6>") 'paredit-mode)
+
+
+;;-------Latex mode
 ;;don't ask to cache preamble
 (setq preview-auto-cache-preamble t)
 ;;indent when pressing RET
 (setq TeX-newline-function 'newline-and-indent)
+
+(autoload 'whizzytex-mode "whizzytex"
+  "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX"
+  t)
+
 
 
 ;;-------C/C++ mode
@@ -196,7 +169,7 @@
 (add-hook 'java-mode-hook 'my-java-indent-setup t)
 
 
-;--------python
+;;-------python mode
 (defadvice run-python (after run-python-revert-patch)
   "revert patch which removes '' from sys.path"
   (python-send-string "import sys
@@ -204,9 +177,19 @@ sys.path.insert(0, '')"))
 (ad-activate 'run-python)
 
 
-;--------compilation
+;;-------php mode
+(require 'php-mode)
+;; Toggle between PHP & HTML mode.  Useful when working on
+;; php files, that can been intertwined with HTML code
+(add-hook 'php-mode-hook
+	  (lambda ()
+	    (global-set-key [f5] 'html-mode)))
+(add-hook 'html-mode-hook
+	  (lambda ()
+	    (global-set-key [f5] 'php-mode)))
 
 
+;;-------compilation
 ;;make compile window disappear after successful compilation
 (setq compilation-finish-function
       (lambda (buf str)
@@ -247,17 +230,11 @@ sys.path.insert(0, '')"))
  compilation-window-height 5
  compilation-auto-jump-to-first-error t)
 
-;;compilation by C-c C-c in modes that don't shadow it
+;;compilation by C-M-c C-M-c
 (global-unset-key (kbd "C-M-c"))
 (global-set-key (kbd "C-M-c C-M-c") 'my-compile)
-;; ;;force the binding in programming modes
-;; (defun unset-c-c () (local-unset-key (kbd "C-c C-c")))
-;; (add-hook 'c-mode-common-hook 'unset-c-c)
-;; (add-hook 'LaTeX-mode-hook 'unset-c-c)
-;; (add-hook 'bibtex-mode-hook 'unset-c-c)
-;; (add-hook 'makefile-mode-hook 'unset-c-c)
 
- 
+
 
 
 ;; dictionnaires francais et anglais
@@ -974,19 +951,10 @@ This places `point' just after the prompt, or at the beginning of the line."
 (autoload 'cmake-mode "~/.emacs.d/cmake-mode.el" t)
 
 
-;; uniquify.el is a helper routine to help give buffer names a better unique name.
-(when (load "uniquify" 'NOERROR)
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
-  ;(setq uniquify-buffer-name-style 'post-forward)
-  )
 
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
 
-;; winner-mode:
-;; allows to “undo” (and “redo”) changes in the window configuration with the key commands ‘C-c left’ and ‘C-c right’
-(winner-mode t)
 
 
 ;;--------------------
@@ -999,7 +967,16 @@ This places `point' just after the prompt, or at the beginning of the line."
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
-;;
+;; Cancel and redo windows configurations
+;; allows to "undo" (and "redo") changes in the window configuration with the key commands 'C-c left' and 'C-c right'
+(require 'winner)
+(setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
+
+(global-set-key (kbd "<C-s-left>") 'winner-undo)
+(global-set-key (kbd "<C-s-right>") 'winner-redo)
+(winner-mode t) ;; turn on the global minor mode
+
+
 ;; window numbering
 ;;
 ;; window-numbering-mode assigns a number to each window in a Emacs frame,
@@ -1012,6 +989,14 @@ This places `point' just after the prompt, or at the beginning of the line."
 
 (require 'window-numbering)
 (window-numbering-mode t)
+
+
+;; uniquify.el is a helper routine to help give buffer names a better unique name.
+(when (load "uniquify" 'NOERROR)
+  (require 'uniquify)
+  (setq uniquify-buffer-name-style 'forward)
+  ;(setq uniquify-buffer-name-style 'post-forward)
+  )
 
 
 
@@ -1027,6 +1012,7 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;dirtrack
 (setq dirtrack-list '("^\\([^@]*\\)@\\([^:]*\\):\\([^$]*\\)" 3))
 (add-hook 'shell-mode-hook 'dirtrack-mode)
+
 
 
 ;;--------------------
@@ -1069,6 +1055,11 @@ This places `point' just after the prompt, or at the beginning of the line."
  org-agenda-files (list "~/.emacs.d/org/todo.org")
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-log-done 'time
+)
+(add-hook 'org-load-hook
+	  (lambda ()
+	    (setq shift-select-mode nil) ;; to modify dates
+	    )
 )
 
 
