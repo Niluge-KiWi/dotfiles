@@ -956,6 +956,27 @@ This places `point' just after the prompt, or at the beginning of the line."
 (global-set-key (kbd "C-c j") 'join-line)
 
 
+;;--------------------
+;; Auto Completion
+;;--------------------
+
+
+;; auto-complete mode : dropdown menu
+;; see http://cx4a.org/software/auto-complete/manual.html
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict")
+(setq ac-comphist-file "~/.emacs.d/auto-complete/ac-comphist.dat")
+(ac-config-default)
+(setq ac-delay 0.2)
+
+;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
+(add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
+(add-to-list 'ac-modes 'shell-mode)
+
+;;etags for auto-complete
+(require 'auto-complete-etags)
+(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
+(add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
 ;;--------------------
 ;; Window management
@@ -1008,6 +1029,39 @@ This places `point' just after the prompt, or at the beginning of the line."
 (setq comint-move-point-for-output t)
 
 ;;shell
+
+;; clean
+(add-hook 'shell-mode-hook 'n-shell-mode-hook)
+(defun n-shell-mode-hook ()
+  "12Jan2002 - sailor, shell mode customizations."
+  ;; (local-set-key '[up] 'comint-previous-input)
+  ;; (local-set-key '[down] 'comint-next-input)
+  ;; (local-set-key '[(shift tab)] 'comint-next-matching-input-from-input)
+  (setq comint-input-sender 'n-shell-simple-send)
+  )
+
+(defun n-shell-simple-send (proc command)
+  "17Jan02 - sailor. Various commands pre-processing before sending to shell."
+  (cond
+   ;; Checking for clear command and execute it.
+   ((string-match "^[ \t]*clear[ \t]*$" command)
+    (comint-send-string proc "\n")
+    (erase-buffer)
+    )
+   ;; Checking for man command and execute it.
+   ((string-match "^[ \t]*man[ \t]*" command)
+    (comint-send-string proc "\n")
+    (setq command (replace-regexp-in-string "^[ \t]*man[ \t]*" "" command))
+    (setq command (replace-regexp-in-string "[ \t]+$" "" command))
+    ;;(message (format "command %s command" command))
+    (funcall 'man command)
+    )
+   ;; TODO add check for ec, less : open file in emacs
+   ;; Send other commands to the default handler.
+   (t (comint-simple-send proc command))
+   )
+  )
+
 
 ;;dirtrack
 (setq dirtrack-list '("^\\([^@]*\\)@\\([^:]*\\):\\([^$]*\\)" 3))
