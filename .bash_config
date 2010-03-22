@@ -116,6 +116,9 @@ alias la='ls -A'
 alias l='ls -latr'
 
 alias g='grep -nriI --color'
+alias gg='grep -nrI --color'
+alias gs='g --exclude-dir=\.svn'
+
 
 # useless mais bon
 alias jacadi='sudo'
