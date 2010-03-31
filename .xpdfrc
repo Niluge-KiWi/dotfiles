@@ -1,0 +1,19 @@
+# Dari's XPDF configuration file
+# <cbelin@etu.enseeiht.fr>
+#
+## Text control
+# Declare output text encoding
+textEncoding UTF-8
+# Output end of lines encoding
+textEOL unix
+# Do not insert page breaks
+textPageBreaks no
+# Keep tiny characters which may be used for shading
+textKeepTinyChars yes
+#" Misc options
+# Initial zoom to full-page-width
+initialZoom width
+# Continuous view of document
+continuousView yes
+# Open browser for URLs
+urlCommand 'gnome-www-browser %s'
