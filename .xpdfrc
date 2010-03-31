@@ -3,7 +3,7 @@
 #
 ## Text control
 # Declare output text encoding
-textEncoding UTF-8
+#textEncoding UTF-8
 # Output end of lines encoding
 textEOL unix
 # Do not insert page breaks
