@@ -98,7 +98,7 @@ alias gu='gf && gr'
 alias gl='git pull'
 alias gp='git push'
 alias gr='git rebase origin/master'
-alias gst='git status | less'
+alias gst='git status | less -RXF'
 alias gk='gitk --all&'
 
 #M-q = delete backward
