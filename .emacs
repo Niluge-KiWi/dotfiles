@@ -69,7 +69,7 @@
       ido-enable-flex-matching t
       ;;ido-max-prospects 12
       ido-max-window-height 1)
-(ido-mode 1)
+(ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
 ;;ido M-x mode #http://www.emacswiki.org/emacs/InteractivelyDoThings#toc6
 (setq ido-execute-command-cache nil)
@@ -988,6 +988,7 @@ This places `point' just after the prompt, or at the beginning of the line."
 (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
+
 ;;--------------------
 ;; Window management
 ;;--------------------
@@ -1122,6 +1123,20 @@ This places `point' just after the prompt, or at the beginning of the line."
 )
 
 
+(setq org-clock-persist 'history)
+     (org-clock-persistence-insinuate)
+
+
+;;--------------------
+;; session management
+;;--------------------
+
+;;save the minibuffer input
+(savehist-mode 1)
+
+;;save last edit place in files
+(require 'saveplace)
+(setq-default save-place t)
 
 
 ;;;;;;;;;;;
