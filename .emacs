@@ -27,6 +27,9 @@
 	   (default-directory my-lisp-dir))
       (setq load-path (cons my-lisp-dir load-path))
       (normal-top-level-add-subdirs-to-load-path)))
+;;TODO: débugger ça pcq ça marche pas... en attendant ça marche mieux avec la suite:
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete/"))
 
 ;; default to better frame titles
 (setq frame-title-format
