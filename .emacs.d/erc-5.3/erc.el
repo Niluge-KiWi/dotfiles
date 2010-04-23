@@ -1445,7 +1445,10 @@ Special commands:
 \\{erc-mode-map}
 
 Turning on `erc-mode' runs the hook `erc-mode-hook'."
-  (kill-all-local-variables)
+  (let ((recon-count erc-server-reconnect-count) (old-mode major-mode))
+    (kill-all-local-variables)
+    (if (and (eq old-mode 'erc-mode) (integerp recon-count) (< 0 recon-count)) 
+	(setq erc-server-reconnect-count recon-count)))
   (use-local-map erc-mode-map)
   (setq mode-name "ERC"
 	major-mode 'erc-mode

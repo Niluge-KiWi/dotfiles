@@ -30,6 +30,7 @@
 ;;TODO: débugger ça pcq ça marche pas... en attendant ça marche mieux avec la suite:
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/erc-5.3/"))
 
 ;; default to better frame titles
 (setq frame-title-format
