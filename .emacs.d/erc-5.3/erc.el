@@ -274,6 +274,12 @@ simply because we do not necessarily receive the QUIT event."
   :group 'erc-hooks
   :type 'hook)
 
+(defcustom erc-disconnected-stop-reconnecting-hook nil
+  "Run this hook with arguments (NICK IP REASON) when disconnected
+and stopped trying to reconnect."
+  :group 'erc-hooks
+  :type 'hook)
+
 (defcustom erc-complete-functions nil
   "These functions get called when the user hits TAB in ERC.
 Each function in turn is called until one returns non-nil to

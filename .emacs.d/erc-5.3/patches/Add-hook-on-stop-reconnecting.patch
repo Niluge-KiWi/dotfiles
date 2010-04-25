@@ -1,0 +1,31 @@
+diff --git a/.emacs.d/erc-5.3/erc-backend.el b/.emacs.d/erc-5.3/erc-backend.el
+index c388ddf..7cef740 100644
+--- a/.emacs.d/erc-5.3/erc-backend.el
++++ b/.emacs.d/erc-5.3/erc-backend.el
+@@ -610,18 +610,19 @@ EVENT is the message received from the closed connection process."
+                                    'terminated ?e event)
+               ;; Update mode line indicators
+               (erc-update-mode-line)
++              ;; Trigger hooks on stop Reconnecting
++              (run-hook-with-args 'erc-disconnected-stop-reconnecting-hook
++                            (erc-current-nick) (system-name) "")
+               (set-buffer-modified-p nil))
+           ;; reconnect
+           (condition-case err
+diff --git a/.emacs.d/erc-5.3/erc.el b/.emacs.d/erc-5.3/erc.el
+index 762adbc..92f817c 100644
+--- a/.emacs.d/erc-5.3/erc.el
++++ b/.emacs.d/erc-5.3/erc.el
+@@ -274,6 +274,12 @@ simply because we do not necessarily receive the QUIT event."
+   :group 'erc-hooks
+   :type 'hook)
+ 
++(defcustom erc-disconnected-stop-reconnecting-hook nil
++  "Run this hook with arguments (NICK IP REASON) when disconnected 
++and stopped trying to reconnect."
++  :group 'erc-hooks
++  :type 'hook)
++
+ (defcustom erc-complete-functions nil
+   "These functions get called when the user hits TAB in ERC.
+ Each function in turn is called until one returns non-nil to

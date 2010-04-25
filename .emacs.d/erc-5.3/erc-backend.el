@@ -610,6 +610,9 @@ EVENT is the message received from the closed connection process."
                                    'terminated ?e event)
               ;; Update mode line indicators
               (erc-update-mode-line)
+              ;; Trigger hooks on stop Reconnecting
+              (run-hook-with-args 'erc-disconnected-stop-reconnecting-hook
+                            (erc-current-nick) (system-name) "")
               (set-buffer-modified-p nil))
           ;; reconnect
           (condition-case err
