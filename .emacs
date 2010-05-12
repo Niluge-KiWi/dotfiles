@@ -188,6 +188,7 @@ sys.path.insert(0, '')"))
 (ad-activate 'run-python)
 
 
+
 ;;-------php mode
 (require 'php-mode)
 ;; Toggle between PHP & HTML mode.  Useful when working on
@@ -371,13 +372,6 @@ expression of the same type as those required by around advices"
 (global-set-key (kbd "C-c c") 'comment-region)
 ;;handy, but buggy on terminals
 (global-set-key (kbd "C-,") 'undo)
-
-;;C-c left/right to undo/redo changes in window configuration
-(winner-mode 1)
-
-;;move between windows with meta-keypad
-(windmove-default-keybindings 'meta)
-
 
 ;; pour éviter que ada-mode me pique le raccourci clavier
 (add-hook 'ada-mode-hook (lambda ()
@@ -989,16 +983,39 @@ This places `point' just after the prompt, or at the beginning of the line."
 (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
+;; auto-complete for python
+;; Initialize Rope (for auto-complete)
+;; if this doesn't work, here is how to install this:
+;;  sudo aptitude install mercurial
+;;  mkdir /tmp/rope && cd /tmp/rope
+;;  hg clone http://bitbucket.org/agr/rope
+;;  hg clone http://bitbucket.org/agr/ropemacs
+;;  hg clone http://bitbucket.org/agr/ropemode
+;;  sudo easy_install rope
+;;  ln -s ../ropemode/ropemode ropemacs/
+;;  sudo easy_install ropemacs
+(ac-ropemacs-initialize)
+(add-hook 'python-mode-hook
+          (lambda ()
+	    (add-to-list 'ac-sources 'ac-source-ropemacs)))
+
+
+
 
 ;;--------------------
 ;; Window management
 ;;--------------------
 
-;;
+;;move between windows with meta-keypad
+(windmove-default-keybindings 'meta)
+
+
+;; resize windows
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
 (global-set-key (kbd "S-C-<down>") 'shrink-window)
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
+
 
 ;; Cancel and redo windows configurations
 ;; allows to "undo" (and "redo") changes in the window configuration with the key commands 'C-c left' and 'C-c right'
@@ -1008,6 +1025,7 @@ This places `point' just after the prompt, or at the beginning of the line."
 (global-set-key (kbd "<C-s-left>") 'winner-undo)
 (global-set-key (kbd "<C-s-right>") 'winner-redo)
 (winner-mode t) ;; turn on the global minor mode
+
 
 
 ;; window numbering
