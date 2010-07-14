@@ -70,7 +70,7 @@ fi
 # alias d'éditeurs (from smeuuh)
 alias e='emacs'
 alias enw='emacs -nw'
-alias ec='emacsclient -a emacs -c'
+alias ec='emacsclient -a "" -c'
 alias re='emacsclient -t'
 export EDITOR='emacsclient -a emacs -c'
 
@@ -78,7 +78,7 @@ export EDITOR='emacsclient -a emacs -c'
 alias gdb='gdb --args'
 
 # alias autres
-alias proc='ps aux | grep'
+alias p='ps aux | grep'
 alias c='cd ..'
 alias w='w -h | sort | uniq -w 4'
 
@@ -130,7 +130,7 @@ alias siteuplait='sudo'
 cd() {
     builtin cd "$@"
     # pas réussi à faire ça en un seul test...
-    if [ -z $(echo "$PWD" | grep "/usr\|/lib") ] && [ "$PWD" != "$HOME" ]; then
+    if [ -z $(echo "$PWD" | grep "^/usr\|^/lib") ] && [ "$PWD" != "$HOME" ]; then
 	ls
     fi
 }

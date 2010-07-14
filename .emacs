@@ -56,8 +56,8 @@
 
 
 ;;byte-recompile elisp files if they need to be
-(byte-recompile-directory "~/.emacs.d" 0)
-(kill-buffer "*Compile-Log*")
+;; (byte-recompile-directory "~/.emacs.d" 0)
+;; (kill-buffer "*Compile-Log*")
 
 
 ;; remote access
