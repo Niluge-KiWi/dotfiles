@@ -278,6 +278,16 @@ sys.path.insert(0, '')"))
 
 
 
+;;autopair
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers
+(setq autopair-blink nil)
+(add-hook 'erc-mode-hook
+	  (lambda () (setq autopair-dont-activate t)))
+(add-hook 'LaTeX-mode-hook
+          (lambda ()
+	    (modify-syntax-entry ?$ "\"")))
+
 
 ;;supprimer la sélection quand on tape
 (delete-selection-mode 1)
