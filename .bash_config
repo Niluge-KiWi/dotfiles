@@ -115,8 +115,8 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -latr'
 
-alias g='grep -nriI --color'
-alias gg='grep -nrI --color'
+alias g='grep -nriI --color --exclude=*~'
+alias gg='grep -nrI --color --exclude=*~'
 alias gs='g --exclude-dir=\.svn'
 
 
