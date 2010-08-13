@@ -120,8 +120,8 @@
 ;;(require 'ess-site)
 
 ;; sqlplus mode pour oracle
-(require 'sqlplus)
-(add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
+;; (require 'sqlplus)
+;; (add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
 
 
 
