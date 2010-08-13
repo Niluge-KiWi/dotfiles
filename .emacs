@@ -212,6 +212,16 @@ sys.path.insert(0, '')"))
 	     (setq indent-tabs-mode nil)
 	     (setq c-indent-level 2)))
 
+;;-------apache mode
+(autoload 'apache-mode "apache-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
+(add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
+(add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
+(add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
+(add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+
+
 ;;-------compilation
 ;;make compile window disappear after successful compilation
 (setq compilation-finish-function
