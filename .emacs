@@ -200,6 +200,17 @@ sys.path.insert(0, '')"))
 	  (lambda ()
 	    (global-set-key [f5] 'php-mode)))
 
+;;-------YAML mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
+(add-hook 'yaml-mode-hook
+	  '(lambda ()
+	     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+(add-hook 'yaml-mode-hook
+	  '(lambda ()
+	     (setq indent-tabs-mode nil)
+	     (setq c-indent-level 2)))
 
 ;;-------compilation
 ;;make compile window disappear after successful compilation
