@@ -58,10 +58,6 @@
 ;; (kill-buffer "*Compile-Log*")
 
 
-;; remote access
-(require 'tramp)
-
-
 ;;mode ido
 (require 'ido)
 (setq ido-create-new-buffer 'always
