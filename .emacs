@@ -263,33 +263,30 @@ sys.path.insert(0, '')"))
 
 
 
-
 ;; dictionnaires francais et anglais
-
-
-;;(ispell-change-dictionary "francais")
-;;(ispell-change-dictionary "american")
-
-;;M-x flyspell-auto-correct-word: automatically correct word.
-;;M-x flyspell-correct-word (or mouse-2): popup correct words.
-
-;;(autoload 'flyspell-mode "flyspell" "On-the-fly spelling checking" t)
-;;(autoload 'global-flyspell-mode "flyspell" "On-the-fly spelling" t)
-;;(global-flyspell-mode t)
 (require 'flyspell)
-(defun flyspell-french ()
+(setq my-languages '("british" "francais"))
+(defun flyspell-lang (&optional lang)
+  "Toggle flyspell-mode with the given lang, or prompt with ido."
   (interactive)
-  (flyspell-mode t)
-  (ispell-change-dictionary "francais")
-  (flyspell-buffer))
-(defun flyspell-english ()
-  (interactive)
-  (flyspell-mode t)
-  (ispell-change-dictionary "british")
-  (flyspell-buffer))
-
-;;  (flyspell-buffer))
-;;(autoload 'flyspell-danish)
+  (let* ((old-language ispell-local-dictionary)
+	 (language (if lang lang
+		     (ido-completing-read
+		      "Spell Language:"
+		      ;; set old language as first value, for simple toggle
+		      (if (member old-language my-languages)
+			  (cons old-language (remove old-language my-languages))
+			my-languages)
+		      nil t))))
+    (if (and flyspell-mode
+	     (string= old-language language))
+	;; toggle off
+	(flyspell-mode 0)
+      ;; start flyspell
+      (progn
+	(flyspell-mode t)
+	(ispell-change-dictionary language)
+	(flyspell-buffer)))))
 
 
 
