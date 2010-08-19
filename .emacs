@@ -46,10 +46,8 @@
 
 
 ;; font
-;;TODO: do it when loading emacsclient, because currently we have to reload the config on the first emacsclient launch...
-;;TODO: trouver autrechose, car freeze emacs 5s au démarrage...
-;; (if (eq window-system 'x)
-;;   (set-default-font "Monospace-10"))
+(setq font-use-system-font t) ;; since emacs 23.2
+;;old way:
 ;; do this in shell:
 ;;echo "Emacs.font: Monospace-10" >> ~/.Xresources
 ;;xrdb -merge ~/.Xresources
