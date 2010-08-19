@@ -92,15 +92,15 @@
 
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Word wrapping
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; pour gérer les lignes trop longues
-;;  "<smeuuh> lll pour local longlines, et ll pour global long lines"
-(define-globalized-minor-mode ll
-  longlines-mode
-  (lambda () (longlines-mode t)))
-;;local longlines
-(defalias 'lll 'longlines-mode)
-;;adapt filling to window size
-(setq longlines-wrap-follows-window-size t)
+;; amazing new variable in e23. No need to worry about longlines any more
+(setq-default word-wrap t)
+;; ... but still use ll sometimes for reading dense text
+(defalias 'll 'longlines-mode)
+
 
 ;; Se limiter à des lignes de 80 caractères dans les modes textes (y
 ;; compris le mode LaTeX) :
