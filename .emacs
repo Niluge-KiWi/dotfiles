@@ -296,7 +296,10 @@ sys.path.insert(0, '')"))
 ;;autopair
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
-(setq autopair-blink nil)
+
+(setq autopair-blink nil) ;; no blink
+(setq autopair-autowrap t) ;; wrap region with character to insert
+
 (add-hook 'erc-mode-hook
 	  (lambda () (setq autopair-dont-activate t)))
 (add-hook 'LaTeX-mode-hook
