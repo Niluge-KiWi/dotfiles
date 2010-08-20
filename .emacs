@@ -1035,7 +1035,7 @@ This places `point' just after the prompt, or at the beginning of the line."
 (ac-ropemacs-initialize)
 (add-hook 'python-mode-hook
           (lambda ()
-	    (add-to-list 'ac-sources 'ac-source-ropemacs)))
+                 (add-to-list 'ac-sources 'ac-source-ropemacs)))
 
 
 
@@ -1194,6 +1194,24 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;save last edit place in files
 (require 'saveplace)
 (setq-default save-place t)
+
+
+;;--------------------
+;; divers
+;;--------------------
+
+;; pastebin from emacs
+(require 'pastebin)
+
+;; iBuffer : dired for buffers
+(require 'ibuffer)
+(setq ibuffer-default-sorting-mode 'recency)
+
+(setq ibuffer-always-show-last-buffer t)
+(setq ibuffer-view-ibuffer t)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
+
 
 
 ;;;;;;;;;;;
