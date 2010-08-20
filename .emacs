@@ -32,6 +32,19 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/erc-5.3/"))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Package Management (ELPA)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; This provides support for the package system and
+;;; interfacing with ELPA, the package archive.
+(when
+    (load
+     (expand-file-name "~/.emacs.d/elpa/package.el"))
+  (package-initialize))
+
+
+
 ;; default to better frame titles
 (setq frame-title-format
       (concat  "%b - emacs@" system-name))
