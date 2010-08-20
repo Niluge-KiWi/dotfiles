@@ -71,7 +71,11 @@
 ;; (kill-buffer "*Compile-Log*")
 
 
-;;mode ido
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Interactively Do Things
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;-------ido
+;; interactively do things with buffers and files.
 (require 'ido)
 (setq ido-create-new-buffer 'always
       ido-enable-flex-matching t
@@ -95,14 +99,19 @@
 			    (setq ido-execute-command-cache
 				  (cons (format "%S" s) ido-execute-command-cache))))))
 	    ido-execute-command-cache))))))
-;;not used by default
-;; (add-hook 'ido-setup-hook
-;; 	  (lambda ()
-;; 	    (global-set-key (kbd "M-x") 'ido-execute-command)))
 
-;;icomplete : completion for commands that don't use ido (like help)
+;;-------icomplete
+;; completion for commands that don't use ido (like help)
 (icomplete-mode 1)
 
+;;--------smex
+;; super M-x : ido + frequency
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -374,7 +383,7 @@ expression of the same type as those required by around advices"
 
 
 
-;--------raccourcis claviers en plus
+;;-------raccourcis claviers en plus
 (defun reload-config ()
   (interactive)
   (load-file "~/.emacs"))
