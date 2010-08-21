@@ -75,8 +75,9 @@
 	 (4 irc-log-wrap-nickname-face)
 	 (5 irc-log-message-face)
 	 )
-       `(".* \\*\\*\\* .*"
-	 (0 irc-log-notice-face)
+       `("\\(.*\\) \\(\\*\\*\\* .*\\)"
+	 (1 irc-log-timestamp-face)
+	 (2 irc-log-notice-face)
 	 )))
 
 
