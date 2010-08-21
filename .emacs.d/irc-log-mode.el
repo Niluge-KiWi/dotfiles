@@ -111,9 +111,14 @@
     st)
   "Syntax table used while in `irc-log-mode'.")
 
+
 (define-derived-mode irc-log-mode fundamental-mode
   (setq font-lock-defaults '(irc-log-keywords))
   (setq mode-name "IRC Log"))
+
+
+;; logs are read only
+(add-hook 'irc-log-mode-hook 'toggle-read-only)
 
 
 (provide 'irc-log-mode)
