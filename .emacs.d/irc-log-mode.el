@@ -22,8 +22,8 @@
 
 ;;; TODO:
 ;; - replace defcustom faces to faces or function...
-;; - less flashy colors by default
 ;; - handle \me messages : nick in bold, and message as a standard message
+;; - handle priv messages : erc-direct-msg-face?
 ;; - handle own messages : special color (use erc-nick or server-nick-alist?)
 
 (require 'erc)
@@ -32,32 +32,31 @@
 
 
 (defcustom irc-log-timestamp-face
-  '((:foreground "red"))
+  'erc-timestamp-face
   "Face for timestamps."
   :type 'face
   :group 'irc-log-faces)
 
 (defcustom irc-log-wrap-nickname-face
-  '((:foreground "black"))
+  'erc-default
   "Face for nicknames wrappers <>."
   :type 'face
   :group 'irc-log-faces)
 
 (defcustom irc-log-nickname-face
-  '((:foreground "blue"))
+  'erc-nick-default-face
   "Face for nicknames."
   :type 'face
   :group 'irc-log-faces)
 
 (defcustom irc-log-message-face
-  '((:foreground "green"))
-  "Face for messages."
+  'erc-direct-msg
   :type 'face
   :group 'irc-log-faces)
 
-(defcustom irc-log-info-line-face
-  '((:foreground "yellow"))
-  "Face for info lines."
+(defcustom irc-log-notice-face
+  'erc-notice-face
+  "Face for notices."
   :type 'face
   :group 'irc-log-faces)
 
@@ -76,7 +75,7 @@
 	 (5 irc-log-message-face)
 	 )
        `(".* \\*\\*\\* .*"
-	 (0 irc-log-info-line-face)
+	 (0 irc-log-notice-face)
 	 )))
 
 
