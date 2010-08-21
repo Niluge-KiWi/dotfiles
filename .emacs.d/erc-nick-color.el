@@ -27,12 +27,16 @@
   (or (cdr (assoc nick erc-nick-color-alist))
       (concat "#" (substring (md5 nick) 0 6)))) ;;TODO better contrast with background color?
 
+(defun erc-get-face-for-nick (nick)
+  "Returns the face for the given nick."
+  `((:foreground ,(erc-get-color-for-nick nick))
+    (:weight bold)))
+
 (defun erc-nick-colorize ()
-  "Colorise the match with the appropriate color"
+  "Colorise the matched nick with the appropriate face"
   (put-text-property
    (match-beginning 1) (match-end 1)
-   'face `((:foreground ,(erc-get-color-for-nick (match-string 1)))
-	   (:weight bold))))
+   'face (erc-get-face-for-nick (match-string 1))))
 
 (defun erc-put-color-on-nick ()
   "This insert-modify hook looks for nicks in new messages and
