@@ -50,7 +50,8 @@
   :group 'irc-log-faces)
 
 (defcustom irc-log-message-face
-  'erc-direct-msg
+  'erc-direct-msg-face
+  "Face for messages."
   :type 'face
   :group 'irc-log-faces)
 
