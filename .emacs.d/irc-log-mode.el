@@ -22,9 +22,12 @@
 
 ;;; TODO:
 ;; - replace defcustom faces to faces or function...
-;; - handle \me messages : nick in bold, and message as a standard message
-;; - handle priv messages : erc-direct-msg-face?
-;; - handle own messages : special color (use erc-nick or server-nick-alist?)
+;; - handle \me messages: erc-action-face
+;; - handle priv messages: erc-direct-msg-face
+;; - handle own message?: erc-input-face (use erc-nick or server-nick-alist?)
+;; - handle own nick?: erc-my-nick-face (use erc-nick or server-nick-alist?)
+;; - handle nick for private messages?: erc-nick-msg-face
+;; - handle "*** Users on"?: erc-current-nick-face
 
 (require 'erc)
 (require 'erc-nick-color)
@@ -50,7 +53,7 @@
   :group 'irc-log-faces)
 
 (defcustom irc-log-message-face
-  'erc-direct-msg-face
+  'erc-default-face
   "Face for messages."
   :type 'face
   :group 'irc-log-faces)
