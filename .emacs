@@ -107,6 +107,7 @@
 ;;--------smex
 ;; super M-x : ido + frequency
 (require 'smex)
+(setq smex-history-length 32)
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
