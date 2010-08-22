@@ -27,7 +27,6 @@
 
 ;;; TODO:
 ;; - r to reload the log
-;; - my-nick custom : a list and not a regexp (regexp-opt)
 ;; - rename to erc-view-log-mode
 ;; - handle priv messages?: erc-direct-msg-face
 ;; - handle nick for private messages?: erc-nick-msg-face
@@ -43,6 +42,12 @@
   "A function that returns a face, given the nick."
   :type 'function)
 
+(defcustom irc-log-my-nickname-match
+  erc-nick
+  "A match for my nickname: either a regexp, or a list of nicks."
+  :type '(choice (regexp :tag "A regexp that matches my nick.")
+		 (list :tag "A list of used nicks. Each nick should be unique and should not contain any regexps.")))
+
 
 (defvar irc-log-timestamp-regexp
   ".*"
@@ -51,10 +56,6 @@
 (defvar irc-log-nickname-regexp
   erc-valid-nick-regexp
   "Regexp to match nicknames (no group match).")
-
-(defvar irc-log-my-nickname-regexp
-  erc-nick
-  "Regexp to match my nickname (no group match).")
 
 (defvar irc-log-message-regexp
   ".*"
@@ -79,6 +80,11 @@
       (apply irc-log-nickname-face-function (list nick))
     'erc-nick-default-face))
 
+(defun erc-log-get-my-nick-regexp ()
+  "Returns a regexp that matches my nick according to custom irc-log-my-nickname-match."
+  (if (listp irc-log-my-nickname-match)
+      (regexp-opt irc-log-my-nickname-match)
+    irc-log-my-nickname-match))
 
 
 ;; warning: only works if erc-timestamp-format doesn't contains the pattern "<a_nickname>"
@@ -86,7 +92,7 @@
   "Returns the font-lock-defaults."
       (list
        ;; own message line
-       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-my-nickname-regexp irc-log-message-regexp)
+       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp (erc-log-get-my-nick-regexp) irc-log-message-regexp)
 	 (1 'erc-timestamp-face)
 	 (2 'erc-default-face)
 	 (3 'erc-my-nick-face)
