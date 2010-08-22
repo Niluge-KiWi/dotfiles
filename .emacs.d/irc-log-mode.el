@@ -28,6 +28,7 @@
 ;;; TODO:
 ;; - r to reload the log
 ;; - my-nick custom : a list and not a regexp (regexp-opt)
+;; - rename to erc-view-log-mode
 ;; - handle priv messages?: erc-direct-msg-face
 ;; - handle nick for private messages?: erc-nick-msg-face
 ;; - handle "*** Users on"?: erc-current-nick-face
