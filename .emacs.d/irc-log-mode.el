@@ -49,7 +49,7 @@
   :group 'irc-log-faces)
 
 (defcustom irc-log-wrap-nickname-face
-  'erc-default
+  'erc-default-face
   "Face for nicknames wrappers <>."
   :type 'face
   :group 'irc-log-faces)
