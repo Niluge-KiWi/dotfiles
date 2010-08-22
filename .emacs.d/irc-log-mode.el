@@ -25,13 +25,13 @@
 ;; For nickname: can be a function that takes the nickname as argument, and returns a face
 
 ;;; TODO:
-;; - handle \me messages: erc-action-face
 ;; - handle commands like "'timestamp' > /whois nickname"" : erc-command-indicator-face and erc-prompt-face
 ;; - handle priv messages?: erc-direct-msg-face
 ;; - handle own message?: erc-input-face (use erc-nick or server-nick-alist?)
 ;; - handle own nick?: erc-my-nick-face (use erc-nick or server-nick-alist?)
 ;; - handle nick for private messages?: erc-nick-msg-face
 ;; - handle "*** Users on"?: erc-current-nick-face
+;; - use vlf.el for large logs? has to be adapted (no more major mode, and handle full lines...)
 
 (require 'erc)
 (require 'erc-nick-color)
@@ -73,7 +73,42 @@
   :type 'face
   :group 'irc-log-faces)
 
+(defcustom irc-log-action-face
+  'erc-action-face
+  "Face for actions (like /ME)."
+  :type 'face
+  :group 'irc-log-faces)
 
+
+(defcustom irc-log-timestamp-regexp
+  ".*"
+  "Regexp to match timestamps (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
+(defcustom irc-log-nickname-regexp
+  erc-valid-nick-regexp
+  "Regexp to match nicknames (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
+(defcustom irc-log-message-regexp
+  ".*"
+  "Regexp to match messages (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
+(defcustom irc-log-notice-regexp
+  "\\*\\*\\* .*"
+  "Regexp to match notices (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
+(defcustom irc-log-action-regexp
+  (format "\\* %s .*" erc-valid-nick-regexp)
+  "Regexp to match actions (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
 
 
 (defun erc-log-nick-get-face ()
@@ -88,19 +123,24 @@
 (setq irc-log-keywords
       (list
        ;; first regexp apply the face
-       `(,(format "^\\(.*\\) \\(<\\)%s\\(>\\) \\(.*\\)$" erc-valid-nick-regexp)
+       `(,(format "^\\(%s\\) \\(<\\)%s\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
 	 (3 irc-log-wrap-nickname-face)
 	 (4 irc-log-message-face)
 	 )
-       `(,(format "^.* <\\(%s\\)> .*$" erc-valid-nick-regexp)
+       `(,(format "^%s <\\(%s\\)> %s$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 1 (erc-log-nick-get-face)
 	 )
-       `("\\(.*\\) \\(\\*\\*\\* .*\\)"
+       `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-notice-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-notice-face)
-	 )))
+	 )
+       `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-action-regexp)
+	 (1 irc-log-timestamp-face)
+	 (2 irc-log-action-face)
+	 )
+       ))
 
 
 ;; undefine some syntax that's messing up with our coloring (for instance, "")
