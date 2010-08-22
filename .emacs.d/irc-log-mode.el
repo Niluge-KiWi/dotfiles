@@ -13,7 +13,7 @@
 ;; To Public License, Version 2, as published by Sam Hocevar. See
 ;; http://sam.zoy.org/wtfpl/COPYING for more details.
 
-;;; Commentary:
+;;; Description:
 ;; Set colors on an irc/erc log file
 
 ;;; Installation:
@@ -57,9 +57,9 @@
 (defcustom irc-log-nickname-face
   ;;'erc-nick-default-face
   'erc-get-face-for-nick
-  "Face for nicknames."
+  "Face for nicknames. Can be either a face or a function that returns a face, given the nick."
   :type '(choice (face :tag "A face")
-		 (function :tag "A function that returns a face, nick as argument"))
+		 (function :tag "A function that returns a face, given the nick"))
   :group 'irc-log-faces)
 
 (defcustom irc-log-my-nickname-face
@@ -142,17 +142,17 @@
   :group 'irc-log-regexps)
 
 (defcustom irc-log-prompt-regexp
-  ">"
+  erc-prompt
   "Regexp to match prompts (no group match)."
   :type 'regexp
   :group 'irc-log-regexps)
 
 
-(defun erc-log-nick-get-face (n)
-  "Returns a face for the matched nick, given the match number."
+(defun erc-log-nick-get-face (nick)
+  "Returns a face for the given nick."
   (if (facep irc-log-nickname-face)
       irc-log-nickname-face
-    (apply irc-log-nickname-face (list (match-string n)))))
+    (apply irc-log-nickname-face (list nick))))
 
 
 
@@ -172,7 +172,7 @@
        `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
-	 (3 (erc-log-nick-get-face 3))
+	 (3 (erc-log-nick-get-face (match-string 3)))
 	 (4 irc-log-wrap-nickname-face)
 	 (5 irc-log-message-face)
 	 )
