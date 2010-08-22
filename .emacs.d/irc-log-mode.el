@@ -26,6 +26,8 @@
 ;; Regexps for: timestamps, nicknames, own nickname, messages, notices, actions, prompt
 
 ;;; TODO:
+;; - r to reload the log
+;; - my-nick custom : a list and not a regexp (regexp-opt)
 ;; - handle priv messages?: erc-direct-msg-face
 ;; - handle nick for private messages?: erc-nick-msg-face
 ;; - handle "*** Users on"?: erc-current-nick-face
@@ -203,12 +205,8 @@
 
 (define-derived-mode irc-log-mode fundamental-mode
   "IRC Log"
-  (setq font-lock-defaults `(,(irc-log-get-keywords))))
-
-
-
-;; logs are read only
-(add-hook 'irc-log-mode-hook 'toggle-read-only)
+  (setq font-lock-defaults `(,(irc-log-get-keywords)))
+  (toggle-read-only))
 
 
 (provide 'irc-log-mode)
