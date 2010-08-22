@@ -207,7 +207,7 @@
 (define-derived-mode irc-log-mode fundamental-mode
   "IRC Log"
   (setq font-lock-defaults `(,(irc-log-get-keywords)))
-  (toggle-read-only))
+  (setq buffer-read-only t))
 
 
 (provide 'irc-log-mode)
