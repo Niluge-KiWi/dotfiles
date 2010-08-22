@@ -37,12 +37,11 @@
 ;; - use vlf.el for large logs? has to be adapted (no more major mode, and handle full lines...)
 
 (require 'erc)
-(require 'erc-nick-color)
 
 
 (defcustom irc-log-nickname-face-function
-  'erc-get-face-for-nick
-  "A function that returns a face, given a nick."
+  nil
+  "A function that returns a face, given a nick. nil to use default erc face."
   :type 'function)
 
 (defcustom irc-log-my-nickname-match
