@@ -153,7 +153,7 @@
 
 
 
-;; warning: only works if erc-timestamp-format doesn't contains the character '<'
+;; warning: only works if erc-timestamp-format doesn't contains the pattern "<a_nickname>"
 (defun irc-log-get-keywords ()
   "Returns the font-lock-defaults."
       (list
