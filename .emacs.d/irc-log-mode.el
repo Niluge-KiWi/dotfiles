@@ -161,7 +161,7 @@
   "Returns the font-lock-defaults."
       (list
        ;; own message line
-       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-my-nickname-regexp irc-log-message-regexp)
+       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-my-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
 	 (3 irc-log-my-nickname-face)
@@ -169,7 +169,7 @@
 	 (5 irc-log-my-message-face)
 	 )
        ;; standard message line
-       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
+       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
 	 (3 (erc-log-nick-get-face 3))
