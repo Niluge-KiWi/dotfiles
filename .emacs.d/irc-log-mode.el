@@ -44,47 +44,33 @@
   :type 'function)
 
 
-(defcustom irc-log-timestamp-regexp
+(defvar irc-log-timestamp-regexp
   ".*"
-  "Regexp to match timestamps (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match timestamps (no group match).")
 
-(defcustom irc-log-nickname-regexp
+(defvar irc-log-nickname-regexp
   erc-valid-nick-regexp
-  "Regexp to match nicknames (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match nicknames (no group match).")
 
-(defcustom irc-log-my-nickname-regexp
+(defvar irc-log-my-nickname-regexp
   erc-nick
-  "Regexp to match my nickname (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match my nickname (no group match).")
 
-(defcustom irc-log-message-regexp
+(defvar irc-log-message-regexp
   ".*"
-  "Regexp to match messages (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match messages (no group match).")
 
-(defcustom irc-log-notice-regexp
+(defvar irc-log-notice-regexp
   "\\*\\*\\* .*"
-  "Regexp to match notices (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match notices (no group match).")
 
-(defcustom irc-log-action-regexp
+(defvar irc-log-action-regexp
   (format "\\* %s .*" erc-valid-nick-regexp)
-  "Regexp to match actions (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match actions (no group match).")
 
-(defcustom irc-log-prompt-regexp
+(defvar irc-log-prompt-regexp
   erc-prompt
-  "Regexp to match prompts (no group match)."
-  :type 'regexp
-  :group 'irc-log-regexps)
+  "Regexp to match prompts (no group match).")
 
 
 (defun erc-log-nick-get-face (nick)
