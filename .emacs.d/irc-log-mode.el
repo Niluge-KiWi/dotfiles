@@ -105,43 +105,43 @@
   ".*"
   "Regexp to match timestamps (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-nickname-regexp
   erc-valid-nick-regexp
   "Regexp to match nicknames (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-my-nickname-regexp
   erc-nick
   "Regexp to match my nickname (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-message-regexp
   ".*"
   "Regexp to match messages (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-notice-regexp
   "\\*\\*\\* .*"
   "Regexp to match notices (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-action-regexp
   (format "\\* %s .*" erc-valid-nick-regexp)
   "Regexp to match actions (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 (defcustom irc-log-prompt-regexp
   ">"
   "Regexp to match prompts (no group match)."
   :type 'regexp
-  :group 'irg-log-regexps)
+  :group 'irc-log-regexps)
 
 
 (defun erc-log-nick-get-face (n)
