@@ -37,72 +37,11 @@
 (require 'erc)
 (require 'erc-nick-color)
 
-(defgroup irc-log nil
-  "IRC log mode"
-  :group 'languages
-  :prefix "irc-log-")
 
-(defcustom irc-log-timestamp-face
-  'erc-timestamp-face
-  "Face for timestamps."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-wrap-nickname-face
-  'erc-default-face
-  "Face for nicknames wrappers <>."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-nickname-face
-  ;;'erc-nick-default-face
+(defcustom irc-log-nickname-face-function
   'erc-get-face-for-nick
-  "Face for nicknames. Can be either a face or a function that returns a face, given the nick."
-  :type '(choice (face :tag "A face")
-		 (function :tag "A function that returns a face, given the nick"))
-  :group 'irc-log-faces)
-
-(defcustom irc-log-my-nickname-face
-  'erc-my-nick-face
-  "Face for my nickname."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-message-face
-  'erc-default-face
-  "Face for messages."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-my-message-face
-  'erc-input-face
-  "Face for my messages."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-notice-face
-  'erc-notice-face
-  "Face for notices."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-action-face
-  'erc-action-face
-  "Face for actions (like /ME)."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-prompt-face
-  'erc-prompt-face
-  "Face for prompts."
-  :type 'face
-  :group 'irc-log-faces)
-
-(defcustom irc-log-command-indicator-face
-  'erc-command-indicator-face
-  "Face for command-indicators (like /whois nickname)."
-  :type 'face
-  :group 'irc-log-faces)
+  "A function that returns a face, given the nick."
+  :type 'function)
 
 
 (defcustom irc-log-timestamp-regexp
@@ -150,9 +89,9 @@
 
 (defun erc-log-nick-get-face (nick)
   "Returns a face for the given nick."
-  (if (facep irc-log-nickname-face)
-      irc-log-nickname-face
-    (apply irc-log-nickname-face (list nick))))
+  (if irc-log-nickname-face-function
+      (apply irc-log-nickname-face-function (list nick))
+    'erc-nick-default-face))
 
 
 
@@ -162,35 +101,35 @@
       (list
        ;; own message line
        `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-my-nickname-regexp irc-log-message-regexp)
-	 (1 irc-log-timestamp-face)
-	 (2 irc-log-wrap-nickname-face)
-	 (3 irc-log-my-nickname-face)
-	 (4 irc-log-wrap-nickname-face)
-	 (5 irc-log-my-message-face)
+	 (1 'erc-timestamp-face)
+	 (2 'erc-default-face)
+	 (3 'erc-my-nick-face)
+	 (4 'erc-default-face)
+	 (5 'erc-input-face) ;; my message
 	 )
        ;; standard message line
        `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\)[ \t]\\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
-	 (1 irc-log-timestamp-face)
-	 (2 irc-log-wrap-nickname-face)
+	 (1 'erc-timestamp-face)
+	 (2 'erc-default-face)
 	 (3 (erc-log-nick-get-face (match-string 3)))
-	 (4 irc-log-wrap-nickname-face)
-	 (5 irc-log-message-face)
+	 (4 'erc-default-face)
+	 (5 'erc-default-face) ;; other message
 	 )
        ;; notice line
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-notice-regexp)
-	 (1 irc-log-timestamp-face)
-	 (2 irc-log-notice-face)
+	 (1 'erc-timestamp-face)
+	 (2 'erc-notice-face)
 	 )
        ;; action line
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-action-regexp)
-	 (1 irc-log-timestamp-face)
-	 (2 irc-log-action-face)
+	 (1 'erc-timestamp-face)
+	 (2 'erc-action-face)
 	 )
        ;; command line
        `(,(format "\\(%s\\) \\(%s\\) \\(/.*\\)" irc-log-timestamp-regexp irc-log-prompt-regexp)
-	 (1 irc-log-timestamp-face)
-	 (2 irc-log-prompt-face)
-	 (3 irc-log-command-indicator-face)
+	 (1 'erc-timestamp-face)
+	 (2 'erc-prompt-face)
+	 (3 'erc-command-indicator-face)
 	 )
        ))
 
