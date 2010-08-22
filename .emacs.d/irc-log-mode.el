@@ -111,11 +111,11 @@
   :group 'irg-log-regexps)
 
 
-(defun erc-log-nick-get-face ()
-  "Returns a face for the matched nick, given "
+(defun erc-log-nick-get-face (n)
+  "Returns a face for the matched nick, given the match number."
   (if (facep irc-log-nickname-face)
       irc-log-nickname-face
-    (apply irc-log-nickname-face (list (match-string 1)))))
+    (apply irc-log-nickname-face (list (match-string n)))))
 
 
 
@@ -123,14 +123,12 @@
 (setq irc-log-keywords
       (list
        ;; first regexp apply the face
-       `(,(format "^\\(%s\\) \\(<\\)%s\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
+       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
-	 (3 irc-log-wrap-nickname-face)
-	 (4 irc-log-message-face)
-	 )
-       `(,(format "^%s <\\(%s\\)> %s$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
-	 1 (erc-log-nick-get-face)
+	 (3 (erc-log-nick-get-face 3))
+	 (4 irc-log-wrap-nickname-face)
+	 (5 irc-log-message-face)
 	 )
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-notice-regexp)
 	 (1 irc-log-timestamp-face)
