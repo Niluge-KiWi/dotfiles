@@ -21,8 +21,9 @@
 ;;    (add-to-list 'auto-mode-alist '("\\.erclogs/.*\\.log" . irc-log-mode))
 
 ;;; Options:
-;; Faces for: timestamp, wrap nickname (<>), nickname, message, notice.
+;; Faces for: timestamp, wrap nickname (<>), nickname, own nickname, message, own message, notice, action, command.
 ;; For nickname: can be a function that takes the nickname as argument, and returns a face
+;; Regexps for: timestamps, nicknames, own nickname, messages, notices, actions, prompt
 
 ;;; TODO:
 ;; - handle priv messages?: erc-direct-msg-face
