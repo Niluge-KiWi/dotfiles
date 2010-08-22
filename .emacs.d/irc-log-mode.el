@@ -14,16 +14,19 @@
 ;; http://sam.zoy.org/wtfpl/COPYING for more details.
 
 ;;; Description:
-;; Set colors on an irc/erc log file
+;; Set colors on an erc log file
 
 ;;; Installation:
 ;;    (require 'irc-log-mode)
 ;;    (add-to-list 'auto-mode-alist '("\\.erclogs/.*\\.log" . irc-log-mode))
 
 ;;; Options:
-;; Faces for: timestamp, wrap nickname (<>), nickname, own nickname, message, own message, notice, action, command.
-;; For nickname: can be a function that takes the nickname as argument, and returns a face
-;; Regexps for: timestamps, nicknames, own nickname, messages, notices, actions, prompt
+;; - irc-log-nickname-face-function:
+;;    A function that returns a face, given a nick, to colorize nicks.
+;;    Can be nil to use standard erc face.
+;; - irc-log-my-nickname-match:
+;;    Either a regexp or a list of nicks, to match our own nickname.
+;;    For the list, each nick should be unique and should not contain any regexps.
 
 ;;; TODO:
 ;; - r to reload the log
@@ -39,7 +42,7 @@
 
 (defcustom irc-log-nickname-face-function
   'erc-get-face-for-nick
-  "A function that returns a face, given the nick."
+  "A function that returns a face, given a nick."
   :type 'function)
 
 (defcustom irc-log-my-nickname-match
