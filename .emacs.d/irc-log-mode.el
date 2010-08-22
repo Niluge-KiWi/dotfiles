@@ -26,8 +26,6 @@
 
 ;;; TODO:
 ;; - handle priv messages?: erc-direct-msg-face
-;; - handle own message?: erc-input-face (use erc-nick or server-nick-alist?)
-;; - handle own nick?: erc-my-nick-face (use erc-nick or server-nick-alist?)
 ;; - handle nick for private messages?: erc-nick-msg-face
 ;; - handle "*** Users on"?: erc-current-nick-face
 ;; - use vlf.el for large logs? has to be adapted (no more major mode, and handle full lines...)
@@ -60,9 +58,21 @@
 		 (function :tag "A function that returns a face, nick as argument"))
   :group 'irc-log-faces)
 
+(defcustom irc-log-my-nickname-face
+  'erc-my-nick-face
+  "Face for my nickname."
+  :type 'face
+  :group 'irc-log-faces)
+
 (defcustom irc-log-message-face
   'erc-default-face
   "Face for messages."
+  :type 'face
+  :group 'irc-log-faces)
+
+(defcustom irc-log-my-message-face
+  'erc-input-face
+  "Face for my messages."
   :type 'face
   :group 'irc-log-faces)
 
@@ -103,6 +113,12 @@
   :type 'regexp
   :group 'irg-log-regexps)
 
+(defcustom irc-log-my-nickname-regexp
+  erc-nick
+  "Regexp to match my nickname (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
 (defcustom irc-log-message-regexp
   ".*"
   "Regexp to match messages (no group match)."
@@ -137,9 +153,18 @@
 
 
 ;; warning: only works if erc-timestamp-format doesn't contains the character '<'
-(setq irc-log-keywords
+(defun irc-log-get-keywords ()
+  "Returns the font-lock-defaults."
       (list
-       ;; first regexp apply the face
+       ;; own message line
+       `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-my-nickname-regexp irc-log-message-regexp)
+	 (1 irc-log-timestamp-face)
+	 (2 irc-log-wrap-nickname-face)
+	 (3 irc-log-my-nickname-face)
+	 (4 irc-log-wrap-nickname-face)
+	 (5 irc-log-my-message-face)
+	 )
+       ;; standard message line
        `(,(format "^\\(%s\\) \\(<\\)\\(%s\\)\\(>\\) \\(%s\\)$" irc-log-timestamp-regexp irc-log-nickname-regexp irc-log-message-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-wrap-nickname-face)
@@ -147,14 +172,17 @@
 	 (4 irc-log-wrap-nickname-face)
 	 (5 irc-log-message-face)
 	 )
+       ;; notice line
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-notice-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-notice-face)
 	 )
+       ;; action line
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-action-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-action-face)
 	 )
+       ;; command line
        `(,(format "\\(%s\\) \\(%s\\) \\(/.*\\)" irc-log-timestamp-regexp irc-log-prompt-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-prompt-face)
@@ -173,8 +201,9 @@
 
 
 (define-derived-mode irc-log-mode fundamental-mode
-  (setq font-lock-defaults '(irc-log-keywords))
-  (setq mode-name "IRC Log"))
+  "IRC Log"
+  (setq font-lock-defaults `(,(irc-log-get-keywords))))
+
 
 
 ;; logs are read only
