@@ -25,7 +25,6 @@
 ;; For nickname: can be a function that takes the nickname as argument, and returns a face
 
 ;;; TODO:
-;; - handle commands like "'timestamp' > /whois nickname"" : erc-command-indicator-face and erc-prompt-face
 ;; - handle priv messages?: erc-direct-msg-face
 ;; - handle own message?: erc-input-face (use erc-nick or server-nick-alist?)
 ;; - handle own nick?: erc-my-nick-face (use erc-nick or server-nick-alist?)
@@ -79,6 +78,18 @@
   :type 'face
   :group 'irc-log-faces)
 
+(defcustom irc-log-prompt-face
+  'erc-prompt-face
+  "Face for prompts."
+  :type 'face
+  :group 'irc-log-faces)
+
+(defcustom irc-log-command-indicator-face
+  'erc-command-indicator-face
+  "Face for command-indicators (like /whois nickname)."
+  :type 'face
+  :group 'irc-log-faces)
+
 
 (defcustom irc-log-timestamp-regexp
   ".*"
@@ -110,6 +121,12 @@
   :type 'regexp
   :group 'irg-log-regexps)
 
+(defcustom irc-log-prompt-regexp
+  ">"
+  "Regexp to match prompts (no group match)."
+  :type 'regexp
+  :group 'irg-log-regexps)
+
 
 (defun erc-log-nick-get-face (n)
   "Returns a face for the matched nick, given the match number."
@@ -137,6 +154,11 @@
        `(,(format "\\(%s\\) \\(%s\\)" irc-log-timestamp-regexp irc-log-action-regexp)
 	 (1 irc-log-timestamp-face)
 	 (2 irc-log-action-face)
+	 )
+       `(,(format "\\(%s\\) \\(%s\\) \\(/.*\\)" irc-log-timestamp-regexp irc-log-prompt-regexp)
+	 (1 irc-log-timestamp-face)
+	 (2 irc-log-prompt-face)
+	 (3 irc-log-command-indicator-face)
 	 )
        ))
 
