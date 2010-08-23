@@ -83,6 +83,9 @@
       ido-max-window-height 1)
 (ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
+;; to have the buffers and files open in the selected-window, as done by switch-to-buffer
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
 ;;ido M-x mode #http://www.emacswiki.org/emacs/InteractivelyDoThings#toc6
 (setq ido-execute-command-cache nil)
 (defun ido-execute-command ()
