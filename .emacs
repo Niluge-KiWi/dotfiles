@@ -6,6 +6,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(global-font-lock-mode t)
  '(inhibit-startup-echo-area-message (user-login-name))
  '(inhibit-startup-screen t)
  '(initial-scratch-message nil)
@@ -13,8 +14,7 @@
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
- '(transient-mark-mode nil)
- '(global-font-lock-mode t))
+ '(transient-mark-mode nil))
 
 (setq inhibit-splash-screen t)
 ;;pas de curseur clignotant
