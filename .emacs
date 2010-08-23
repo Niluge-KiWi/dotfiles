@@ -144,6 +144,15 @@
 ;; (add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Diff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;-------ediff mode
+;;vertical split (terminology is confusing)
+(setq ediff-split-window-function 'split-window-horizontally)
+;;no separate frame
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;; this is a huge hack
 
 
 ;;paredit :: not used, deactivated
