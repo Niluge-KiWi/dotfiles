@@ -1,7 +1,10 @@
 (require 'erc)
 ;;--------------------
-;;Settings
+;; Settings
 ;;--------------------
+; specific settings for IM gateways : minbif or bitlbee
+(setq im-gateway-channel-name "&friends")
+; erc general conf
 (setq erc-modules '(autojoin button completion fill
 			     irccontrols list
 			     log match menu move-to-prompt
@@ -128,7 +131,7 @@ This function is a possible value for `erc-generate-log-file-name-function'."
   (end-of-buffer))
 
 ;;--------------------
-;;Unread messages bar
+;; Unread messages bar
 ;;--------------------
 (eval-after-load 'erc-track
   '(progn
@@ -169,14 +172,58 @@ erc-modified-channels-alist. Should be executed on window change."
      (add-hook 'erc-send-completed-hook (lambda (str)
 					  (erc-bar-update-overlay)))))
 
+;;--------------------
+;; Connect
+;;--------------------
+(defun assoc-regexp (key list)
+  "Like assoc-string, but returns whenever there is a match"
+  (if (null list) nil
+    (if (string-match (caar list) key)
+	(car list)
+      (assoc-regexp key (cdr list)))))
+
+(defvar my-irc-server-nick-alist '()
+  "alist irc server nick")
+(defvar my-irc-server-port-alist '()
+  "alist irc server port")
+(defvar my-irc-server-pass-alist '()
+  "alist irc server pass")
+(defvar my-irc-servers '()
+  "list irc server")
+
+(defun get-nick-for-server (serv)
+  (or (cadr (assoc-regexp serv my-irc-server-nick-alist))
+      erc-nick))
+(defun get-port-for-server (serv)
+  (or (cadr (assoc-regexp serv my-irc-server-port-alist))
+      6667))
+(defun get-pass-for-server (serv)
+  (or (cadr (assoc-regexp serv my-irc-server-pass-alist))
+      ""))
+
+(defun irc ()
+  "Connect to IRC."
+  (interactive)
+  (mapcar (lambda (x) (erc :server x :port (get-port-for-server x) :nick (get-nick-for-server x) :password (get-pass-for-server x))) my-irc-servers))
+
+(defun irc-deco ()
+  "Kill all server buffers"
+  (interactive)
+  (mapcar (lambda (x) (kill-buffer (format "%s:%d" x (get-port-for-server x)))) my-irc-servers))
+
+
+(defun irc-reco ()
+  "Kill all server buffers, and connect again"
+  (interactive)
+  (irc-deco)
+  (irc))
 
 ;;--------------------
-;;channel change commands
+;; Channel change commands
 ;;--------------------
 (defun irc-dwim (arg)
-  "Runs IRC (by function irc, to be written for your particular servers)
-  if it is not running, use erc-track to switch to last modified
-  chan if it is."
+  "Runs IRC (by function irc) if it is not running,
+  use erc-track to switch to last modified chan if it is."
   (interactive "p")
   (require 'erc-track)
   (if (erc-channel-list nil)
@@ -279,7 +326,7 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 
 
 ;;--------------------
-;;notify in query buffers when someone appears/disappears
+;; Notify in query buffers when someone appears/disappears
 ;;--------------------
 (erc-define-catalog
  'english
@@ -308,7 +355,7 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 
 
 ;;--------------------
-;;prompts for commands
+;; Prompts for commands
 ;;--------------------
 (defun erc-query-prompt ()
   "Prompts for someone to query"
@@ -427,11 +474,13 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;; TODO use notification-daemon with dbus http://www.galago-project.org/specs/notification/0.9/x408.html#command-notify ?
 ;; TODO or gnome-osd ? see smeuuh.emacs
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; System tray
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;ERC tray. Needs tray_daemon, http://smeuuh.free.fr/tray_daemon/
-;;defined in emacs_perso : list of regexps for which we don't blink
+
+;;--------------------
+;; System tray
+;;--------------------
+;;-------ERC tray
+;; Needs tray_daemon, http://smeuuh.free.fr/tray_daemon/
+;; defined in emacs_perso : list of regexps for which we don't blink
 ;;the tray icon
 (setq erc-tray-inhibit-one-activation nil)
 (setq erc-tray-ignored-channels nil)
