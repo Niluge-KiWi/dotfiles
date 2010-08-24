@@ -4,6 +4,12 @@
 
 ;; Copyright (C) 2010 Thomas Riccardi
 
+;; This program is free software. It comes without any warranty, to
+;; the extent permitted by applicable law. You can redistribute it
+;; and/or modify it under the terms of the Do What The Fuck You Want
+;; To Public License, Version 2, as published by Sam Hocevar. See
+;; http://sam.zoy.org/wtfpl/COPYING for more details.
+
 ;;; Commentary:
 ;; Set colors nicknames in erc buffers:
 ;; - random colors based on md5, directly mapped to #rrggbb values,
@@ -12,15 +18,23 @@
 ;;; Installation:
 ;;    (require 'erc-nick-color)
 ;;    (add-hook 'erc-insert-modify-hook 'erc-put-color-on-nick)
-;;    (setq erc-nick-color-alist
-;;    (list (cons "NickName1" green)
-;;          (cons "NickName2" blue)
-;;          ))
+;;    (setq erc-nick-color-alist '(("Nick1" . "blue")
+;;    			     ("Nick2" . "green")
+;;    			     ))
+
+;;; Todo
+;; - colorize nicks everywhere : http://github.com/antoine-levitt/perso/commit/eae7232f9c9a1fa9201061c8aeffedbd76d6d036 but with advice on erc-button-add-button
 
 (require 'erc)
 
-(setq erc-nick-color-alist '())
-(setq erc-nick-color-match-regexp (format "<\\(%s\\)>" erc-valid-nick-regexp))
+(defcustom erc-nick-color-alist '()
+  "alist of nick and color."
+  ;;:type '(alist :key-type (string :tag "nick") :value-type 'color) ;; TODO revoir le type
+  :group 'erc)
+
+(defvar erc-nick-color-match-regexp
+  (format "<\\(%s\\)>" erc-valid-nick-regexp)
+  "Regexp to match nicks.")
 
 (defun erc-get-color-for-nick (nick)
   "Returns the color for the given nick, by random md5 or hardcoded value."
