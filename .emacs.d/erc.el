@@ -5,7 +5,7 @@
 ; specific settings for IM gateways : minbif or bitlbee
 (setq im-gateway-channel-name "&friends")
 ; erc general conf
-(setq erc-modules '(autojoin button completion fill
+(setq erc-modules '(autojoin button completion
 			     irccontrols list
 			     log match menu move-to-prompt
 			     netsplit networks noncommands
@@ -59,9 +59,6 @@
       erc-autoaway-idle-seconds (* 60 30)
       erc-autoaway-message "Away"
       erc-truncate-buffer-on-save t
-      erc-fill-variable 'erc-fill-static
-      erc-fill-static-center 13
-      erc-fill-column 10000000 ;; long lines are well displayed by emacs, no need to cut by hand
       )
 
 
