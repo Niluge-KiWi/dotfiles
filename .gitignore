@@ -1,0 +1,5 @@
+# Perso files #
+###############
+.bash_perso
+.emacs.d/perso.el
+.gitconfig
