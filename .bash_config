@@ -1,11 +1,10 @@
 #!/bin/bash
-## .bashrc perso (versionné) ##
+## .bashrc versionned config ##
 
 ## How to use : add this to .bashrc
 
-# ## ajouts communs à toutes mes installations (versionné) ##
-# if [ -f ~/.bash_perso ]; then
-#    . ~/.bash_perso
+# if [ -f ~/.bash_config ]; then
+#    . ~/.bash_config
 # fi
 
 ## from debian ##
