@@ -62,7 +62,7 @@
 (setq font-use-system-font t) ;; since emacs 23.2
 ;;old way:
 ;; do this in shell:
-;;echo "Emacs.font: Monospace-10" >> ~/.Xresources
+;;echo "Emacs.font: Monospace-12" >> ~/.Xresources
 ;;xrdb -merge ~/.Xresources
 
 
