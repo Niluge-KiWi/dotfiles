@@ -255,7 +255,7 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
   (unless erc-modified-channels-alist
     (erc-tray-change-state nil))
   ;;maybe make tray blink
-  (unless (eq nil (frame-visible-p (selected-frame)))
+  (unless (frame-focus-p)
     ;;filter list according to erc-tray-ignored-channels
     (let ((filtered-list erc-modified-channels-alist))
       (mapc (lambda (el)
@@ -287,8 +287,8 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 (defun erc-notify-if-hl (matched-type nick msg)
   "Notify whenever someone highlights you and you're away"
   (when (and (eq matched-type 'current-nick)
-	     (not (eq t (frame-visible-p (selected-frame)))))
-    (notify (format "HL: \<%s\> %s" (erc-extract-nick nick) msg))))
+	     (not (frame-focus-p)))
+    (notify (format "HL \<%s\>" (erc-extract-nick nick)) msg)))
 ;;notify if away and highlighted
 (add-hook 'erc-text-matched-hook 'erc-notify-if-hl)
 
@@ -311,12 +311,12 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 	(msg (erc-response.contents parsed)))
 
     (when (and (string= target (erc-current-nick))
-	       (not (eq t (frame-visible-p (selected-frame))))
+	       (not (frame-focus-p))
 	       (not (erc-is-message-ctcp-and-not-action-p msg)))
       ;;prevents from blinking on messages for which there is already
       ;;a notification
       ;; (setq erc-tray-inhibit-one-activation t)
-      (notify (format "PM: \<%s\> %s" nick msg))))
+      (notify (format "PM \<%s\>" nick) msg)))
   nil)
 ;;notify if away and pmed
 (add-hook 'erc-server-PRIVMSG-functions 'my-notify-PRIVMSG)
@@ -457,19 +457,43 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;; Notification framework (used in ERC)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;TODO move to .emacs
+
+(defun get-frame-name (&optional frame)
+  "Return the string that names FRAME (a frame).  Default is selected frame."
+  (unless frame (setq frame (selected-frame)))
+  (if (framep frame)
+      (cdr (assq 'name (frame-parameters frame)))
+    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
+
+(defun frame-focus-p (&optional frame)
+  "Return t iff the given frame has the X focus.
+If frame is a non X terminal frame, return (frame-visible-p frame)."
+  (unless frame (setq frame (selected-frame)))
+  (if (not (string= 'x (framep frame)))
+      ;; not a X terminal frame
+      (frame-visible-p frame))
+  (let ((focus-name (shell-command-to-string "~/bin/getInputFocus/getInputFocusName.sh"))
+	(frame-name (get-frame-name frame)))
+    (string= focus-name frame-name)))
+
 ;;notification
-(setq do-not-disturb nil)
-;;set this if you don't want to be disturbed by notifications
-;;(setq do-not-disturb t)
+(defvar do-not-disturb nil
+  "Set this if you don't want to be disturbed by notifications")
+(require 'notifications)
+;; (defmacro notify (&rest PARAM)
+;;   "Notify user by graphical display"
+;;   (unless do-not-disturb
+;;     `(notifications-notify ,@PARAM)))
+;; temporary macro with notify-send, because there is a bug with utf8 and dbus in emacs
 (defun notify (title message)
   "Notify user by graphical display"
   (unless do-not-disturb
     (shell-command-to-string (format
-			      "notify-send %s %s"
-			      (shell-quote-argument (concat "" title))
-			      (shell-quote-argument (concat "" message))))))
-;; TODO use notification-daemon with dbus http://www.galago-project.org/specs/notification/0.9/x408.html#command-notify ?
-;; TODO or gnome-osd ? see smeuuh.emacs
+			      "notify-send %s %s --icon=%s"
+			      (shell-quote-argument title)
+			      (shell-quote-argument message)
+			      (shell-quote-argument "emacs")))))
+
 
 
 ;;--------------------
