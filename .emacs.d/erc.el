@@ -479,7 +479,7 @@ If frame is a non X terminal frame, return (frame-visible-p frame)."
 ;;notification
 (defvar do-not-disturb nil
   "Set this if you don't want to be disturbed by notifications")
-(require 'notifications)
+;;(require 'notifications)
 ;; (defmacro notify (&rest PARAM)
 ;;   "Notify user by graphical display"
 ;;   (unless do-not-disturb
