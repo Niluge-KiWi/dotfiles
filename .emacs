@@ -859,10 +859,10 @@ we can quit by pressing 'ESC' three times. This function handles it more conveni
 of not being in the minibuffer but having it active. Otherwise simply doing the ESC or (keyboard-escape-quit) would
 brake whatever split of windows we might have in the frame."
   (interactive)
-  (if (not(window-minibuffer-p (selected-window)))
-      (if (active-minibuffer-window)
-          (keyboard-escape-quit)))
-   (keyboard-quit))
+  (if (and (not (window-minibuffer-p (selected-window)))
+	     (active-minibuffer-window))
+      (keyboard-escape-quit)
+    (keyboard-quit)))
 (define-key global-map (kbd "C-g") 'my-keyboard-quit)
 
 ;;find file at point
