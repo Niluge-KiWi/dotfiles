@@ -452,50 +452,6 @@ This places `point' just after the prompt, or at the beginning of the line."
   (point))
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Notification framework (used in ERC)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;TODO move to .emacs
-
-(defun get-frame-name (&optional frame)
-  "Return the string that names FRAME (a frame).  Default is selected frame."
-  (unless frame (setq frame (selected-frame)))
-  (if (framep frame)
-      (cdr (assq 'name (frame-parameters frame)))
-    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
-
-(defun frame-focus-p (&optional frame)
-  "Return t iff the given frame has the X focus.
-If frame is a non X terminal frame, return (frame-visible-p frame)."
-  (unless frame (setq frame (selected-frame)))
-  (if (not (string= 'x (framep frame)))
-      ;; not a X terminal frame
-      (frame-visible-p frame))
-  (let ((focus-name (shell-command-to-string "~/bin/getInputFocus/getInputFocusName.sh"))
-	(frame-name (get-frame-name frame)))
-    (string= focus-name frame-name)))
-
-;;notification
-(defvar do-not-disturb nil
-  "Set this if you don't want to be disturbed by notifications")
-;;(require 'notifications)
-;; (defmacro notify (&rest PARAM)
-;;   "Notify user by graphical display"
-;;   (unless do-not-disturb
-;;     `(notifications-notify ,@PARAM)))
-;; temporary macro with notify-send, because there is a bug with utf8 and dbus in emacs
-(defun notify (title message)
-  "Notify user by graphical display"
-  (unless do-not-disturb
-    (shell-command-to-string (format
-			      "notify-send %s %s --icon=%s"
-			      (shell-quote-argument title)
-			      (shell-quote-argument message)
-			      (shell-quote-argument "emacs")))))
-
-
-
 ;;--------------------
 ;; System tray
 ;;--------------------

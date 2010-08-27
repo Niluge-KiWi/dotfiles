@@ -1,36 +1,22 @@
 ;; -*- coding: utf-8 -*-
+;;; Emacs of Thomas Riccardi. Homepage : http://github.com/Niluge-KiWi/dotfiles
+;; Many things from http://github.com/antoine-levitt/perso, and some other things
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(column-number-mode t)
- '(global-font-lock-mode t)
- '(inhibit-startup-echo-area-message (user-login-name))
- '(inhibit-startup-screen t)
- '(initial-scratch-message nil)
- '(menu-bar-mode nil)
- '(scroll-bar-mode nil)
- '(show-paren-mode t)
- '(tool-bar-mode nil)
- '(transient-mark-mode nil))
+;; Can be viewed in outline mode
 
-(setq inhibit-splash-screen t)
-;;pas de curseur clignotant
-(blink-cursor-mode -1)
 
-;;library path : used for require, load-library, autoload ...
-;; search in each subdir of ~/.emacs.d/
-(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-    (let* ((my-lisp-dir "~/.emacs.d/")
-	   (default-directory my-lisp-dir))
-      (setq load-path (cons my-lisp-dir load-path))
-      (normal-top-level-add-subdirs-to-load-path)))
-;;TODO: débugger ça pcq ça marche pas... en attendant ça marche mieux avec la suite:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Path setup
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/erc-5.3/"))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
+;;byte-recompile elisp files if they need to be
+;;(byte-recompile-directory "~/.emacs.d" 0)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,21 +30,47 @@
   (package-initialize))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Desktop and server
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;if we are alone, run server, and load desktop
+;;very crude hack
+(defvar emacs-is-master nil
+  "Is emacs the server?")
+(when (string= "1\n"
+	       (shell-command-to-string
+		"ps x | grep emacs | grep -v grep | grep -v emacs-bin | grep -v emacsclient | wc -l"))
+  (setq emacs-is-master t)
+  ;;(server-start)
+  (desktop-save-mode 1))
+;;TODO desktop-save-mode
 
-;; default to better frame titles
-(setq frame-title-format
-      (concat  "%b - emacs@" system-name))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Graphical display
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; there is some stuff in customize, but can't move it
+;; here for technical reasons
+
+;; fullscreen
+(defun toggle-fullscreen (&optional f)
+  (interactive)
+  (let ((current-value (frame-parameter nil 'fullscreen)))
+    (set-frame-parameter nil 'fullscreen
+			 (if (equal 'fullboth current-value)
+			     (if (boundp 'old-fullscreen) old-fullscreen nil)
+			   (progn (setq old-fullscreen current-value)
+				  'fullboth)))))
+;; ;; one emacs to rule them all and in fullscreen bind them
+;; (when emacs-is-master
+;;   (toggle-fullscreen))
 
 
-;; Color Themes
-;;(require 'color-theme)
-;;(color-theme-initialize)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Colour theme and fonts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'zenburn)
-(color-theme-zenburn)
-
-
-
-;; font
+(zenburn)
 (setq font-use-system-font t) ;; since emacs 23.2
 ;;old way:
 ;; do this in shell:
@@ -66,56 +78,126 @@
 ;;xrdb -merge ~/.Xresources
 
 
-;;byte-recompile elisp files if they need to be
-;; (byte-recompile-directory "~/.emacs.d" 0)
-;; (kill-buffer "*Compile-Log*")
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Mouse
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;(setq mouse-yank-at-point t)
+(setq mouse-highlight t)
+(mouse-avoidance-mode 'jump)
+;; control mouse clipboard. In particular, select-active-regions, activated in 23.2, sucks.
+(setq x-select-enable-primary t)
+(setq x-select-enable-clipboard nil)
+(setq select-active-regions nil)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Interactively Do Things
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;-------ido
-;; interactively do things with buffers and files.
-(require 'ido)
-(setq ido-create-new-buffer 'always
-      ido-enable-flex-matching t
-      ;;ido-max-prospects 12
-      ido-max-window-height 1)
-(ido-mode 'both) ;; for buffers and files
-(ido-everywhere 1)
-;; to have the buffers and files open in the selected-window, as done by switch-to-buffer
-(setq ido-default-file-method 'selected-window)
-(setq ido-default-buffer-method 'selected-window)
-;;ido M-x mode #http://www.emacswiki.org/emacs/InteractivelyDoThings#toc6
-(setq ido-execute-command-cache nil)
-(defun ido-execute-command ()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; General-purpose functions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun toggle-variable (symb)
+  (set symb (not (eval symb))))
+
+(defun current-mm ()
+  (buffer-local-value 'major-mode (current-buffer)))
+
+(defun current-buffer-not-mini ()
+  "Return current-buffer if current buffer is not the *mini-buffer*
+  else return buffer before minibuf is activated."
+  (if (not (window-minibuffer-p)) (current-buffer)
+    (if (eq (get-lru-window) (next-window))
+	(window-buffer (previous-window)) (window-buffer (next-window)))))
+
+(defun launch-command (command filename)
+  "Launches command with argument filename, discarding all output"
+  (let ((process-connection-type nil))
+    (start-process "" nil command filename)))
+
+(defun gnome-open-file (filename)
+  "gnome-opens the specified file."
+  (interactive "fFile to open: ")
+  (launch-command  "/usr/bin/gnome-open" filename))
+
+(defun basename-cons(f)
+  (cons (file-name-nondirectory f) f))
+
+(defun sudo-edit (&optional arg)
+  "Edit a file as root"
+  (interactive "p")
+  (if arg
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+(defun rde () (interactive) (load-file "~/.emacs"))
+(defun ede () (interactive) (find-file "~/.emacs"))
+
+(defun indent-whole-buffer ()
+  "Indent whole buffer"
   (interactive)
-  (let ((ido-enable-flex-matching nil)) ;; too disturbing with too much results
-       (call-interactively
-	(intern
-	 (ido-completing-read
-	  "M-x "
-	  (progn
-	    (unless ido-execute-command-cache
-	      (mapatoms (lambda (s)
-			  (when (commandp s)
-			    (setq ido-execute-command-cache
-				  (cons (format "%S" s) ido-execute-command-cache))))))
-	    ido-execute-command-cache))))))
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil))
 
-;;-------icomplete
-;; completion for commands that don't use ido (like help)
-(icomplete-mode 1)
+(defun kill-whitespace ()
+  "Kill the whitespace between two non-whitespace characters"
+  (interactive "*")
+  (save-excursion
+    (save-restriction
+      (save-match-data
+	(progn
+	  (re-search-backward "[^ \t\r\n]" nil t)
+	  (re-search-forward "[ \t\r\n]+" nil t)
+	  (replace-match "" nil nil))))))
 
-;;-------smex
-;; super M-x : ido + frequency
-(require 'smex)
-(setq smex-history-length 32)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Misc. settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; instead of / or whatever
+(setq default-directory (expand-file-name "~/"))
+;; ;; OH MY GOD IT'S A SECURITY VULNERABILITY, WE ARE ALL GONNA DIE
+;; (setq enable-local-variables :all)
+;;automatic indent
+(global-set-key (kbd "RET") 'newline-and-indent)
+;;no transient mark
+(transient-mark-mode -1)
+;; TODO check when selected by mouse
+
+;; bypass emacs broken mechanism to detect browser
+(setq browse-url-browser-function
+      (lambda (url &rest args)
+	(interactive)
+	(launch-command "x-www-browser" url)))
+
+;;just type y/n instead of yes/no RET. this should be default
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;;blinking cursor is distracting and useless
+(blink-cursor-mode -1)
+
+;;display buffer name in title bar
+(setq frame-title-format '("%b" " - " invocation-name "@" system-name))
+(setq icon-title-format 
+      '(multiple-frames ("%b" invocation-name "@" system-name)
+			("" invocation-name "@" system-name)))
+
+
+;; ;;backups/autosaves : no autosaves, and backups in one centralised place
+;; (setq auto-save-default nil)
+;; (defvar backup-dir "~/.emacsbackups/")
+;; (setq backup-directory-alist (list (cons "." backup-dir)))
+
+;;please add a final newline each time I save a buffer
+(setq require-final-newline 't)
+
+;; TODO use own pastebin
+(require 'pastebin)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Scrolling
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;scroll one line at a time
+(setq scroll-conservatively 100000000)
+;;keep cursor at current position when scrolling
+(setq scroll-preserve-screen-position t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -128,429 +210,149 @@
 (defalias 'll 'longlines-mode)
 
 
-;; Se limiter à des lignes de 80 caractères dans les modes textes (y
-;; compris le mode LaTeX) :
-;; cf. http://www-verimag.imag.fr/~moy/emacs/#autofill
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Auto revert
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; automatically update buffers when changed
+(global-auto-revert-mode t)
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-interval 30) ;30s is enough
+(setq auto-revert-verbose nil)
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Interactively Do Things
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;-------ido
+;;makes C-x C-f and C-x b a lot easier
+(require 'ido)
+(setq ido-create-new-buffer 'always
+      ido-enable-flex-matching t
+      ;;ido-max-prospects 12
+      ido-max-window-height 1)
+(ido-mode 'both) ;; for buffers and files
+(ido-everywhere 1)
+;; to have the buffers and files open in the selected-window, as done by switch-to-buffer
+(setq ido-default-file-method 'selected-window)
+(setq ido-default-buffer-method 'selected-window)
 
+;;-------icomplete
+;; completion for commands that don't use ido (like help)
+(icomplete-mode 1)
+;; TODO test icicles
 
-;; ess Emacs Speaks Statistics
-;;(require 'ess-site)
-
-;; sqlplus mode pour oracle
-;; (require 'sqlplus)
-;; (add-to-list 'auto-mode-alist '("\\.sqp\\'" . sqlplus-mode))
+;;-------smex
+;; super M-x : ido + frequency
+(require 'smex)
+(setq smex-history-length 32)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+;; This is your old M-x.
+;;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Diff
+;;; Uniquify
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;-------ediff mode
-;;vertical split (terminology is confusing)
-(setq ediff-split-window-function 'split-window-horizontally)
-;;no separate frame
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-;; this is a huge hack
+;; uniquify buffer names
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'post-forward)
 
 
-;;paredit :: not used, deactivated
-;; (autoload 'paredit-mode "paredit"
-;;   "Minor mode for pseudo-structurally editing Lisp code."
-;;   t)
-;; ;;undefine keys I use
-;; (eval-after-load 'paredit
-;;   '(progn
-;;      (define-key paredit-mode-map (kbd "M-<down>")
-;;        nil)
-;;      (define-key paredit-mode-map (kbd "M-<up>")
-;;        nil)
-;;      (define-key paredit-mode-map (kbd "M-\"")
-;;        nil)
-;;      (define-key paredit-mode-map (kbd "M-q")
-;;        'paredit-backward-kill-word)))
-;; ;;toggle paredit with f6
-;; (global-set-key (kbd "<f6>") 'paredit-mode)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Parenthesis editing
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;visual paren matching
+(show-paren-mode t)
 
 
-;;-------Latex mode
-;;don't ask to cache preamble
-(setq preview-auto-cache-preamble t)
-;;indent when pressing RET
-(setq TeX-newline-function 'newline-and-indent)
-
-(autoload 'whizzytex-mode "whizzytex"
-  "WhizzyTeX, a minor-mode WYSIWIG environment for LaTeX"
-  t)
-
-
-
-;;-------C/C++ mode
-(setq c-default-style "linux")
-(setq-default c-basic-offset 4)
-
-(defun my-c-indent-setup ()
-  (c-set-style "linux")
-  (setq-default c-basic-offset 4))
-  ;;(setq-default c-basic-offset 8))
-(add-hook 'c-mode-hook 'my-c-indent-setup)
-(add-hook 'c++-mode-hook 'my-c-indent-setup)
-
-;;'electric' indentation : indent on newline
-(add-hook 'c-mode-common-hook (lambda ()
-                                (define-key c-mode-base-map "\C-m"
-                                  'c-context-line-break)))
-
-;;------java mode
-(defun my-java-indent-setup ()
-  (c-set-style "java")
-  (setq c-basic-offset 4))
-(add-hook 'java-mode-hook 'my-java-indent-setup t)
-
-
-;;-------python mode
-(defadvice run-python (after run-python-revert-patch)
-  "revert patch which removes '' from sys.path"
-  (python-send-string "import sys
-sys.path.insert(0, '')"))
-(ad-activate 'run-python)
-
-
-
-;;-------php mode
-(require 'php-mode)
-;; Toggle between PHP & HTML mode.  Useful when working on
-;; php files, that can been intertwined with HTML code
-(add-hook 'php-mode-hook
-	  (lambda ()
-	    (global-set-key [f5] 'html-mode)))
-(add-hook 'html-mode-hook
-	  (lambda ()
-	    (global-set-key [f5] 'php-mode)))
-
-;;-------YAML mode
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
-(add-hook 'yaml-mode-hook
-	  '(lambda ()
-	     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-(add-hook 'yaml-mode-hook
-	  '(lambda ()
-	     (setq indent-tabs-mode nil)
-	     (setq c-indent-level 2)))
-
-;;-------apache mode
-(autoload 'apache-mode "apache-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
-(add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
-(add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
-(add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
-(add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
-
-
-
-;;-------compilation
-;;make compile window disappear after successful compilation
-(setq compilation-finish-function
-      (lambda (buf str)
-	(if (string-match "*Compilation*" (buffer-name buf))
-	    (if (string-match "abnormally" str)
-		(message "There were errors :-(")
-	      ;;no errors, make the compilation window go away in 2 second
-	      (run-at-time 2 nil
-			   (lambda (buf)
-			     (delete-windows-on buf)
-			     (bury-buffer buf))
-			   buf)
-	      (message "No errors :-)")))))
-
-;;my-compile is smarter about how to display the new buffer
-(defun display-buffer-by-splitting-largest (buffer force-other-window)
-  "Display buffer BUFFER by splitting the largest buffer vertically, except if
-  there is already a window for it."
-  (or (get-buffer-window buffer)
-      (let ((new-win
-	     (with-selected-window (get-largest-window)
-	       (split-window-vertically))))
-	(set-window-buffer new-win buffer)
-	new-win)))
-
-(defun my-compile ()
-  "Ad-hoc display of compilation buffer."
-  (interactive)
-  (let ((display-buffer-function 'display-buffer-by-splitting-largest))
-    (call-interactively 'compile)))
-
-;;misc compilation settings
-(setq-default
- compile-command "make"
- compilation-read-command nil
- compilation-scroll-output 'first-error
- compilation-ask-about-save nil
- compilation-window-height 5
- compilation-auto-jump-to-first-error t)
-
-;;compilation by C-M-c C-M-c
-(global-unset-key (kbd "C-M-c"))
-(global-set-key (kbd "C-M-c C-M-c") 'my-compile)
-
-
-
-;; dictionnaires francais et anglais
-(require 'flyspell)
-(setq my-languages '("british" "francais"))
-(defun flyspell-lang (&optional lang)
-  "Toggle flyspell-mode with the given lang, or prompt with ido."
-  (interactive)
-  (let* ((old-language ispell-local-dictionary)
-	 (language (if lang lang
-		     (ido-completing-read
-		      "Spell Language:"
-		      ;; set old language as first value, for simple toggle
-		      (if (member old-language my-languages)
-			  (cons old-language (remove old-language my-languages))
-			my-languages)
-		      nil t))))
-    (if (and flyspell-mode
-	     (string= old-language language))
-	;; toggle off
-	(flyspell-mode 0)
-      ;; start flyspell
-      (progn
-	(flyspell-mode t)
-	(ispell-change-dictionary language)
-	(flyspell-buffer)))))
-
-
-
-;;autopair
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Autopair
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers
 
 (setq autopair-blink nil) ;; no blink
 (setq autopair-autowrap t) ;; wrap region with character to insert
 
+;; not in ERC
 (add-hook 'erc-mode-hook
-	  (lambda () (setq autopair-dont-activate t)))
+	  #'(lambda () (setq autopair-dont-activate t)))
+;; pair $ correctly
 (add-hook 'LaTeX-mode-hook
-          (lambda ()
-	    (modify-syntax-entry ?$ "\"")))
-
-
-;;supprimer la sélection quand on tape
-(delete-selection-mode 1)
-
-;;qwerty du pauvre
-(global-set-key (kbd "M-é") 'split-window-vertically)
-(global-set-key (kbd "M-\"") 'split-window-horizontally)
-(global-set-key (kbd "M-&") 'delete-other-windows)
-(global-set-key (kbd "M-à") 'delete-window)
-
-
-;;make tab the ultimate completion key
-(defmacro ad-add-advice-to-key (key expr)
-  "Around advice the key KEY with expression EXPR. KEY should be
-a key in the format accepted by key-binding and such, and EXPR an
-expression of the same type as those required by around advices"
-  `(add-hook 'pre-command-hook
-	     (lambda ()
-	       (when (equal (this-command-keys-vector) ,key)
-		 (ad-add-advice this-command
-				'(azerrswdf ;arbitrary advice name
-				  nil	    ;not protected
-				  t	    ;activated
-				  (lambda ()
-				    ,expr
-				    (ad-unadvise this-command)))
-				'around
-				'last)
-		 (ad-activate this-command)))))
-
-(ad-add-advice-to-key [9]
-		      (let ((p (point)))
-			ad-do-it
-			(when (and (not (minibuffer-window-active-p (minibuffer-window)))
-				   (= p (point))
-				   (not (bolp))
-				   (looking-at "\\_>"))
-			  (dabbrev-expand nil))))
-
-
-;;Emacs is a text editor, make sure your text files end in a newline
-(setq require-final-newline 't)
-
-;;scrolling
-;;scroll one line at a time
-(setq scroll-conservatively 100000000)
-;;keep cursor at current position when scrolling
-(setq scroll-preserve-screen-position t)
- 
-;;just type y/n instead of yes/no RET. this should be default
-(fset 'yes-or-no-p 'y-or-n-p)
-
-
-;;browse kill ring to look for forgotten copy/paste
-(require 'browse-kill-ring)(global-set-key (kbd "C-c k") 'browse-kill-ring)
-
-
-
-;;-------raccourcis claviers en plus
-(defun reload-config ()
-  (interactive)
-  (load-file "~/.emacs"))
-(global-set-key "\C-x\C-r" 'reload-config)
-
-;;C-< et M-< pour aller au début et à la fin d'un buffer
-(global-set-key [(meta <)] 'beginning-of-buffer)
-(global-set-key [(control <)] 'end-of-buffer)
-
-
-;;I just want C-x k to kill the buffer instead of just prompting me
-;;for it like ido does
-(global-set-key (kbd "C-x k") (lambda ()
-                                (interactive) (kill-buffer (current-buffer))))
-;;like C-x k, but nicer :-)
-(global-set-key (kbd "C-x l") 'bury-buffer)
-;;could not live without
-(global-set-key (kbd "M-q") 'backward-kill-word)
-
-;;rebind previous M-q binding to M-s
-(global-set-key (kbd "M-s") 'fill-paragraph)
-;;nice to have, coherent with other keybindings, and bound to nothing
-;;by default, so ...
-(global-set-key (kbd "M-n") 'scroll-up)
-(global-set-key (kbd "M-p") 'scroll-down)
-;;M-g defaults to a prefix, I just rebind next/previous error and bind
-;;M-g to goto
-(global-set-key (kbd "M-g") 'goto-line)
-(global-set-key (kbd "C-c n") 'next-error)
-(global-set-key (kbd "C-c p") 'previous-error)
-;;TODO : change c-mode horrible commenting method
-(global-set-key (kbd "C-c u") 'uncomment-region)
-(global-set-key (kbd "C-c c") 'comment-region)
-;;handy, but buggy on terminals
-(global-set-key (kbd "C-,") 'undo)
-
-;; pour éviter que ada-mode me pique le raccourci clavier
-(add-hook 'ada-mode-hook (lambda ()
-			   (local-unset-key (kbd "<C-tab>"))))
-
-;;fast switching between two buffers
-(global-set-key [\s-tab] (lambda ()
-                           (interactive)
-                           (switch-to-buffer (other-buffer))))
-(global-set-key [\C-tab] 'next-buffer)
-(global-set-key [\C-\S-iso-lefttab] 'previous-buffer)
-;;make use of that useless key to do something useful. This can fail,
-;;so protect
-(condition-case err
-    (global-set-key (kbd "²") (lambda () (interactive) (insert "\\")))
-  (error
-   (message "Failed to bind key to \\. Live with it.")))
-
-;;zap to char -> zap up to char
-;;found at emacs wiki, added the repeat part
-(defun zap-up-to-char (arg char)
-  "Kill up to, but not including ARGth occurrence of CHAR.
-Case is ignored if `case-fold-search' is non-nil in the current buffer.
-Goes backward if ARG is negative; error if CHAR not found.
-Ignores CHAR at point."
-  (interactive "p\ncZap up to char: ")
-  (let ((direction (if (>= arg 0) 1 -1)))
-    (kill-region (point)
-		 (progn
-		   (forward-char direction)
-		   (unwind-protect
-		       (search-forward (char-to-string char) nil nil arg)
-		     (backward-char direction))
-		   (point))))
-  ;;repeat same key to repeat command. adapted code found in kmacro
-  (message "Press %s to repeat" (char-to-string char))
-  (if (equal char (read-event))
-      (zap-up-to-char arg char)
-    (setq unread-command-events (list last-input-event))))
-
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-
-;;zap to isearch
-(defun zap-to-isearch ()
-  (interactive)
-  (kill-region isearch-opoint isearch-other-end)
-  (isearch-done)
-  (if (> isearch-other-end isearch-opoint)
-      (backward-word)
-    (forward-word)))
-
-(define-key isearch-mode-map (kbd "M-z") 'zap-to-isearch)
-
-;;misc functions
-(defun indent-whole-buffer ()
-  "indent whole buffer"
-  (interactive)
-  (delete-trailing-whitespace)
-  (indent-region (point-min) (point-max) nil))
+          #'(lambda ()
+              (modify-syntax-entry ?$ "\"")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;macros
+;;; Dired
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;macros on alt-gr + some key
-;;use M-x insert-kbd-macro to insert the definition of the macro
-;;you just typed
-(setq latex-macros
-      '(
-	;;F : frac
-	("đ" "\\frac{}{}\C-b\C-b\C-b")
-	;;Q : section
-	("@" "\\section{}\C-b")
-	;;S : subsection
-	("ß" "\\subsection{}\C-b")
-	;;D : subsubsection
-	("ð" "\\subsubsection{}\C-b")
-	;;C : cite
-	("¢" "\\cite{}\C-b")
-	;;R : ref
-	("¶" "\\ref{}\C-b")
-	;;E : end
-	("€" "\\end{}\C-b")
-	;;B : begin
-	("”" "\\begin{}\C-b")
-	;;I : item
-	("→" "\\item ")
-	))
+;; misc. dired add-ons
+(require 'dired-x)
+;; omit hidden files + default
+(setq dired-omit-files
+      (concat dired-omit-files "\\|" "^\\..+$"))
+;;clean dired default view : don't display groups, use human-readable sizes
+(setq dired-listing-switches "-alhG"
+      dired-free-space-args "-Pkm" ;; TODO k and m for what?
+      dired-auto-revert-buffer t)
+;; Omit, be quiet
+(defadvice dired-omit-expunge (around dired-omit-be-quiet)
+  "Be quiet."
+  (flet ((message (&rest args) ))
+    ad-do-it))
+(ad-activate 'dired-omit-expunge)
+(add-hook 'dired-mode-hook 'dired-omit-mode)
 
-(setq c-common-macros
-      '(
-	;;F : for
-	("‘" [?f ?o ?r ?\( ?i ?  ?= ? ?0 ?\; ?  ?i ?  ?< ?  ?n
-		 ?\; ?  ?i ?+ ?+ ?\) ?  ?\{ return tab return ?\} ?\C-p
-		 ?\C-p ?\C-a ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f
-		 ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-f ?\C-d])
-	))
+(require 'dired+)
+;; copy/pasting in dired
+(require 'wuxch-dired-copy-paste)
+(define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
+(define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
+(define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
+;;add gnome-open as C-ret
+(defun dired-gnome-open-file ()
+  "Opens the current file in a Dired buffer."
+  (interactive)
+  (launch-command "gnome-open" (dired-get-file-for-visit)))
+(define-key dired-mode-map (kbd "<C-return>") 'dired-gnome-open-file)
 
-(defun apply-macro-binding (list)
-  "Takes a list ((key macro) ...) and binds macro to key.
-key is any argument that can be given to global-set-key"
-  (mapcar (lambda (el)
-	    (local-set-key (nth 0 el) (nth 1 el)))
-	  list))
-
-(add-hook 'LaTeX-mode-hook
-	  (lambda ()
-	    (interactive)
-	    (apply-macro-binding latex-macros)))
-(add-hook 'c-mode-common-hook
-	  (lambda ()
-	    (interactive)
-	    (apply-macro-binding c-common-macros)))
-
-(put 'downcase-region 'disabled nil)
-(put 'upcase-region 'disabled nil)
+;; TODO something here makes really ugly colors, change this
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Psvn
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;C-x v s as main svn entry point
+;;note : dired customisations have to be done BEFORE this
+(require 'psvn)
+(global-set-key (kbd "C-x v s") 'svn-examine)
+;;default to a clean view.
+(setq svn-status-hide-unknown t)
+(setq svn-status-hide-unmodified t)
+;; TODO test this
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Egg for git
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'egg)
+(setq egg-buffer-hide-help-on-start (quote (egg-status-buffer-mode egg-log-buffer-mode egg-file-log-buffer-mode egg-reflog-buffer-mode egg-diff-buffer-mode egg-commit-buffer-mode))
+      egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff)))
+      egg-confirm-next-action nil
+      egg-status-buffer-sections '(repo unstaged staged)
+      egg-commit-buffer-sections '(staged unstaged))
+;; TODO test this
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Window management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;move between windows with meta-keypad
+(windmove-default-keybindings 'meta)
+
+;; TODO test this
 ;; widen window : widen selected window
 ;; (require 'widen-window)
 ;; (global-widen-window-mode t)
@@ -561,90 +363,6 @@ key is any argument that can be given to global-set-key"
 ;; (add-to-list 'ww-advised-functions 'windmove-left)
 
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ERC
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load "~/.emacs.d/erc.el")
-;;read personal info (ERC stuff)
-(load "~/.emacs.d/perso.el" t)
-
-
-
-
-
-
-;; un peu de mercurial 
-;;(require 'mercurial)
-
-
-;; kde
-
-;;cmake
-; Add cmake listfile names to the mode list.
-(setq auto-mode-alist
-	  (append
-	   '(("CMakeLists\\.txt\\'" . cmake-mode))
-	   '(("\\.cmake\\'" . cmake-mode))
-	   auto-mode-alist))
-
-(autoload 'cmake-mode "~/.emacs.d/cmake-mode.el" t)
-
-
-
-;; Join this line to previous and fix up whitespace at join.
-(global-set-key (kbd "C-c j") 'join-line)
-
-
-;;--------------------
-;; Auto Completion
-;;--------------------
-
-
-;; auto-complete mode : dropdown menu
-;; see http://cx4a.org/software/auto-complete/manual.html
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict")
-(setq ac-comphist-file "~/.emacs.d/auto-complete/ac-comphist.dat")
-(ac-config-default)
-(setq ac-delay 0.2)
-
-;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
-(add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
-(add-to-list 'ac-modes 'shell-mode)
-
-;;etags for auto-complete
-(require 'auto-complete-etags)
-(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
-(add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
-
-;; auto-complete for python
-;; Initialize Rope (for auto-complete)
-;; if this doesn't work, here is how to install this:
-;;  sudo aptitude install mercurial
-;;  mkdir /tmp/rope && cd /tmp/rope
-;;  hg clone http://bitbucket.org/agr/rope
-;;  hg clone http://bitbucket.org/agr/ropemacs
-;;  hg clone http://bitbucket.org/agr/ropemode
-;;  sudo easy_install rope
-;;  ln -s ../ropemode/ropemode ropemacs/
-;;  sudo easy_install ropemacs
-(ac-ropemacs-initialize)
-(add-hook 'python-mode-hook
-          (lambda ()
-                 (add-to-list 'ac-sources 'ac-source-ropemacs)))
-
-
-
-
-;;--------------------
-;; Window management
-;;--------------------
-
-;;move between windows with meta-keypad
-(windmove-default-keybindings 'meta)
-
-
 ;; resize windows
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
@@ -653,14 +371,10 @@ key is any argument that can be given to global-set-key"
 
 
 ;; Cancel and redo windows configurations
-;; allows to "undo" (and "redo") changes in the window configuration with the key commands 'C-c left' and 'C-c right'
+;;C-c left/right to undo/redo changes in window configuration
 (require 'winner)
 (setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
-
-(global-set-key (kbd "<C-s-left>") 'winner-undo)
-(global-set-key (kbd "<C-s-right>") 'winner-redo)
 (winner-mode t) ;; turn on the global minor mode
-
 
 
 ;; window numbering
@@ -677,25 +391,282 @@ key is any argument that can be given to global-set-key"
 (window-numbering-mode t)
 
 
-;; uniquify.el is a helper routine to help give buffer names a better unique name.
-(when (load "uniquify" 'NOERROR)
-  (require 'uniquify)
-  (setq uniquify-buffer-name-style 'forward)
-  ;(setq uniquify-buffer-name-style 'post-forward)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Session Management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;save the minibuffer input
+(savehist-mode 1)
+
+;;save last edit place in files
+(setq-default save-place t)
+(require 'saveplace)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Recent files
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;recent files, interaction with ido
+(require 'recentf)
+(defun recentf-ido-find-file-or-maybe-list (&optional arg)
+  "Find a recent file using Ido, or list all recent files if prefixed"
+  (interactive "P")
+  (if arg
+      (recentf-open-files)
+    ;;build alist basename->name, offer user a choice of basenames,
+    ;;then get matching file and find it
+    (let ((file-alist (mapcar 'basename-cons recentf-list))
+	  (basename-list (mapcar 'file-name-nondirectory recentf-list)))
+      (let ((file (ido-completing-read
+		   "Choose recent file: "
+		   (mapcar 'file-name-nondirectory
+			   recentf-list)
+		   nil t)))
+	(when file
+	  (find-file (cdr (assoc file file-alist))))))))
+(setq recentf-max-saved-items nil)
+(recentf-mode 1)
+(global-set-key (kbd "C-x C-r") 'recentf-ido-find-file-or-maybe-list)
+;; TODO uniquify this
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Imenu: jump between indexes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'imenu)
+(defun ido-goto-symbol ()
+  "Update the imenu index and then use ido to select a symbol to navigate to."
+  (interactive)
+  (imenu--make-index-alist)
+  (let ((name-and-pos '())
+        (symbol-names '()))
+    (flet ((addsymbols (symbol-list)
+                       (when (listp symbol-list)
+                         (dolist (symbol symbol-list)
+                           (let ((name nil) (position nil))
+                             (cond
+                              ((and (listp symbol) (imenu--subalist-p symbol))
+                               (addsymbols symbol))
+
+                              ((listp symbol)
+                               (setq name (car symbol))
+                               (setq position (cdr symbol)))
+
+                              ((stringp symbol)
+                               (setq name symbol)
+                               (setq position (get-text-property 1 'org-imenu-marker symbol))))
+
+                             (unless (or (null position) (null name))
+                               (add-to-list 'symbol-names name)
+                               (add-to-list 'name-and-pos (cons name position))))))))
+      (addsymbols imenu--index-alist))
+    (let* ((selected-symbol (ido-completing-read "Symbol? " symbol-names))
+           (position (cdr (assoc selected-symbol name-and-pos))))
+      (push-mark)
+      (goto-char position))))
+(global-set-key (kbd "C-x C-i") 'ido-goto-symbol)
+;; TODO test this
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Ibuffer
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; dired for buffers
+(require 'ibuffer)
+(setq ibuffer-default-sorting-mode 'recency)
+
+(setq ibuffer-always-show-last-buffer t)
+(setq ibuffer-view-ibuffer t)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; TODO import al-ibuffer.el
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Programming modes
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;ignore case when matching a suffix (such as .F90)
+(setq auto-mode-case-fold t)
+;;tags
+(setq tags-table-list '("~/.emacs.d")
+      tags-revert-without-query t)
+;;indent yanked code in programming languages modes
+(load-library "yank-indent")
+(add-to-list 'yank-indent-modes 'python-mode)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; C
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'cc-mode)
+;;linux style
+(setq c-default-style "linux")
+(setq-default c-basic-offset 4)
+;;'electric' indentation : indent on newline
+(define-key c-mode-base-map "\C-m"
+  'c-context-line-break)
+(define-key c-mode-base-map (kbd "M-q") nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; C++
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;TODO ceded...
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Python
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'python)
+(defadvice run-python (after run-python-revert-patch)
+  "revert patch which removes '' from sys.path"
+  (python-send-string "import sys
+sys.path.insert(0, '')"))
+(ad-activate 'run-python)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; PHP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'php-mode)
+;; Toggle between PHP & HTML mode.  Useful when working on
+;; php files, that can been intertwined with HTML code
+(add-hook 'php-mode-hook
+	  (lambda ()
+	    (global-set-key [f5] 'html-mode)))
+(add-hook 'html-mode-hook
+	  (lambda ()
+	    (global-set-key [f5] 'php-mode)))
+;; TODO remove warning messages when failling parsing html
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; YAML
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
+(add-hook 'yaml-mode-hook
+	  '(lambda ()
+	     (setq indent-tabs-mode nil)
+	     (setq c-indent-level 2)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Apache
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload 'apache-mode "apache-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
+(add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
+(add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
+(add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
+(add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Latex
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; TODO manage auctex?
+;; (condition-case err
+;;     (progn (load "auctex.el" nil t t)
+;; 	   (load "preview-latex.el" nil t t))
+;;   (error
+;;    (message "Failed to load auctex")))
+;;don't ask to cache preamble
+(setq preview-auto-cache-preamble t)
+;;indent when pressing RET
+(setq TeX-newline-function 'newline-and-indent
+      LaTeX-math-abbrev-prefix (kbd "ù"))
+;;always preview using gnome-open
+(setq TeX-output-view-style
+      '(("pdf" "." "gnome-open %o")
+	("dvi" "." "dvipdf %o && gnome-open $(basename %o dvi)pdf")))
+(defun my-tex-config ()
+  (turn-on-reftex)
+  (auto-fill-mode 1)
+  (flyspell-mode 1)
+  (flyspell-buffer)
+  (TeX-PDF-mode 1)
+  (LaTeX-math-mode 1)
+  (local-set-key (kbd "C-c C-d") 'TeX-insert-braces)
+  (local-set-key (kbd "C-c l") 'reftex-label)
+  (local-set-key (kbd "C-c r") 'reftex-reference)
+  (local-set-key (kbd "C-c b") 'reftex-citation)
+  ;; undo TeX remaps, otherwise it interferes with compilation
+  (define-key TeX-mode-map [remap next-error] nil)
+  (define-key TeX-mode-map [remap previous-error] nil)
+
+  ;; If the file contains local variables defining TeX-master, respect that.
+  ;; Otherwise, look for a master file in the current directory
+  ;; Define a local variable by
+  ;; %%% Local Variables:
+  ;; %%% TeX-master: "something"
+  ;; %%% End:
+
+  ;; list of master files to look for, increasing order of priority
+  (setq list-of-master-files '("report" "master" "main"))
+  ;; OK, this is a hack, but we force parsing of the file local variables here
+  (hack-local-variables)
+  (unless (stringp TeX-master)
+    (dolist (name list-of-master-files)
+      (when (file-exists-p (concat name ".tex"))
+  	(setq TeX-master name))))
+
+  ;; setup compilation, based on TeX-master
+  ;; needs raise_process, which raises (using wmctrl) a process whose invocation
+  ;; line matches the argument
+  ;; (let ((master (if (stringp TeX-master)
+  ;; 		    TeX-master
+  ;; 		  (file-name-sans-extension (file-name-nondirectory (buffer-file-name))))))
+  ;;   (set (make-local-variable 'compile-command)
+  ;; 	 (format
+  ;; 	  "rubber -d %s && (raise_process.sh %s.pdf || nohup gnome-open %s.pdf > /dev/null)"
+  ;; 	  master master master)))
   )
+(add-hook 'LaTeX-mode-hook 'my-tex-config)
+
+;; (defun my-bibtex-compilation-setup ()
+;;   (set (make-local-variable 'compile-command)
+;;        (format
+;; 	"rubber -d main && (raise_process main.pdf || nohup gnome-open main.pdf > /dev/null)")))
+;; (add-hook 'bibtex-mode-hook 'my-bibtex-compilation-setup 'attheend)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Outline
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq outline-minor-mode-prefix (kbd "s-o"))
+(add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+(add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
+(defun setup-outline-lisp ()
+  "Only outline on ;;;, thank you."
+  (setq outline-regexp ";;; "))
+(add-hook 'emacs-lisp-mode-hook 'setup-outline-lisp)
+(require 'fold-dwim)
+(setq fold-dwim-outline-style 'nested)
+;; Have two toggles, one for the header we're in, and one general
+(global-set-key (kbd "<f6>")  'fold-dwim-toggle)
+(global-set-key (kbd "<f7>")  'fold-dwim-toggle-all)
+;; This is suboptimal, not buffer-local, etc. I don't care.
+(setq fold-dwim-general-toggle nil)
+(defun fold-dwim-toggle-all ()
+  (interactive)
+  (if fold-dwim-general-toggle
+      (fold-dwim-show-all)
+    (fold-dwim-hide-all))
+  (toggle-variable 'fold-dwim-general-toggle))
 
 
 
-;;--------------------
-;; Shells in emacs
-;;--------------------
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Shell
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq comint-scroll-to-bottom-on-input 'all)
 (setq comint-move-point-for-output t)
 
-;;shell
+(ansi-color-for-comint-mode-on)
 
-;; clean
+;; TODO clean
 (add-hook 'shell-mode-hook 'n-shell-mode-hook)
 (defun n-shell-mode-hook ()
   "12Jan2002 - sailor, shell mode customizations."
@@ -733,20 +704,19 @@ key is any argument that can be given to global-set-key"
 (add-hook 'shell-mode-hook 'dirtrack-mode)
 
 
-
-;;--------------------
-;; org-mode
-;;--------------------
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Org
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org-install)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
-;; (add-hook 'org-mode-hook 'org-indent-mode)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(setq org-startup-indented t)
 (require 'remember)
 (add-hook 'remember-mode-hook 'org-remember-apply-template)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c r") 'remember)
-					;bindings
+
+;; bindings
 (add-hook 'org-load-hook
 	  (lambda ()
 	    ;change becase meta-{up,down,right,left} is already used to change selected window
@@ -764,57 +734,581 @@ key is any argument that can be given to global-set-key"
 	    (define-key org-mode-map (kbd "<C-tab>") nil)
 	    )
 )
-					;settings
+
+;; settings
 (setq
  org-agenda-files (list "~/.emacs.d/org/todo.org")
  org-default-notes-file "~/.emacs.d/org/notes.org"
+ org-agenda-ndays 7
  org-log-done 'time
-)
+ org-startup-folded 'content
+ org-deadline-warning-days 4
+ org-agenda-show-all-dates t
+ ;; org-agenda-skip-deadline-if-done t
+ ;; org-agenda-skip-scheduled-if-done t
+ org-agenda-start-on-weekday 1
+ org-agenda-repeating-timestamp-show-all t
+ ;; org-reverse-note-order t
+ org-remember-store-without-prompt t
+ ;; TODO what it this?
+ ;; org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
+ ;; 				(110 "* %?" "~/.emacs.d/org/notes.org" "Notes")))
+ remember-annotation-functions (quote (org-remember-annotation))
+ remember-handler-functions (quote (org-remember-handler))
+ )
+
 (add-hook 'org-load-hook
 	  (lambda ()
 	    (setq shift-select-mode nil) ;; to modify dates
-	    )
-)
+	    ))
+
+;; (setq org-clock-persist 'history)
+;; (org-clock-persistence-insinuate)
 
 
-(setq org-clock-persist 'history)
-     (org-clock-persistence-insinuate)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Compilation
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'compile)
+;;make compile window disappear after successful compilation
+(setq compilation-finish-function
+      (lambda (buf str)
+	(if (string-match "*Compilation*" (buffer-name buf))
+	    (unless (string-match "abnormally" str)
+	      ;;no errors, make the compilation window go away
+	      (message "*Compilation* OK")
+	      (delete-windows-on buf)
+	      (bury-buffer buf)))))
 
+;;misc compilation settings
+(setq-default
+ compile-command "make"
+ compilation-read-command nil
+ compilation-scroll-output 'first-error
+ compilation-ask-about-save nil
+ compilation-window-height nil
+ compilation-auto-jump-to-first-error t
+ compilation-disable-input t)
 
-;;--------------------
-;; session management
-;;--------------------
-
-;;save the minibuffer input
-(savehist-mode 1)
-
-;;save last edit place in files
-(require 'saveplace)
-(setq-default save-place t)
-
-
-;;--------------------
-;; divers
-;;--------------------
-
-;; pastebin from emacs
-(require 'pastebin)
-
-;; iBuffer : dired for buffers
-(require 'ibuffer)
-(setq ibuffer-default-sorting-mode 'recency)
-
-(setq ibuffer-always-show-last-buffer t)
-(setq ibuffer-view-ibuffer t)
-
-(global-set-key (kbd "C-x C-b") 'ibuffer-other-window)
+;;compilation by C-c C-c in modes that don't shadow it
+(global-set-key (kbd "C-c C-c") 'compile)
+;;(global-set-key (kbd "C-M-c C-M-c") 'compile)
 
 
 
-;;;;;;;;;;;
-;; TESTS ;;
-;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; CMake
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload 'cmake-mode "~/.emacs.d/cmake-mode.el" t)
+(add-to-list 'auto-mode-alist '("CMakeLists\\.txt\\'" . cmake-mode))
+(add-to-list 'auto-mode-alist '("\\.cmake\\'"         . cmake-mode))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Keybindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;see http://www.emacswiki.org/emacs/IgnacioKeyboardQuit , with a little bit of modifications
+(defun my-keyboard-quit()
+  "Escape the minibuffer or cancel region consistently using 'Control-g'.
+Normally if the minibuffer is active but we lost focus (say, we clicked away or set the cursor into another buffer)
+we can quit by pressing 'ESC' three times. This function handles it more conveniently, as it checks for the condition
+of not being in the minibuffer but having it active. Otherwise simply doing the ESC or (keyboard-escape-quit) would
+brake whatever split of windows we might have in the frame."
+  (interactive)
+  (if (not(window-minibuffer-p (selected-window)))
+      (if (active-minibuffer-window)
+          (keyboard-escape-quit)))
+   (keyboard-quit))
+(define-key global-map (kbd "C-g") 'my-keyboard-quit)
+
+;;find file at point
+(global-set-key (kbd "<C-return>") 'ffap)
+
+;;I just want C-x k to kill the buffer instead of just prompting me
+;;for it
+(defun kill-current-buffer ()
+  (interactive)
+  (kill-buffer (current-buffer)))
+(global-set-key (kbd "C-x k") 'kill-current-buffer)
+;;like C-x k, but nicer :-)
+(global-set-key (kbd "C-x l") 'bury-buffer)
+;;could not live without
+(global-set-key (kbd "M-q") 'backward-kill-word)
+(global-set-key (kbd "C-M-q") 'backward-kill-sexp)
+(global-set-key (kbd "C-q") 'backward-delete-char)
+;;rebind previous M-q binding to M-s
+(global-set-key (kbd "M-s") 'fill-paragraph)
+;;nice to have, coherent with other keybindings, and bound to nothing
+;;by default, so ...
+(global-set-key (kbd "M-n") 'scroll-up)
+(global-set-key (kbd "M-p") 'scroll-down)
+;;shortcuts for region commenting
+(global-set-key (kbd "C-c u") 'uncomment-region)
+(global-set-key (kbd "C-c c") 'comment-region)
+;;M-g defaults to a prefix, I just rebind next/previous error and bind
+;;M-g to goto
+(global-set-key (kbd "M-g") 'goto-line)
+(global-set-key (kbd "C-c n") 'next-error)
+(global-set-key (kbd "C-c p") 'previous-error)
+;;switch between .c and .h
+(global-set-key (kbd "C-c o") 'ff-find-other-file)
+;;handy, but buggy on terminals
+(global-set-key (kbd "C-,") 'undo)
+(defun my-kill-whole-line ()
+  (interactive)
+  (let ((col (current-column)))
+    (kill-whole-line 1)
+    (move-to-column col)))
+(global-set-key (kbd "C-S-k") 'my-kill-whole-line)
+;;sometimes useful (for query-replace and such)
+(global-set-key (kbd "C-c C-SPC") 'transient-mark-mode)
+;;easy window management for azerty keyboards
+(global-set-key (kbd "M-é") 'split-window-vertically)
+(global-set-key (kbd "M-\"") 'split-window-horizontally)
+(global-set-key (kbd "M-&") 'delete-other-windows)
+(global-set-key (kbd "M-à") 'delete-window)
+
+;;browse kill ring to look for forgotten copy/paste
+(require 'browse-kill-ring)
+(global-set-key (kbd "C-c k") 'browse-kill-ring)
+
+;; kill-whitespace seems more usefull than kill-sentence
+(global-set-key (kbd "M-k") 'kill-whitespace)
+;; Join this line to previous and fix up whitespace at join.
+(global-set-key (kbd "C-c j") 'join-line)
+
+;;make use of that useless ^2 key to do something useful. This can fail on some terminals,
+;;so protect
+(condition-case err
+    (progn
+      ;;normal
+      (global-set-key (kbd "²") (lambda () (interactive) (insert "\\")))
+      ;;isearch
+      (define-key isearch-mode-map (kbd "²")
+	(lambda ()
+	  (interactive)
+	  (if current-input-method
+	      (isearch-process-search-multibyte-characters ?\\)
+	    (isearch-process-search-char ?\\)))))
+  (error
+   (message "Failed to bind key to \\. Live with it.")))
+
+;; replace $$ in M-! by the name of the associated buffer
+(defun shell-command-replace (command &optional output-buffer error-buffer)
+  "Same as shell-command, but replace occurences of $$ by the current buffer name"
+  (interactive
+   (list
+    (read-shell-command "Shell command: " nil nil
+			(and buffer-file-name
+			     (file-relative-name buffer-file-name)))
+    current-prefix-arg
+    shell-command-default-error-buffer))
+  (shell-command (replace-regexp-in-string "\\$\\$" (buffer-name (current-buffer-not-mini)) command)
+		 output-buffer error-buffer))
+(global-set-key (kbd "M-!") 'shell-command-replace)
+
+;;zap to char -> zap up to char
+;;found at emacs wiki, added the repeat part
+(defun zap-up-to-char (arg char)
+  "Kill up to, but not including ARGth occurrence of CHAR.
+Case is ignored if `case-fold-search' is non-nil in the current buffer.
+Goes backward if ARG is negative; error if CHAR not found.
+Ignores CHAR at point."
+  (interactive "p\ncZap up to char: ")
+  (let ((direction (if (>= arg 0) 1 -1)))
+    (kill-region (point)
+		 (progn
+		   (forward-char direction)
+		   (unwind-protect
+		       (search-forward (char-to-string char) nil nil arg)
+		     (backward-char direction))
+		   (point))))
+  ;;repeat same key to repeat command. adapted code found in kmacro
+  (message "Press %s to repeat" (char-to-string char))
+  (if (equal char (read-event))
+      (zap-up-to-char arg char)
+    (setq unread-command-events (list last-input-event))))
+(defun zap-up-to-char-back (char)
+  (interactive "cBackward zap up to char: ")
+  (zap-up-to-char -1 char))
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+(global-set-key (kbd "C-M-z") 'zap-up-to-char-back)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Super keybindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; to use on console environments, where s- just doesn't work.
+;; seriously, when is the last time you used insert?
+(define-key function-key-map (kbd "<insert>") 'event-apply-super-modifier)
+(define-key function-key-map (kbd "<insertchar>") 'event-apply-super-modifier)
+(define-key function-key-map (kbd "<f5>") 'event-apply-super-modifier)
+(global-set-key (kbd "<insertchar>") nil)
+(global-set-key (kbd "<insert>") nil)
+(global-set-key (kbd "<f5>") nil)
+;; some packages, e.g. gnus-summary, don't define deletechar but only delete. Fix that by aliasing
+(global-set-key (kbd "<deletechar>") (kbd "<delete>"))
+
+
+;;shortcuts to two-keys commands I often use
+(global-set-key (kbd "s-s") 'save-buffer)
+(global-set-key (kbd "s-b") 'switch-to-buffer)
+(global-set-key (kbd "s-c") 'compile)
+(global-set-key (kbd "s-j") 'compile-with-style-check)
+(global-set-key (kbd "s-f") 'find-file)
+(global-set-key (kbd "s-u") 'undo)
+(global-set-key (kbd "s-i") 'indent-whole-buffer)
+(global-set-key (kbd "s-x") 'exchange-point-and-mark)
+(global-set-key (kbd "s-SPC") 'pop-global-mark)
+(global-set-key (kbd "s-;") 'ede)
+(global-set-key (kbd "s-k") 'kill-whitespace)
+(global-set-key (kbd "<s-left>") 'winner-undo)
+(global-set-key (kbd "<s-right>") 'winner-redo)
+(defun open-shell-here ()
+  (interactive)
+  (launch-command "gnome-terminal" ""))
+(global-set-key (kbd "s-h") 'open-shell-here)
+(defun note ()
+  (interactive)
+  (find-file "~/.emacs.d/org/notes.org"))
+(defun todos ()
+  (interactive)
+  (find-file "~/.emacs.d/org/todo.org"))
+(global-set-key (kbd "s-n") 'note)
+(global-set-key (kbd "s-t") 'todos)
+(global-set-key (kbd "s-l") 'bury-buffer)
+;; ghosts of past yanks
+(global-set-key (kbd "s-y") (lambda ()
+			      (interactive)
+			      (popup-menu 'yank-menu)))
+(defun duplicate-current-line ()
+  (interactive)
+  "Duplicate current line"
+  (let ((text (buffer-substring (line-beginning-position) (line-end-position))))
+    (save-excursion
+      (end-of-line)
+      (newline)
+      (insert text))))
+(global-set-key (kbd "s-d") 'duplicate-current-line)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Easy buffer switching
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar switch-include-erc t
+  "Do we include erc buffers in buffer switching?")
+(defun toggle-switch-to-erc ()
+  (interactive)
+  (toggle-variable 'switch-include-erc)
+  (message "Now %s"
+	   (if switch-include-erc "including erc" "excluding erc")))
+;;quickly switch buffers
+(defun switch-to-nth-buffer (n arg)
+  "Switches to nth most recent buffer. Ignores erc buffers unless switch-include-erc is non-nil."
+  (catch 'tag
+    (mapcar (lambda (b)
+	      (if (or switch-include-erc
+		      (not (eq (buffer-local-value 'major-mode b) 'erc-mode)))
+		  (unless (minibufferp b)
+					;(unless (string-match "^\\*" (buffer-name b))
+		    (if (= n 1)
+			(progn
+			  (switch-to-buffer b)
+			  (throw 'tag nil))
+		      (setq n (- n 1))))));)
+	    (cdr (buffer-list)))))
+
+(defun switch-to-most-recent-buffer (&optional arg)
+  (interactive "P")
+  (switch-to-nth-buffer 1 arg))
+(defun switch-to-second-most-recent-buffer (&optional arg)
+  (interactive "P")
+  (switch-to-nth-buffer 2 arg))
+(defun switch-to-third-most-recent-buffer (&optional arg)
+  (interactive "P")
+  (switch-to-nth-buffer 3 arg))
+
+;;fast switching between two buffers
+(global-set-key (kbd "<s-tab>") 'switch-to-most-recent-buffer)
+(global-set-key (kbd "s-TAB") 'switch-to-most-recent-buffer)
+;;fast switching between three buffers
+;; (global-set-key (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
+;; (global-set-key (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
+;; switch like alt+tab in standard wm
+(global-set-key (kbd "<C-tab>") 'next-buffer)
+(global-set-key (kbd "<C-S-iso-lefttab>") 'previous-buffer)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Misc editing commands without keybindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun duplicate-region (beg end &optional sep)
+  "Duplicate the region"
+  (interactive "*r")
+  (let ((p (point)))
+    (copy-region-as-kill beg end)
+    (message "%d" (point))
+    (goto-char end)
+    (if (stringp sep) (insert sep))
+    (yank)
+    (goto-char p)))
+
+(defun exchange-lines ()
+  "Exchanges line at point with line at mark"
+  (interactive)
+  (save-excursion
+    (transpose-lines 0)))
+
+;;huge hack, but emacs internals are quite messy concerning
+;;this. Don't even try to use regexps in the arguments :)
+(defun query-exchange (str1 str2 &optional delimited start end)
+  "Exchange str1 and str2 with a regexp replace"
+  (interactive
+   (let ((common
+	  (query-replace-read-args
+	   (concat "Query exchange"
+		   (if current-prefix-arg " word" "")
+		   " regexp"
+		   (if (and transient-mark-mode mark-active) " in region" ""))
+	   t)))
+     (list (nth 0 common) (nth 1 common) (nth 2 common)
+	   ;; These are done separately here
+	   ;; so that command-history will record these expressions
+	   ;; rather than the values they had this time.
+	   (if (and transient-mark-mode mark-active)
+	       (region-beginning))
+	   (if (and transient-mark-mode mark-active)
+	       (region-end)))))
+  (defun my-aux-fun (match1 match2)
+    (if (match-string 1) str2 str1))
+  (defun my-add-word-boundary (str)
+    (if current-prefix-arg (concat "\\<" str "\\>") str))
+  (query-replace-regexp (format "\\(%s\\)\\|\\(%s\\)"
+				(my-add-word-boundary str1)
+				(my-add-word-boundary str2))
+			'(my-aux-fun) delimited start end))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Ediff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;vertical split (terminology is confusing)
+(setq ediff-split-window-function 'split-window-horizontally)
+;;no separate frame
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+;;kill variants
+(setq ediff-keep-variants nil)
+;; restore window config on ediff, found on emacswiki, and modified to bury non-file buffers
+(defvar my-ediff-bwin-config nil "Window configuration before ediff.")
+(defun my-ediff-bsh ()
+  "Function to be called before any buffers or window setup for
+    ediff."
+  (setq my-ediff-bwin-config (current-window-configuration)))
+;; this is a huge hack
+(defun my-ediff-qh-before ()
+  (setq my-ediff-buffer-A ediff-buffer-A
+	my-ediff-buffer-B ediff-buffer-B
+	my-ediff-buffer-C ediff-buffer-C))
+(defun my-ediff-qh-after ()
+  "Function to be called when ediff quits."
+  (when (and my-ediff-buffer-A
+	     (not (buffer-file-name my-ediff-buffer-A)))
+    (bury-buffer my-ediff-buffer-A))
+  (when (and my-ediff-buffer-B
+	     (not (buffer-file-name my-ediff-buffer-B)))
+    (bury-buffer my-ediff-buffer-B))
+  (when (and my-ediff-buffer-C
+	     (not (buffer-file-name my-ediff-buffer-C)))
+    (bury-buffer my-ediff-buffer-C))
+  (when my-ediff-bwin-config
+    (set-window-configuration my-ediff-bwin-config)))
+(add-hook 'ediff-before-setup-hook 'my-ediff-bsh)
+(add-hook 'ediff-quit-hook 'my-ediff-qh-before)
+(add-hook 'ediff-quit-hook 'my-ediff-qh-after 'after)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Isearch
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;zap to isearch
+(defun zap-to-isearch ()
+  (interactive)
+  (kill-region isearch-opoint isearch-other-end)
+  (isearch-done)
+  (if (> isearch-other-end isearch-opoint)
+      (backward-word)
+    (forward-word)))
+
+(define-key isearch-mode-map (kbd "M-z") 'zap-to-isearch)
+
+;;C-o in isearch brings up every hit
+(define-key isearch-mode-map (kbd "C-o")
+  (lambda ()
+    (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string
+	       (regexp-quote isearch-string))))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Dictionnaries
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'flyspell)
+(setq my-languages '("british" "francais"))
+(defun flyspell-lang (&optional lang)
+  "Toggle flyspell-mode with the given lang, or prompt with ido."
+  (interactive)
+  (let* ((old-language ispell-local-dictionary)
+	 (language (if lang lang
+		     (ido-completing-read
+		      "Spell Language:"
+		      ;; set old language as first value, for simple toggle
+		      (if (member old-language my-languages)
+			  (cons old-language (remove old-language my-languages))
+			my-languages)
+		      nil t))))
+    (if (and flyspell-mode
+	     (string= old-language language))
+	;; toggle off
+	(flyspell-mode 0)
+      ;; start flyspell
+      (progn
+	(flyspell-mode t)
+	(ispell-change-dictionary language)
+	(flyspell-buffer)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; W3M
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; w3m
+;; TODO load emacs-w3m with el-get
+;; (require 'w3m)
+;; (setq w3m-use-cookies t)
+;; (setq w3m-use-title-buffer-name t)
+;; (setq w3m-default-display-inline-images t)
+;; (setq w3m-toggle-inline-images-permanently nil)
+;; (setq mm-w3m-safe-url-regexp nil)
+;; (define-key w3m-minor-mode-map "m"
+;;   'w3m-view-url-with-external-browser)
+;; (defun w3m-switch ()
+;;   (interactive "")
+;;   (if (eq 'w3m-mode (current-mm))
+;;       (w3m-close-window)
+;;     (w3m)))
+;; (defalias 'w3m-ems-create-image 'create-image) ; this is only a workaround for emacs24, will be fixed
+;; (global-set-key (kbd "s-w") 'w3m-switch)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Tab completion
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; need 23.2
+(setq tab-always-indent 'complete)
+(defun my-dabbrev-expand ()
+  (when (and (not (bolp))
+	     (looking-at "\\_>"))
+    (dabbrev-expand nil)))
+(defun my-dabbrev-expand-and-nil ()
+  (my-dabbrev-expand)
+  nil)
+(setq completion-at-point-functions '(my-dabbrev-expand-and-nil))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Auto Completion
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; auto-complete mode : dropdown menu
+;; see http://cx4a.org/software/auto-complete/manual.html
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict")
+(setq ac-comphist-file "~/.emacs.d/auto-complete/ac-comphist.dat")
+(ac-config-default)
+(setq ac-delay 0.2)
+
+;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
+(add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
+(add-to-list 'ac-modes 'shell-mode)
+
+;;etags for auto-complete
+(require 'auto-complete-etags)
+(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
+(add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
+
+;; auto-complete for python
+;; Initialize Rope (for auto-complete)
+;; if this doesn't work, here is how to install this:
+;;  sudo aptitude install mercurial
+;;  mkdir /tmp/rope && cd /tmp/rope
+;;  hg clone http://bitbucket.org/agr/rope
+;;  hg clone http://bitbucket.org/agr/ropemacs
+;;  hg clone http://bitbucket.org/agr/ropemode
+;;  sudo easy_install rope
+;;  ln -s ../ropemode/ropemode ropemacs/
+;;  sudo easy_install ropemacs
+(ac-ropemacs-initialize)
+(add-hook 'python-mode-hook
+          (lambda ()
+                 (add-to-list 'ac-sources 'ac-source-ropemacs)))
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Notification framework (used in ERC)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun get-frame-name (&optional frame)
+  "Return the string that names FRAME (a frame).  Default is selected frame."
+  (unless frame (setq frame (selected-frame)))
+  (if (framep frame)
+      (cdr (assq 'name (frame-parameters frame)))
+    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
+
+(defun frame-focus-p (&optional frame)
+  "Return t iff the given frame has the X focus.
+If frame is a non X terminal frame, return (frame-visible-p frame)."
+  (unless frame (setq frame (selected-frame)))
+  (if (not (string= 'x (framep frame)))
+      ;; not a X terminal frame
+      (frame-visible-p frame))
+  (let ((focus-name (shell-command-to-string "~/bin/getInputFocus/getInputFocusName.sh"))
+	(frame-name (get-frame-name frame)))
+    (string= focus-name frame-name)))
+
+;;notification
+(defvar do-not-disturb nil
+  "Set this if you don't want to be disturbed by notifications")
+;;(require 'notifications)
+;; (defmacro notify (&rest PARAM)
+;;   "Notify user by graphical display"
+;;   (unless do-not-disturb
+;;     `(notifications-notify ,@PARAM)))
+;; temporary macro with notify-send, because there is a bug with utf8 and dbus in emacs
+(defun notify (title message)
+  "Notify user by graphical display"
+  (unless do-not-disturb
+    (shell-command-to-string (format
+			      "notify-send %s %s --icon=%s"
+			      (shell-quote-argument title)
+			      (shell-quote-argument message)
+			      (shell-quote-argument "emacs")))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; ERC
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load "~/.emacs.d/erc.el")
+;;read personal info (mainly ERC stuff)
+(load "~/.emacs.d/perso.el" t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Tests
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; des tests pour gérer les buffers par frame
 
