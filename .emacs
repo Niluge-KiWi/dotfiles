@@ -9,8 +9,9 @@
 ;;; Path setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/auto-complete/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/erc-5.3/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/auto-complete/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/erc-5.3/"))
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
