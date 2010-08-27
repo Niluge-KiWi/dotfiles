@@ -171,9 +171,10 @@ virtual host to use.  For example use 'emacs' for 'emacs.pastebin.com'."
           '(("Content-Type" . "application/x-www-form-urlencoded")))
          (url-request-data
 
-          (concat (format "submit=submit&paste_private=1&paste_expire_date=N&paste_subdomain=%s&paste_format=%s&paste_code=%s"
+          (concat (format "submit=submit&paste_private=0&paste_expire_date=N&paste_subdomain=%s&paste_format=%s&paste_name=%s&paste_code=%s"
               subdomain
                           (or (assoc-default major-mode pastebin-type-assoc) "text")
+                          (url-hexify-string (user-full-name))
                           (url-hexify-string data))))
          (content-buf (url-retrieve pastebin-url
                                     (lambda (arg)

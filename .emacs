@@ -21,15 +21,58 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Package Management (ELPA)
+;;; Package Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; This provides support for the package system and
-;;; interfacing with ELPA, the package archive.
+;;-------ELAP
+;; This provides support for the package system and
+;; interfacing with ELPA, the package archive.
 (when
     (load
      (expand-file-name "~/.emacs.d/elpa/package.el"))
   (package-initialize))
 
+;;-------el-get
+;; Manage the external elisp bits and pieces you depend upon
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
+(require 'el-get)
+(setq el-get-sources
+      '((:name el-get :type git
+               :url "git://github.com/dimitri/el-get.git")
+	(:name apache :type http
+	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
+	(:name auto-complete :type git
+	       :url "git://github.com/m2ym/auto-complete.git")
+	(:name autopair :type git-svn
+	       :url "http://autopair.googlecode.com/svn/trunk/")
+	(:name browse-kill-ring :type http
+	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/browse-kill-ring.el")
+	(:name cmake :type http
+	       :url "http://www.cmake.org/CMakeDocs/cmake-mode.el")
+	(:name dired+ :type http
+	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
+	(:name egg :type git
+	       :url "git://github.com/byplayer/egg.git")
+	(:name fold-dwim :type http
+	       :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
+	(:name pastebin :type http
+	       :url "http://www.emacswiki.org/emacs/download/pastebin.el")
+	(:name php-mode :type http
+	       :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
+	(:name psvn :type http
+	       :url "http://www.xsteve.at/prg/emacs/psvn.el")
+	(:name widen-window :type http
+	       :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
+	(:name window-numbering :type http
+	       :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el")
+	(:name wuxch-dired-copy-paste :type http
+	       :url "http://www.emacswiki.org/emacs/download/wuxch-dired-copy-paste.el")
+	(:name yaml-mode :type git
+	       :url "git://github.com/yoshiki/yaml-mode.git")
+	(:name zenburn :type http
+	       :url "http://brockman.se/2003/zenburn/zenburn.el")
+	))
+
+(el-get)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Desktop and server
@@ -538,7 +581,7 @@ sys.path.insert(0, '')"))
 (add-hook 'html-mode-hook
 	  (lambda ()
 	    (global-set-key [f5] 'php-mode)))
-;; TODO remove warning messages when failling parsing html
+;; TODO use Nxhtml instead http://www.emacswiki.org/emacs/NxhtmlMode
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1226,8 +1269,8 @@ Ignores CHAR at point."
 ;; auto-complete mode : dropdown menu
 ;; see http://cx4a.org/software/auto-complete/manual.html
 (require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/ac-dict")
-(setq ac-comphist-file "~/.emacs.d/auto-complete/ac-comphist.dat")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
+(setq ac-comphist-file "~/.emacs.d/el-get/auto-complete/ac-comphist.dat")
 (ac-config-default)
 (setq ac-delay 0.2)
 
