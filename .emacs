@@ -42,8 +42,8 @@
 	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
 	(:name auto-complete :type git
 	       :url "git://github.com/m2ym/auto-complete.git")
-	(:name autopair :type git-svn
-	       :url "http://autopair.googlecode.com/svn/trunk/")
+	(:name autopair :type http
+	       :url "http://autopair.googlecode.com/svn/trunk/autopair.el")
 	(:name browse-kill-ring :type http
 	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/browse-kill-ring.el")
 	(:name cmake :type http
