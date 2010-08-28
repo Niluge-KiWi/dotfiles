@@ -1,0 +1,15 @@
+[submodule ".emacs.d/el-get/el-get"]
+	path = .emacs.d/el-get/el-get
+	url = git://github.com/dimitri/el-get.git
+
+[submodule ".emacs.d/el-get/auto-complete"]
+	path = .emacs.d/el-get/auto-complete
+	url = git://github.com/m2ym/auto-complete.git
+
+[submodule ".emacs.d/el-get/egg"]
+	path = .emacs.d/el-get/egg
+	url = git://github.com/byplayer/egg.git
+
+[submodule ".emacs.d/el-get/yaml-mode"]
+	path = .emacs.d/el-get/yaml-mode
+	url = git://github.com/yoshiki/yaml-mode.git
