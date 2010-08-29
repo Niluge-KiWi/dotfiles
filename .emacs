@@ -13,9 +13,6 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/auto-complete/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/erc-5.3/"))
 
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
-
 ;;byte-recompile elisp files if they need to be
 ;;(byte-recompile-directory "~/.emacs.d" 0)
 
@@ -366,8 +363,8 @@
   (launch-command "gnome-open" (dired-get-file-for-visit)))
 (define-key dired-mode-map (kbd "<C-return>") 'dired-gnome-open-file)
 
-;; TODO something here makes really ugly colors, change this
-
+;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
+(add-hook 'dired-mode-hook '(lambda () (setenv "LANG" "C")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Psvn
@@ -1352,6 +1349,13 @@ If frame is a non X terminal frame, return (frame-visible-p frame)."
 (load "~/.emacs.d/erc.el")
 ;;read personal info (mainly ERC stuff)
 (load "~/.emacs.d/perso.el" t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Customs
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
