@@ -364,7 +364,7 @@
 (define-key dired-mode-map (kbd "<C-return>") 'dired-gnome-open-file)
 
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
-(add-hook 'dired-mode-hook '(lambda () (setenv "LANG" "C")))
+(add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Psvn
