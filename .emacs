@@ -56,8 +56,6 @@
 	       :url "git://github.com/byplayer/egg.git")
 	(:name fold-dwim :type http
 	       :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
-	(:name pastebin :type http
-	       :url "http://www.emacswiki.org/emacs/download/pastebin.el")
 	(:name php-mode :type http
 	       :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 	(:name psvn :type http
