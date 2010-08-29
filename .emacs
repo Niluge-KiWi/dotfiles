@@ -62,6 +62,8 @@
 	       :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 	(:name psvn :type http
 	       :url "http://www.xsteve.at/prg/emacs/psvn.el")
+	(:name rainbow-mode :type http
+	       :url "http://git.naquadah.org/?p=rainbow.git;a=blob_plain;f=rainbow-mode.el;hb=HEAD")
 	(:name widen-window :type http
 	       :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
 	(:name window-numbering :type http
@@ -122,6 +124,8 @@
 ;; do this in shell:
 ;;echo "Emacs.font: Monospace-12" >> ~/.Xresources
 ;;xrdb -merge ~/.Xresources
+
+(require 'rainbow-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
