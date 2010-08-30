@@ -51,6 +51,8 @@
 	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
 	(:name egg :type git
 	       :url "git://github.com/byplayer/egg.git")
+	(:name erc-view-log :type git
+	       :url "git@github.com:Niluge-KiWi/erc-view-log.git")
 	(:name fold-dwim :type http
 	       :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
 	(:name php-mode :type http
