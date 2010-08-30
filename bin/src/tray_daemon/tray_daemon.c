@@ -26,7 +26,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/stat.h>
 #include <signal.h>
 
 GtkStatusIcon *status;
@@ -67,9 +66,6 @@ void sigquit_handler(int sig)
 
 int main(int argc, char **argv)
 {
-	//init fifo
-	struct stat stat_buf;
-
 	//rm existing fifo, if any
 	remove(fifo);
 
