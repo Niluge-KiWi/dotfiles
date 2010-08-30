@@ -810,6 +810,12 @@ sys.path.insert(0, '')"))
 ;; (setq org-clock-persist 'history)
 ;; (org-clock-persistence-insinuate)
 
+;; activate narrow-to-region
+;; C-x n n to narrow region
+;; C-x n s in org-mode to narrow current bullet point
+;; C-x n w to un-narrow
+(put 'narrow-to-region 'disabled nil)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Compilation
