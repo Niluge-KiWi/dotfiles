@@ -1,0 +1,27 @@
+#!/usr/bin/emacs --script
+; syntax : ebatch "some lisp code" files
+
+; example : ebatch "(iwb)" *.c : indent all C files
+; example : ebatch "(convert 'latin-1 'utf-8)" *.tex : convert tex files from latin-1 to utf-8
+
+
+; insert settings here
+(setq require-final-newline t)
+
+; insert functions here
+(defun iwb ()
+  "indent whole buffer"
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil))
+
+(defun convert (coding)
+  (set-buffer-file-coding-system coding))
+
+; do the work
+(mapc (lambda (f)
+	(message "============ Processing file %S ===========" f)
+	(find-file f)
+	(eval (read (car command-line-args-left)))
+	(save-buffer))
+      (cdr command-line-args-left))
