@@ -12,11 +12,11 @@
 // BUGS : timeout is ugly. Should find a way to use select(1) in gtk_main instead
 
 #define FIFO_PATH "/tmp/tray_daemon_control"
-#define NORMAL_ICON "icon_blue.png"
-#define BEEPING_ICON "icon_red.png"
+#define NORMAL_ICON "emacs.png"
+#define BEEPING_ICON "emacs-red.png"
 #define FIFO_TIMEOUT 200
 //if 1, fork and return
-#define DAEMONIZE 0
+#define DAEMONIZE 1
 
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -27,6 +27,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <signal.h>
 
 GtkStatusIcon *status;
 GdkPixbuf *pixbuf_normal;
@@ -53,23 +54,39 @@ gint timeout_callback( gpointer data ) {
 			gtk_status_icon_set_visible(status, TRUE);
 			break;
 		case 'Q':
-			exit(0);
+			gtk_main_quit();
 		}
 	}
 	return TRUE;
 }
+
+void sigquit_handler(int sig)
+{
+	gtk_main_quit();
+}
+
 int main(int argc, char **argv)
 {
 	//init fifo
-	if((fifo_fd = open(fifo, O_RDONLY | O_NONBLOCK)) == -1) {
-		if(mkfifo(fifo, 0600) == 0) {
-			fifo_fd = open(fifo, O_RDONLY | O_NONBLOCK);
-		}
-		else {
-			printf("Unable to create fifo, aborting\n");
-			exit(1);
-		}
+	struct stat stat_buf;
+
+	//rm existing fifo, if any
+	remove(fifo);
+
+	//create fifo
+	if(mkfifo(fifo, 0600) == 0) {
+		fifo_fd = open(fifo, O_RDONLY | O_NONBLOCK);
 	}
+	else {
+		printf("Unable to create fifo, aborting\n");
+		exit(1);
+	}
+
+	//register signal handlers, to properly quit
+	(void) signal(SIGINT, sigquit_handler);
+	(void) signal(SIGQUIT, sigquit_handler);
+	(void) signal(SIGTERM, sigquit_handler);
+
 	//daemonize
 #if DAEMONIZE
 	if(fork() != 0)
@@ -94,6 +111,8 @@ int main(int argc, char **argv)
 	//main loop
 	gtk_main();
 
-	//shouldn't happen
+	//and clean
+	remove(fifo);
+
 	return 0;
 }
