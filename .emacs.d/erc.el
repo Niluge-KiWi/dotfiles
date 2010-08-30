@@ -1,7 +1,12 @@
 (require 'erc)
-;;--------------------
-;; Settings
-;;--------------------
+;;; ERC conf of Thomas Riccardi. Homepage : http://github.com/Niluge-KiWi/dotfiles
+
+;; Can be viewed in outline mode
+
+
+;;;--------------------
+;;; Settings
+;;;--------------------
 ; specific settings for IM gateways : minbif or bitlbee
 (setq im-gateway-channel-name "&friends")
 ; erc general conf
@@ -62,9 +67,9 @@
       )
 
 
-;;--------------------
-;; Auto completion
-;;--------------------
+;;;--------------------
+;;; Auto completion
+;;;--------------------
 ;;-------nicks then dabbrev
 ;; modify return value of erc-pcomplete: return t if completed
 ;; something, nil otherwise
@@ -127,9 +132,9 @@ This function is a possible value for `erc-generate-log-file-name-function'."
   (find-file (erc-current-logfile))
   (end-of-buffer))
 
-;;--------------------
-;; Unread messages bar
-;;--------------------
+;;;--------------------
+;;; Unread messages bar
+;;;--------------------
 (eval-after-load 'erc-track
   '(progn
      (defun erc-bar-move-back (n)
@@ -169,9 +174,9 @@ erc-modified-channels-alist. Should be executed on window change."
      (add-hook 'erc-send-completed-hook (lambda (str)
 					  (erc-bar-update-overlay)))))
 
-;;--------------------
-;; Connect
-;;--------------------
+;;;--------------------
+;;; Connect
+;;;--------------------
 (defun assoc-regexp (key list)
   "Like assoc-string, but returns whenever there is a match"
   (if (null list) nil
@@ -215,9 +220,9 @@ erc-modified-channels-alist. Should be executed on window change."
   (irc-deco)
   (irc))
 
-;;--------------------
-;; Channel change commands
-;;--------------------
+;;;--------------------
+;;; Channel change commands
+;;;--------------------
 (defun irc-dwim (arg)
   "Runs IRC (by function irc) if it is not running,
   use erc-track to switch to last modified chan if it is."
@@ -243,9 +248,9 @@ Differs a bit from erc's implementation : robust to buffer kills and stuff like 
 	(setq blist (cdr blist))))))
 
 
-;;--------------------
-;; Tray control
-;;--------------------
+;;;--------------------
+;;; Tray control
+;;;--------------------
 (defun erc-tray-update-state ()
   "Update the state of the tray icon. Blink when some new event
 appears when you're not looking. Events are changes to
@@ -281,9 +286,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 			       (erc-modified-channels-update)))))
 
 
-;;--------------------
-;; Notification control
-;;--------------------
+;;;--------------------
+;;; Notification control
+;;;--------------------
 (defun erc-notify-if-hl (matched-type nick msg)
   "Notify whenever someone highlights you and you're away"
   (when (and (eq matched-type 'current-nick)
@@ -322,9 +327,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 (add-hook 'erc-server-PRIVMSG-functions 'my-notify-PRIVMSG)
 
 
-;;--------------------
-;; Notify in query buffers when someone appears/disappears
-;;--------------------
+;;;--------------------
+;;; Notify in query buffers when someone appears/disappears
+;;;--------------------
 (erc-define-catalog
  'english
  '((my_notify_join      . "%n is back")
@@ -351,9 +356,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 (add-hook 'erc-server-QUIT-functions 'my-notify-in-privmsg-QUIT)
 
 
-;;--------------------
-;; Prompts for commands
-;;--------------------
+;;;--------------------
+;;; Prompts for commands
+;;;--------------------
 (defun erc-query-prompt ()
   "Prompts for someone to query"
   (interactive)
@@ -382,9 +387,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
       (erc-send-message "root: blist")
     (erc-channel-names)))
 
-;;--------------------
-;; Setting away
-;;--------------------
+;;;--------------------
+;;; Setting away
+;;;--------------------
 (require 'erc-autoaway)
 (defun erc-toggle-away ()
   "Toggles away status in ERC."
@@ -393,9 +398,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
       (erc-autoaway-set-back)
     (erc-autoaway-set-away erc-autoaway-idle-seconds)))
 
-;;--------------------
-;; Toggle tracking
-;;--------------------
+;;;--------------------
+;;; Toggle tracking
+;;;--------------------
 (defvar erc-track-exclude '())
 (defun toggle-channel-track ()
   "Toggle exclude status of current channel"
@@ -411,9 +416,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 	(message "Tracking off")))))
 
 
-;;--------------------
-;; browse url before point with just a keystroke
-;;--------------------
+;;;--------------------
+;;; Browse url before point with just a keystroke
+;;;--------------------
 (require 'thingatpt)
 (defun browse-url-before-point ()
   (interactive)
@@ -424,9 +429,9 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 	(message "Pas d'URL dans le buffer")))))
 
 
-;;--------------------
-;; Setup keys
-;;--------------------
+;;;--------------------
+;;; Setup keys
+;;;--------------------
 (defun erc-setup-my-commands ()
   (interactive)
   (global-set-key [escape] 'irc-dwim)
@@ -452,9 +457,9 @@ This places `point' just after the prompt, or at the beginning of the line."
   (point))
 
 
-;;--------------------
-;; System tray
-;;--------------------
+;;;--------------------
+;;; System tray
+;;;--------------------
 ;;-------ERC tray
 ;; Needs tray_daemon, http://smeuuh.free.fr/tray_daemon/
 ;; defined in emacs_perso : list of regexps for which we don't blink
@@ -481,9 +486,9 @@ Additional support for inhibiting one activation (quick hack)"
 
 
 
-;;--------------------
-;; TMP TO check
-;;--------------------
+;;;--------------------
+;;; TMP TO check
+;;;--------------------
 
 ;; (setq erc-mode-hook
 ;;       (cons erc-mode-hook
