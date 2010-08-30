@@ -20,7 +20,8 @@
  `(diredp-read-priv ((t nil)))
  `(diredp-symlink ((t (:foreground ,zenburn-blue-3))))
  `(diredp-write-priv ((t nil)))
- `(diredp-ignored-file-name ((t (:foreground ,zenburn-blue-4)))))
+ `(diredp-ignored-file-name ((t (:foreground ,zenburn-blue-4))))
+ `(erc-my-nick-face ((t (:foreground ,zenburn-red-4)))))
 
 (custom-set-variables
   ;; custom-set-variables was added by Custom.
