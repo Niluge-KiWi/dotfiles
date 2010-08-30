@@ -21,5 +21,5 @@ int main(int argc, const char* argv[])
 	
 	//sleep(2);
 	XGetInputFocus(display, &window, &revert);
-	printf("%u\n", window);
+	printf("%u\n", (unsigned int)window);
 }

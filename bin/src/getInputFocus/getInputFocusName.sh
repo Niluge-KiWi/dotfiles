@@ -4,7 +4,7 @@
 
 cd $(dirname $0)
 
-WINID=$(./getInput)
+WINID=$(./getInputFocus)
 
 function getname {
     xwininfo -id "$1" | grep xwininfo | sed 's/.* id: [^ ]* \(.*\)/\1/'
