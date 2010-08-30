@@ -1183,6 +1183,9 @@ Ignores CHAR at point."
 (add-hook 'ediff-quit-hook 'my-ediff-qh-before)
 (add-hook 'ediff-quit-hook 'my-ediff-qh-after 'after)
 
+;; LANG=Fr breaks ediff on some output ("\ Pas de fin de ligne \303\240 la fin du fichier.")
+(add-hook 'ediff-mode-hook '(lambda () (setenv "LANG" "C")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Isearch
