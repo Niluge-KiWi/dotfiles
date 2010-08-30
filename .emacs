@@ -549,6 +549,8 @@
 ;;linux style
 (setq c-default-style "linux")
 (setq-default c-basic-offset 4)
+(setq-default tab-width 4)
+
 ;;'electric' indentation : indent on newline
 (define-key c-mode-base-map "\C-m"
   'c-context-line-break)
