@@ -91,9 +91,9 @@
 ;; TODO setup a source for auto-complete?
 
 
-;;--------------------
-;; Colorize nicks
-;;--------------------
+;;;--------------------
+;;; Colorize nicks
+;;;--------------------
 (require 'erc-nick-color)
 (add-hook 'erc-insert-modify-hook 'erc-put-color-on-nick)
 ;; special colors for some people
@@ -102,9 +102,9 @@
 			     ))
 
 
-;;--------------------
-;; Logs
-;;--------------------
+;;;--------------------
+;;; Logs
+;;;--------------------
 ;;-------colors
 (require 'erc-view-log)
 (setq erc-view-log-nickname-face-function 'erc-get-face-for-nick)
