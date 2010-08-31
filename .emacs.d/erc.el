@@ -466,20 +466,17 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;the tray icon
 (setq erc-tray-inhibit-one-activation nil)
 (setq erc-tray-ignored-channels nil)
-(setq erc-tray-state nil)
 (setq erc-tray-enable t)
 (defun erc-tray-change-state-aux (arg)
   "Enables or disable blinking, depending on arg (non-nil or nil)"
-  (unless (eq erc-tray-state arg)
-    (shell-command-to-string
-     (concat "echo " (if arg "B" "b") " > /tmp/tray_daemon_control"))
-    (setq erc-tray-state arg)))
+  (shell-command-to-string
+   (concat "echo " (if arg "B" "b") " > /tmp/tray_daemon_control")))
 (defun erc-tray-change-state (arg)
   "Enables or disable blinking, depending on arg (t or nil).
 Additional support for inhibiting one activation (quick hack)"
   (when erc-tray-enable
     (if erc-tray-inhibit-one-activation
-	(setq erc-tray-inhibit-one-activation nil)
+		(setq erc-tray-inhibit-one-activation nil)
       (erc-tray-change-state-aux arg))))
 
 
