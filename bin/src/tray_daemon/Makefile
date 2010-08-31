@@ -5,6 +5,7 @@ tray_daemon: tray_daemon.c
 
 install: tray_daemon
 	cp tray_daemon ~/bin
+	cp tray_daemon.sh ~/bin
 	cp emacs.png ~/bin
 	cp emacs-red.png ~/bin
 clean:

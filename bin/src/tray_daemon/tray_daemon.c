@@ -16,7 +16,7 @@
 #define BEEPING_ICON "emacs-red.png"
 #define FIFO_TIMEOUT 200
 //if 1, fork and return
-#define DAEMONIZE 1
+#define DAEMONIZE 0
 
 #include <glib.h>
 #include <gtk/gtk.h>
