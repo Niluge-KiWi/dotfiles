@@ -35,7 +35,9 @@ Activity means that there was no user input in the last 10 seconds."
 
 (defun erc-track-get-buffer-window (buffer frame-param)
   (cond ((eq frame-param 'focus)
-		 (buffer-focus-p buffer))
+		 (if (buffer-focus-p buffer)
+			 (get-buffer-window buffer)
+		   nil))
 		((eq frame-param 'selected-visible)
 		 (if (eq (frame-visible-p (selected-frame)) t)
 			 (get-buffer-window buffer nil)
