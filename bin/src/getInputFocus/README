@@ -1,10 +1,5 @@
 == getInputFocus ==
-Small C program to get the X Window ID that has the focus.
-
-== getInputFocusName.sh ==
-Small bash program to get the name of the window that has the focus.
-(Hacky version for gtk programs...)
-
+Small C program to get the the name of the window that has the focus.
 
 Used in emacs since from there we cannot know such information: 
 frame-visible-p just knows if the frame is minimized or not.
