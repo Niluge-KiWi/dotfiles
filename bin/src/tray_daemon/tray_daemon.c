@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
+#include <assert.h>
 
 #include "libwindowswitchs.h"
 
@@ -68,18 +69,67 @@ gint timeout_callback( gpointer data ) {
 
 /* Monitor part */
 
+char* get_buffer_name_emacs(const char* window_name)
+{
+	// the emacs title is "<buffer-name> - emacs@hostname"
+	char* buffer_name = NULL;
+
+	char hostname[256];
+	gethostname(hostname, 256);
+
+	char* emacs_fix = " - emacs@";
+
+	size_t suffix_size = strlen(emacs_fix) + strlen(hostname);
+	char* suffix = (char*) malloc (sizeof(char)*(suffix_size+1));
+	strcpy(suffix, emacs_fix);
+	strcat(suffix, hostname);
+
+	int prefix_size = strlen(window_name) - suffix_size;
+	if(prefix_size <= 0) {
+		// no match: window_name is too short
+		goto ret;
+	}
+
+	const char* suffix_window_name = window_name + prefix_size;
+
+	if(!strcmp(suffix, suffix_window_name)) {
+		// we got a match
+		buffer_name = (char*) malloc(sizeof(char)*(prefix_size+1));
+		strncpy(buffer_name, window_name, prefix_size);
+		buffer_name[prefix_size] = '\0';
+	}
+
+ret:
+	free(suffix);
+	return buffer_name;
+}
+
 // monitor windows switchs with libwindowswitch, and call emacsclient --eval
 void enter_window(const char* window_name)
 {
 	// TODO: Implement emacs hook (erc-channel-?)window-got-focus
-	// currently just call what we need
-
+	// currently just call what we need:
 	// only when this is an erc channel buffer
-	if(window_name[0]=='#' && // has to start with #
-	   strstr(window_name, " - emacs@") >= window_name+2) { // smallest chan name length: 1, thus len(#channame)>=2
-		system("emacsclient --eval '(erc-modified-channels-update)'");
+
+	char* buffer_name = get_buffer_name_emacs(window_name);
+	if(!buffer_name) {
+		// no match
+		return;
 	}
 
+	if(buffer_name[0]=='#') { // has to start with #
+		char* format = "emacsclient --eval '(progn (select-window (get-buffer-window \"%s\" t)) (erc-modified-channels-update))'";
+		size_t cmd_size = strlen(format) + strlen(buffer_name);
+		char* cmd = (char*) malloc(sizeof(char)*(cmd_size+1));
+		int ret = snprintf(cmd, (cmd_size+1), format, buffer_name);
+
+		assert(0 <= ret && (size_t)ret <= cmd_size); // snprintf should fully work
+
+		system(cmd);
+
+		free(cmd);
+	}
+	free(buffer_name);
 }
 
 
