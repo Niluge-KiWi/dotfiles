@@ -1350,7 +1350,9 @@ displaying it has the focus."
   "Returns t iff the given buffer-or-name is displayed in a
   window that has the focus."
   (let ((window (get-buffer-window buffer-or-name)))
-	(window-focus-p window)))
+	(if window
+		(window-focus-p window)
+	  nil)))
 
 ;;notification
 (defvar do-not-disturb nil
