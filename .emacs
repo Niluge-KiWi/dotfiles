@@ -1333,8 +1333,8 @@ If frame is a non X terminal frame, return (frame-visible-p frame)."
   (if (not (string= 'x (framep frame)))
       ;; not a X terminal frame
       (frame-visible-p frame))
-  (let ((focus-name (shell-command-to-string "getInputFocusName"))
-	(frame-name (get-frame-name frame)))
+  (let ((focus-name (shell-command-to-string "getInputFocus"))
+		(frame-name (concat (get-frame-name frame) "\n")))
     (string= focus-name frame-name)))
 
 (defun window-focus-p (&optional window)

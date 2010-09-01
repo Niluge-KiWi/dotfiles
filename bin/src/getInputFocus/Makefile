@@ -1,11 +1,10 @@
 all: getInputFocus
 
 getInputFocus: getInputFocus.c
-	gcc -o getInputFocus getInputFocus.c -lX11
+	gcc -o getInputFocus getInputFocus.c `pkg-config --cflags --libs libwnck-1.0`
 
 install: getInputFocus
 	cp getInputFocus ~/bin
-	cp getInputFocusName.sh ~/bin/getInputFocusName
 
 clean:
 	rm getInputFocus
