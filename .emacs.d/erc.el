@@ -5,6 +5,47 @@
 
 
 ;;;--------------------
+;;; Modify erc-track-mode
+;;;--------------------
+;; to add erc-track-visibility 'focus
+;; that uses my buffer-focus-p: handles X focus
+(defcustom erc-track-visibility t
+  "Where do we look for buffers to determine their visibility?
+The value of this variable determines, when a buffer is considered
+visible or invisible.  New messages in invisible buffers are tracked,
+while switching to visible buffers when they are tracked removes them
+from the list.  See also `erc-track-when-inactive'.
+
+Possible values are:
+
+t                - all frames
+visible          - all visible frames
+nil              - only the selected frame
+selected-visible - only the selected frame if it is visible
+focus            - check if buffer has emacs focus and X focus
+
+Activity means that there was no user input in the last 10 seconds."
+  :group 'erc-track
+  :type  '(choice (const :tag "All frames" t)
+				  (const :tag "All visible frames" visible)
+				  (const :tag "Only the selected frame" nil)
+				  (const :tag "Only the selected frame if it was active" selected-visible)
+				  (const :tag "Emacs and X focus for the buffer" focus)))
+
+
+(defun erc-track-get-buffer-window (buffer frame-param)
+  (cond ((eq frame-param 'focus)
+		 (buffer-focus-p buffer))
+		((eq frame-param 'selected-visible)
+		 (if (eq (frame-visible-p (selected-frame)) t)
+			 (get-buffer-window buffer nil)
+		   nil))
+		(t
+		 (get-buffer-window buffer frame-param))))
+
+
+
+;;;--------------------
 ;;; Settings
 ;;;--------------------
 ; specific settings for IM gateways : minbif or bitlbee
@@ -47,7 +88,7 @@
       erc-track-position-in-mode-line t
       erc-track-showcount t
       erc-track-switch-direction 'leastactive
-      erc-track-visibility 'visible
+      erc-track-visibility 'focus
       ;; only fontify indicator on HLs
       erc-track-faces-priority-list
       '((erc-nick-default-face erc-current-nick-face)
@@ -259,19 +300,24 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
   ;;stop blinking tray when there're no channels in list
   (unless erc-modified-channels-alist
     (erc-tray-change-state nil))
-  ;;maybe make tray blink
-  (unless (frame-focus-p)
-    ;;filter list according to erc-tray-ignored-channels
-    (let ((filtered-list erc-modified-channels-alist))
-      (mapc (lambda (el)
-	      (mapc (lambda (reg)
-		      (when (string-match reg (buffer-name (car el)))
-			(setq filtered-list
-			      (remove el filtered-list))))
-		    erc-tray-ignored-channels))
-	    filtered-list)
-      (when filtered-list
-	(erc-tray-change-state t)))))
+  ;;maybe make tray blink-
+  ;;filter list according to erc-tray-ignored-channels
+  (let ((filtered-list erc-modified-channels-alist))
+	(mapc (lambda (el)
+			(mapc (lambda (reg)
+					(when (string-match reg (buffer-name (car el)))
+					  (setq filtered-list
+							(remove el filtered-list))))
+				  erc-tray-ignored-channels))
+		  filtered-list)
+	(catch 'break
+	  (mapc (lambda (el)
+			  (unless (buffer-focus-p (car el))
+				;; found a buffer that has not the focus
+				(erc-tray-change-state t)
+				(throw 'break t)))
+			filtered-list))))
+
 
 ;;blink if away and activity
 (add-hook 'erc-track-list-changed-hook 'erc-tray-update-state)
@@ -292,7 +338,7 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 (defun erc-notify-if-hl (matched-type nick msg)
   "Notify whenever someone highlights you and you're away"
   (when (and (eq matched-type 'current-nick)
-	     (not (frame-focus-p)))
+	     (not (buffer-focus-p)))
     (notify (format "HL \<%s\>" (erc-extract-nick nick)) msg)))
 ;;notify if away and highlighted
 (add-hook 'erc-text-matched-hook 'erc-notify-if-hl)
@@ -316,7 +362,7 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 	(msg (erc-response.contents parsed)))
 
     (when (and (string= target (erc-current-nick))
-	       (not (frame-focus-p))
+	       (not (buffer-focus-p))
 	       (not (erc-is-message-ctcp-and-not-action-p msg)))
       ;;prevents from blinking on messages for which there is already
       ;;a notification

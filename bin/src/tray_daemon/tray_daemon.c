@@ -23,16 +23,21 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <signal.h>
 
+#include "libwindowswitchs.h"
+
 GtkStatusIcon *status;
 GdkPixbuf *pixbuf_normal;
 GdkPixbuf *pixbuf_beeping;
 
+
+/* Command part */
 char *fifo = FIFO_PATH;
 int fifo_fd;
 //called every FIFO_TIMEOUT. Processes available commands in the fifo and returns
@@ -60,9 +65,28 @@ gint timeout_callback( gpointer data ) {
 	return TRUE;
 }
 
+
+/* Monitor part */
+
+// monitor windows switchs with libwindowswitch, and call emacsclient --eval
+void enter_window(const char* window_name)
+{
+	// TODO: Implement emacs hook (erc-channel-?)window-got-focus
+	// currently just call what we need
+
+	// only when this is an erc channel buffer
+	if(window_name[0]=='#' && // has to start with #
+	   strstr(window_name, " - emacs@") >= window_name+2) { // smallest chan name length: 1, thus len(#channame)>=2
+		system("emacsclient --eval '(erc-modified-channels-update)'");
+	}
+
+}
+
+
+/* Main part */
 void sigquit_handler(int sig)
 {
-	gtk_main_quit();
+	windowswitchs_stop();
 }
 
 int main(int argc, char **argv)
@@ -90,8 +114,8 @@ int main(int argc, char **argv)
 		exit(0);
 #endif
 
-	//init GTK
-	gtk_init(&argc, &argv);
+	// init libwindowswitchs and GTK
+	windowswitchs_init(&enter_window, NULL);
 
 	//init icons
 	GError *error = NULL;
@@ -106,7 +130,7 @@ int main(int argc, char **argv)
 	gtk_timeout_add(FIFO_TIMEOUT, timeout_callback, NULL);
 
 	//main loop
-	gtk_main();
+	windowswitchs_start();
 
 	//and clean
 	remove(fifo);

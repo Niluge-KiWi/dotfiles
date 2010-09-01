@@ -1337,6 +1337,21 @@ If frame is a non X terminal frame, return (frame-visible-p frame)."
 	(frame-name (get-frame-name frame)))
     (string= focus-name frame-name)))
 
+(defun window-focus-p (&optional window)
+  "Return t iff the given window has the X focus.
+That is, the window is the selected window, and the frame
+displaying it has the focus."
+  (unless window (setq window (selected-window)))
+  (and (eq window (selected-window))
+	   ;; The selected window always resides on the selected frame.
+	   (frame-focus-p (selected-frame))))
+
+(defun buffer-focus-p (&optional buffer-or-name)
+  "Returns t iff the given buffer-or-name is displayed in a
+  window that has the focus."
+  (let ((window (get-buffer-window buffer-or-name)))
+	(window-focus-p window)))
+
 ;;notification
 (defvar do-not-disturb nil
   "Set this if you don't want to be disturbed by notifications")
