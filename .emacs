@@ -70,7 +70,7 @@
 	(:name yaml-mode :type git
 	       :url "git://github.com/yoshiki/yaml-mode.git")
 	(:name zenburn :type http
-	       :url "http://brockman.se/2003/zenburn/zenburn.el")
+	       :url "http://www.emacswiki.org/emacs/download/zenburn.el")
 	))
 
 (el-get)
