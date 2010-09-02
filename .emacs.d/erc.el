@@ -7,10 +7,13 @@
 ;;;--------------------
 ;;; Modify erc-track-mode
 ;;;--------------------
-;; to add erc-track-visibility 'focus
-;; that uses my buffer-focus-p: handles X focus
-(defcustom erc-track-visibility t
-  "Where do we look for buffers to determine their visibility?
+
+(defun patch-erc-track-mode ()
+  "Add erc-track-visibility 'focus that uses my buffer-focus-p:
+  handles X focus"
+
+  (defcustom erc-track-visibility t
+	"Where do we look for buffers to determine their visibility?
 The value of this variable determines, when a buffer is considered
 visible or invisible.  New messages in invisible buffers are tracked,
 while switching to visible buffers when they are tracked removes them
@@ -25,27 +28,32 @@ selected-visible - only the selected frame if it is visible
 focus            - check if buffer has emacs focus and X focus
 
 Activity means that there was no user input in the last 10 seconds."
-  :group 'erc-track
-  :type  '(choice (const :tag "All frames" t)
-				  (const :tag "All visible frames" visible)
-				  (const :tag "Only the selected frame" nil)
-				  (const :tag "Only the selected frame if it was active" selected-visible)
-				  (const :tag "Emacs and X focus for the buffer" focus)))
+	:group 'erc-track
+	:type  '(choice (const :tag "All frames" t)
+					(const :tag "All visible frames" visible)
+					(const :tag "Only the selected frame" nil)
+					(const :tag "Only the selected frame if it was active" selected-visible)
+					(const :tag "Emacs and X focus for the buffer" focus)))
 
 
-(defun erc-track-get-buffer-window (buffer frame-param)
-  (cond ((eq frame-param 'focus)
-		 (if (buffer-focus-p buffer)
-			 (get-buffer-window buffer t)
-		   nil))
-		((eq frame-param 'selected-visible)
-		 (if (eq (frame-visible-p (selected-frame)) t)
-			 (get-buffer-window buffer nil)
-		   nil))
-		(t
-		 (get-buffer-window buffer frame-param))))
+  (defun erc-track-get-buffer-window (buffer frame-param)
+	(cond ((eq frame-param 'focus)
+		   (if (buffer-focus-p buffer)
+			   (get-buffer-window buffer t)
+			 nil))
+		  ((eq frame-param 'selected-visible)
+		   (if (eq (frame-visible-p (selected-frame)) t)
+			   (get-buffer-window buffer nil)
+			 nil))
+		  (t
+		   (get-buffer-window buffer frame-param)))))
 
-
+;; (eval-after-load "erc-track"
+;; ;;  (message (format "test %s" (featurep 'erc-track))))
+;;   (patch-erc-track-mode))
+;; above code doesn't work: it prints "test nil" so the redefinition doesn't work either
+(require 'erc-track)
+(patch-erc-track-mode)
 
 ;;;--------------------
 ;;; Settings
@@ -323,15 +331,6 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
 
 ;;blink if away and activity
 (add-hook 'erc-track-list-changed-hook 'erc-tray-update-state)
-
-;;stop blinking whenever frame is set visible
-(add-hook 'erc-mode-hook (lambda ()
-			   (interactive)
-			   (define-key special-event-map [make-frame-visible]
-			     (lambda () (interactive)
-			       (erc-bar-update-overlay)
-			       (erc-tray-change-state nil)
-			       (erc-modified-channels-update)))))
 
 
 ;;;--------------------
