@@ -35,47 +35,47 @@
 (setq el-get-sources
       '((:name el-get :type git
                :url "git://github.com/dimitri/el-get.git")
-	(:name apache :type http
-	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
-	(:name auto-complete :type git
-	       :url "git://github.com/m2ym/auto-complete.git")
-	(:name auto-complete-etags :type http
-	       :url "http://www.emacswiki.org/emacs/download/auto-complete-etags.el")
-	(:name autopair :type http
-	       :url "http://autopair.googlecode.com/svn/trunk/autopair.el")
-	(:name browse-kill-ring :type http
-	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/browse-kill-ring.el")
-	(:name cmake :type http
-	       :url "http://www.cmake.org/CMakeDocs/cmake-mode.el")
-	(:name dired+ :type http
-	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
-	(:name erc-view-log :type git
-	       :url "git@github.com:Niluge-KiWi/erc-view-log.git")
-	(:name fold-dwim :type http
-	       :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
-	(:name gitsum :type git
-		   :url "git://github.com/chneukirchen/gitsum.git")
-	(:name magit :type git
-		   :info "."
-		   :build ("./autogen.sh" "./configure" "make")
-		   :url "git://github.com/philjackson/magit.git")
-	(:name php-mode :type http
-	       :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
-	(:name psvn :type http
-	       :url "http://www.xsteve.at/prg/emacs/psvn.el")
-	(:name rainbow-mode :type http
-	       :url "http://git.naquadah.org/?p=rainbow.git;a=blob_plain;f=rainbow-mode.el;hb=HEAD")
-	(:name widen-window :type http
-	       :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
-	(:name window-numbering :type http
-	       :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el")
-	(:name wuxch-dired-copy-paste :type http
-	       :url "http://www.emacswiki.org/emacs/download/wuxch-dired-copy-paste.el")
-	(:name yaml-mode :type git
-	       :url "git://github.com/yoshiki/yaml-mode.git")
-	(:name zenburn :type http
-	       :url "http://www.emacswiki.org/emacs/download/zenburn.el")
-	))
+		(:name apache :type http
+			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
+		(:name auto-complete :type git
+			   :url "git://github.com/m2ym/auto-complete.git")
+		(:name auto-complete-etags :type http
+			   :url "http://www.emacswiki.org/emacs/download/auto-complete-etags.el")
+		(:name autopair :type http
+			   :url "http://autopair.googlecode.com/svn/trunk/autopair.el")
+		(:name browse-kill-ring :type http
+			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/browse-kill-ring.el")
+		(:name cmake :type http
+			   :url "http://www.cmake.org/CMakeDocs/cmake-mode.el")
+		(:name dired+ :type http
+			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
+		(:name erc-view-log :type git
+			   :url "git@github.com:Niluge-KiWi/erc-view-log.git")
+		(:name fold-dwim :type http
+			   :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
+		(:name gitsum :type git
+			   :url "git://github.com/chneukirchen/gitsum.git")
+		(:name magit :type git
+			   :info "."
+			   :build ("./autogen.sh" "./configure" "make")
+			   :url "git://github.com/philjackson/magit.git")
+		(:name php-mode :type http
+			   :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
+		(:name psvn :type http
+			   :url "http://www.xsteve.at/prg/emacs/psvn.el")
+		(:name rainbow-mode :type http
+			   :url "http://git.naquadah.org/?p=rainbow.git;a=blob_plain;f=rainbow-mode.el;hb=HEAD")
+		(:name widen-window :type http
+			   :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
+		(:name window-numbering :type http
+			   :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el")
+		(:name wuxch-dired-copy-paste :type http
+			   :url "http://www.emacswiki.org/emacs/download/wuxch-dired-copy-paste.el")
+		(:name yaml-mode :type git
+			   :url "git://github.com/yoshiki/yaml-mode.git")
+		(:name zenburn :type http
+			   :url "http://www.emacswiki.org/emacs/download/zenburn.el")
+		))
 
 (el-get)
 
