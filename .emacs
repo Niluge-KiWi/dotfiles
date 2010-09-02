@@ -49,12 +49,16 @@
 	       :url "http://www.cmake.org/CMakeDocs/cmake-mode.el")
 	(:name dired+ :type http
 	       :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
-	(:name egg :type git
-	       :url "git://github.com/byplayer/egg.git")
 	(:name erc-view-log :type git
 	       :url "git@github.com:Niluge-KiWi/erc-view-log.git")
 	(:name fold-dwim :type http
 	       :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
+	(:name gitsum :type git
+		   :url "git://github.com/chneukirchen/gitsum.git")
+	(:name magit :type git
+		   :info "."
+		   :build ("./autogen.sh" "./configure" "make")
+		   :url "git://github.com/philjackson/magit.git")
 	(:name php-mode :type http
 	       :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 	(:name psvn :type http
@@ -380,16 +384,31 @@
 (setq svn-status-hide-unmodified t)
 ;; TODO test this
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Egg for git
+;;; Gitsum
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'egg)
-(setq egg-buffer-hide-help-on-start (quote (egg-status-buffer-mode egg-log-buffer-mode egg-file-log-buffer-mode egg-reflog-buffer-mode egg-diff-buffer-mode egg-commit-buffer-mode))
-      egg-buffer-hide-section-type-on-start (quote ((egg-status-buffer-mode . :diff)))
-      egg-confirm-next-action nil
-      egg-status-buffer-sections '(repo unstaged staged)
-      egg-commit-buffer-sections '(staged unstaged))
-;; TODO test this
+;; for something like git add --patch, but better:
+;;  can split hunks where git add cant
+;;  and can also manually edit the patch
+(require 'gitsum)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Magit
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Something like Egg, but still maintained and developped
+(require 'magit)
+
+;; no subdirectories for unstaged files
+;; TODO get them when open subsection on directory
+(setq magit-omit-untracked-dir-contents t)
+;; M-arrows is for window-switching
+(define-key magit-mode-map (kbd "<M-left>") nil)
+;; "u" and "U" are already taken by unstage...
+(define-key magit-mode-map (kbd "o") 'magit-goto-parent-section)
+
+(global-set-key (kbd "C-c s") 'magit-status)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
