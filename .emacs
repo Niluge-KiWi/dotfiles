@@ -1305,7 +1305,7 @@ Ignores CHAR at point."
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
 (setq ac-comphist-file "~/.emacs.d/el-get/auto-complete/ac-comphist.dat")
 (ac-config-default)
-(setq ac-delay 0.2)
+(setq ac-delay 0.1)
 
 ;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
 (add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
