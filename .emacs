@@ -59,6 +59,8 @@
 			   :info "."
 			   :build ("./autogen.sh" "./configure" "make")
 			   :url "git://github.com/philjackson/magit.git")
+		(:name minimap :type http
+			   :url "http://randomsample.de/minimap.el")
 		(:name php-mode :type http
 			   :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 		(:name psvn :type http
@@ -112,6 +114,23 @@
 ;; (when emacs-is-master
 ;;   (toggle-fullscreen))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Minimap
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'minimap)
+;; 50ms is more than the repeat period for standard keyboards,
+;; so no slow down when scrolling
+(setq minimap-update-delay 0.05)
+
+(defun minimap-toggle ()
+  "Show minimap if hidden, hide if present."
+  (interactive)
+  (if (and minimap-bufname
+	       (get-buffer minimap-bufname)
+	       (get-buffer-window (get-buffer minimap-bufname)))
+      (minimap-kill)
+    (minimap-create)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Colour theme and fonts
