@@ -1196,33 +1196,19 @@ Ignores CHAR at point."
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 ;;kill variants
 (setq ediff-keep-variants nil)
-;; restore window config on ediff, found on emacswiki, and modified to bury non-file buffers
-(defvar my-ediff-bwin-config nil "Window configuration before ediff.")
-(defun my-ediff-bsh ()
-  "Function to be called before any buffers or window setup for
-    ediff."
-  (setq my-ediff-bwin-config (current-window-configuration)))
-;; this is a huge hack
-(defun my-ediff-qh-before ()
-  (setq my-ediff-buffer-A ediff-buffer-A
-	my-ediff-buffer-B ediff-buffer-B
-	my-ediff-buffer-C ediff-buffer-C))
-(defun my-ediff-qh-after ()
-  "Function to be called when ediff quits."
-  (when (and my-ediff-buffer-A
-	     (not (buffer-file-name my-ediff-buffer-A)))
-    (bury-buffer my-ediff-buffer-A))
-  (when (and my-ediff-buffer-B
-	     (not (buffer-file-name my-ediff-buffer-B)))
-    (bury-buffer my-ediff-buffer-B))
-  (when (and my-ediff-buffer-C
-	     (not (buffer-file-name my-ediff-buffer-C)))
-    (bury-buffer my-ediff-buffer-C))
-  (when my-ediff-bwin-config
-    (set-window-configuration my-ediff-bwin-config)))
-(add-hook 'ediff-before-setup-hook 'my-ediff-bsh)
-(add-hook 'ediff-quit-hook 'my-ediff-qh-before)
-(add-hook 'ediff-quit-hook 'my-ediff-qh-after 'after)
+
+;; restore window config on ediff, found on emacswiki
+(add-hook 'ediff-load-hook
+		  (lambda ()
+			(add-hook 'ediff-before-setup-hook
+					  (lambda ()
+						(setq ediff-saved-window-configuration (current-window-configuration))))
+			
+			(let ((restore-window-configuration
+				   (lambda ()
+					 (set-window-configuration ediff-saved-window-configuration))))
+			  (add-hook 'ediff-quit-hook restore-window-configuration 'append)
+			  (add-hook 'ediff-suspend-hook restore-window-configuration 'append))))
 
 ;; LANG=Fr breaks ediff on some output ("\ Pas de fin de ligne \303\240 la fin du fichier.")
 (add-hook 'ediff-mode-hook '(lambda () (setenv "LANG" "C")))
