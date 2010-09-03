@@ -6,6 +6,20 @@
 ;; URL: http://www.brockman.se/software/zenburn/zenburn.el
 ;; Updated: 2010-07-19 20:10
 
+;; Changes (2010-09), Thomas Riccardi
+;; - Reverted font-lock-function-name
+;; - Removed underline on paren-match
+;; - Modified button : less different than standard text:
+;;    removed background and bold
+;; - Reverted cursor
+;; - Modified diff-removed: inspired by magit default
+;;    (but slightly darker)
+;; - Magit: header to diff-header
+;; - Magit: use default diff-*
+;; - Magit: item-highlight : use zenburn-bg+1
+;; - Modified flyspell : they were too different and too different from
+;;    default. Now less flashy than default, but same idea.
+
 ;; Changes (2010-07), Keffin Barnaby
 ;; - Added fixme-face using vim zenburn todo colours (highlight-fixmes-mode)
 ;; - Added all icompletep-* faces (icomplete-mode)
@@ -309,7 +323,7 @@ static char *gnus-pointer[] = {
 	`(font-lock-doc-string
 	   ((t (:foreground ,zenburn-blue+1))))
 	`(font-lock-function-name
-	   ((t (:foreground ,zenburn-blue))))
+	   ((t (:foreground ,zenburn-yellow))))
 	'(font-lock-keyword
 	   ((t (:inherit zenburn-primary-1))))
 	'(font-lock-negation-char
@@ -434,13 +448,12 @@ static char *gnus-pointer[] = {
 	'(highlight ((t (:underline t))))
 	'(paren ((t (:inherit zenburn-lowlight-1))))
 	'(show-paren-mismatch ((t (:inherit font-lock-warning))))
-	`(show-paren-match ((t (:foreground ,zenburn-blue-1 :underline t))))
+	`(show-paren-match ((t (:foreground ,zenburn-blue-1))))
 	'(match ((t (:weight bold))))
 
-	`(button ((t (:foreground ,zenburn-yellow :background "#506070"
-		       :weight bold :underline t))))
+	`(button ((t (:foreground ,zenburn-yellow :underline t))))
 
-	`(cursor ((t (:background "#aaaaaa" :foreground nil))))
+	`(cursor ((t (:background ,zenburn-fg :foreground ,zenburn-bg))))
 	'(hover-highlight ((t (:underline t :foreground "#f8f893"))))
 	'(menu ((t nil)))
 	'(mouse ((t (:inherit zenburn-foreground))))
@@ -551,7 +564,7 @@ static char *gnus-pointer[] = {
 	'(diff-hunk-header ((t (:inherit zenburn-highlight-subtle))))
 
 	'(diff-added ((t (:inherit zenburn-primary-3))))
-	'(diff-removed ((t (:inherit zenburn-blue))))
+	'(diff-removed ((t (:foreground "#d9430b"))))
 	'(diff-context ((t (:inherit font-lock-comment))))
 	'(diff-refine-change ((t (:inherit zenburn-background-2))))
 
@@ -946,9 +959,14 @@ static char *gnus-pointer[] = {
 
 	'(magit-section-title ((t (:inherit zenburn-primary-1))))
 	'(magit-branch ((t (:inherit zenburn-primary-2))))
+	'(magit-header ((t (:inherit diff-header))))
+	'(magit-diff-add ((t (:inherit diff-added))))
+	'(magit-diff-none ((t (:inherit diff-context))))
+	'(magit-diff-del ((t (:inherit diff-removed))))
+	`(magit-item-highlight ((t (:foreground nil :background ,zenburn-bg+1))))
 
-	'(flyspell-duplicate ((t (:inherit zenburn-primary-1))))
-	'(flyspell-incorrect ((t (:inherit font-lock-warning))))
+	'(flyspell-duplicate ((t (:foreground "#e69c89" :background nil :underline t))))
+	'(flyspell-incorrect ((t (:foreground "#e37170" :background nil :underline t))))
 
 	`(elscreen-tab-other-screen ((t ((:foreground ,zenburn-fg
 					   :background ,zenburn-green-1)))))

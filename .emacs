@@ -73,8 +73,6 @@
 			   :url "http://www.emacswiki.org/emacs/download/wuxch-dired-copy-paste.el")
 		(:name yaml-mode :type git
 			   :url "git://github.com/yoshiki/yaml-mode.git")
-		(:name zenburn :type http
-			   :url "http://www.emacswiki.org/emacs/download/zenburn.el")
 		))
 
 (el-get)
@@ -125,6 +123,11 @@
 ;; do this in shell:
 ;;echo "Emacs.font: Monospace-12" >> ~/.Xresources
 ;;xrdb -merge ~/.Xresources
+
+(defun reload-zenburn ()
+  (interactive)
+  (load-file (expand-file-name "~/.emacs.d/lisp/zenburn.el"))
+  (color-theme-zenburn))
 
 (require 'rainbow-mode)
 
