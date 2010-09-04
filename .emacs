@@ -217,7 +217,7 @@
 	(progn
 	  (re-search-backward "[^ \t\r\n]" nil t)
 	  (re-search-forward "[ \t\r\n]+" nil t)
-	  (replace-match "" nil nil))))))
+	  (replace-match " " nil nil))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
