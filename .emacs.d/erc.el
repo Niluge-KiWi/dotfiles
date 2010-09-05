@@ -527,6 +527,18 @@ Additional support for inhibiting one activation (quick hack)"
       (erc-tray-change-state-aux arg))))
 
 
+;;;--------------------
+;;; Hide passwords
+;;;--------------------
+(defun erc-dont-display-passwords ()
+  "Hide passwords when login.
+Use this defun with `erc-insert-modify-hook'."
+  (save-excursion
+    (goto-char (point-min))
+	(while (re-search-forward "/msg NickServ identify \\(.*\\)$" nil t)
+	  (replace-match "********" nil t nil 1))))
+
+(add-hook 'erc-send-modify-hook 'erc-dont-display-passwords)
 
 
 
