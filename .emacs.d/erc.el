@@ -225,6 +225,23 @@ erc-modified-channels-alist. Should be executed on window change."
      (add-hook 'erc-send-completed-hook (lambda (str)
 					  (erc-bar-update-overlay)))))
 
+
+;;;--------------------
+;;; Easier navigation
+;;;--------------------
+(defun erc-goto-last ()
+  "Set cursor to last read line."
+  (interactive)
+  (when (eq 'erc-mode (buffer-local-value 'major-mode (current-buffer)))
+	(let ((last-read-pos (overlay-start erc-bar-overlay)))
+	  (if last-read-pos
+		  (goto-char last-read-pos);; TODO test this
+		(message "erc-input-marker")
+		(goto-char erc-input-marker)))))
+
+(define-key erc-mode-map (kbd "C-c C-c") 'erc-goto-last)
+
+
 ;;;--------------------
 ;;; Connect
 ;;;--------------------
