@@ -421,6 +421,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Something like Egg, but still maintained and developped
 (require 'magit)
+(require 'magit-svn)
 
 ;; no subdirectories for unstaged files
 ;; TODO get them when open subsection on directory
@@ -431,6 +432,7 @@
 (define-key magit-mode-map (kbd "o") 'magit-goto-parent-section)
 
 (global-set-key (kbd "C-c s") 'magit-status)
+(global-set-key (kbd "C-c C-s") 'magit-status)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
