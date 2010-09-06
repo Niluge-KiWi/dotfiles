@@ -434,6 +434,12 @@
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
+;; Diff with remote svn head
+(magit-define-command svn-remote-diff ()
+  (interactive)
+  (magit-diff "remotes/trunk..HEAD"))
+(define-key magit-svn-map (kbd "d") 'magit-svn-remote-diff)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Window management
