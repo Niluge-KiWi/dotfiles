@@ -134,6 +134,16 @@
 (defvar zenburn-blue-4 "#4c7073")
 (defvar zenburn-blue-5 "#366060")
 (defvar zenburn-magenta "#dc8cc3")
+(defvar zenburn-green-yellow-2 "#89a610")
+(defvar zenburn-green-yellow-1 "#99b32f")
+(defvar zenburn-green-yellow "#afd21c")
+(defvar zenburn-green-yellow+1 "#d1ed5d")
+(defvar zenburn-green-yellow+2 "#daed8d")
+(defvar zenburn-yellow-green-2 "#a3ab10")
+(defvar zenburn-yellow-green-1 "#b1b831")
+(defvar zenburn-yellow-green "#cfd81d")
+(defvar zenburn-yellow-green+1 "#e8ef5e")
+(defvar zenburn-yellow-green+2 "#eaef8f")
 
 (eval-after-load 'term
   '(setq ansi-term-color-vector
