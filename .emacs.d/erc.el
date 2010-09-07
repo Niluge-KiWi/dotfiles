@@ -236,7 +236,6 @@ erc-modified-channels-alist. Should be executed on window change."
 	(let ((last-read-pos (overlay-start erc-bar-overlay)))
 	  (if last-read-pos
 		  (goto-char last-read-pos)
-		(message "erc-input-marker")
 		(goto-char erc-input-marker)))))
 
 (define-key erc-mode-map (kbd "C-c C-c") 'erc-goto-last)
