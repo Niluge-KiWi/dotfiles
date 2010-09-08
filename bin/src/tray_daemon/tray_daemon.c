@@ -49,9 +49,11 @@ gint timeout_callback( gpointer data ) {
 		{
 		case 'b':
 			gtk_status_icon_set_from_pixbuf(status, pixbuf_normal);
+			gtk_status_icon_set_blinking(status, FALSE);
 			break;
 		case 'B':
 			gtk_status_icon_set_from_pixbuf(status, pixbuf_beeping);
+			gtk_status_icon_set_blinking(status, TRUE);
 			break;
 		case 'v':
 			gtk_status_icon_set_visible(status, FALSE);
