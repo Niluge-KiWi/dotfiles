@@ -55,6 +55,8 @@
 			   :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
 		(:name gitsum :type git
 			   :url "git://github.com/chneukirchen/gitsum.git")
+		(:name google-weather :type git
+			   :url "git://git.naquadah.org/google-weather-el.git")
 		(:name magit :type git
 			   :info "."
 			   :build ("./autogen.sh" "./configure" "make")
@@ -866,6 +868,13 @@ sys.path.insert(0, '')"))
 ;; C-x n s in org-mode to narrow current bullet point
 ;; C-x n w to un-narrow
 (put 'narrow-to-region 'disabled nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Google-weather (and mode for org)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'google-weather)
+(require 'org-google-weather)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
