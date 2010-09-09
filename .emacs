@@ -217,7 +217,7 @@
 	(progn
 	  (re-search-backward "[^ \t\r\n]" nil t)
 	  (re-search-forward "[ \t\r\n]+" nil t)
-	  (replace-match "" nil nil))))))
+	  (replace-match " " nil nil))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -976,8 +976,8 @@ brake whatever split of windows we might have in the frame."
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c k") 'browse-kill-ring)
 
-;; just-one-space seems more usefull than kill-sentence
-(global-set-key (kbd "M-k") 'just-one-space)
+;; kill-whitespace seems more usefull than kill-sentence
+(global-set-key (kbd "M-k") 'kill-whitespace)
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
 
@@ -1065,7 +1065,7 @@ Ignores CHAR at point."
 (global-set-key (kbd "s-x") 'exchange-point-and-mark)
 (global-set-key (kbd "s-SPC") 'pop-global-mark)
 (global-set-key (kbd "s-;") 'ede)
-(global-set-key (kbd "s-k") 'just-one-space)
+(global-set-key (kbd "s-k") 'kill-whitespace)
 (global-set-key (kbd "<s-left>") 'winner-undo)
 (global-set-key (kbd "<s-right>") 'winner-redo)
 (defun open-shell-here ()
