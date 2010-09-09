@@ -248,8 +248,8 @@
 ;;display buffer name in title bar
 (setq frame-title-format '("%b" " - " invocation-name "@" system-name))
 (setq icon-title-format 
-      '(multiple-frames ("%b" invocation-name "@" system-name)
-			("" invocation-name "@" system-name)))
+      '(multiple-frames ("%b" " - " invocation-name "@" system-name)
+			("" " - " invocation-name "@" system-name)))
 
 
 ;; ;;backups/autosaves : no autosaves, and backups in one centralised place
