@@ -319,30 +319,42 @@ Differs a bit from erc's implementation : robust to buffer kills and stuff like 
 ;;; Tray control
 ;;;--------------------
 (defun erc-tray-update-state ()
-  "Update the state of the tray icon. Blink when some new event
-appears when you're not looking. Events are changes to
-erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
+  "Update the state of the tray icon.
+Red if new event new event appears when you're not
+looking. Events are changes to erc-modified-channels-alist.
+Blinking, if in erc-tray-blink-channels."
   (interactive)
   ;;stop blinking tray when there're no channels in list
   (unless erc-modified-channels-alist
-    (erc-tray-change-state nil))
+    (erc-tray-change-state 'default))
   ;;maybe make tray blink-
   ;;filter list according to erc-tray-ignored-channels
-  (let ((filtered-list erc-modified-channels-alist))
+  (let ((modified-notify-list erc-modified-channels-alist)
+		(modified-blink-list '()))
 	(mapc (lambda (el)
-			(mapc (lambda (reg)
-					(when (string-match reg (buffer-name (car el)))
-					  (setq filtered-list
-							(remove el filtered-list))))
-				  erc-tray-ignored-channels))
-		  filtered-list)
-	(catch 'break
-	  (mapc (lambda (el)
-			  (unless (buffer-focus-p (car el))
-				;; found a buffer that has not the focus
-				(erc-tray-change-state t)
-				(throw 'break t)))
-			filtered-list))))
+			(let* ((buf (car el))
+				   (focus (buffer-focus-p buf)))
+			  ;; remove buf from modified-notify-list if channel has the focus
+			  (if focus
+				  (setq modified-notify-list (remove el modified-notify-list))
+				;; no focus buffers
+				;; remove buf from modified-notify-list if channel ignored
+				(mapc (lambda (reg)
+						(when (string-match reg (buffer-name buf)
+											(setq modified-notify-list
+												  (remove el modified-notify-list)))))
+						erc-tray-ignored-channels)
+				;; add buff to modified-blink-list if channel can blink
+				(mapc (lambda (reg)
+						(when (string-match reg (buffer-name buf))
+						  (setq modified-blink-list 
+								(cons el modified-blink-list))))
+					  erc-tray-blink-channels))))
+		  erc-modified-channels-alist)
+	(erc-tray-change-state
+	 (cond ((car modified-blink-list) 'blink)
+		   ((car modified-notify-list) 'red)
+		   (t 'default)))))
 
 
 ;;blink if away and activity
@@ -381,9 +393,6 @@ erc-modified-channels-alist, filtered by erc-tray-ignored-channels."
     (when (and (string= target (erc-current-nick))
 	       (not (buffer-focus-p))
 	       (not (erc-is-message-ctcp-and-not-action-p msg)))
-      ;;prevents from blinking on messages for which there is already
-      ;;a notification
-      ;; (setq erc-tray-inhibit-one-activation t)
       (notify (format "PM \<%s\>" nick) msg)))
   nil)
 ;;notify if away and pmed
@@ -525,22 +534,24 @@ This places `point' just after the prompt, or at the beginning of the line."
 ;;;--------------------
 ;;-------ERC tray
 ;; Needs tray_daemon, http://smeuuh.free.fr/tray_daemon/
-;; defined in emacs_perso : list of regexps for which we don't blink
-;;the tray icon
-(setq erc-tray-inhibit-one-activation nil)
-(setq erc-tray-ignored-channels nil)
-(setq erc-tray-enable t)
+;; set in emacs_perso:
+(defvar erc-tray-ignored-channels nil
+  "List of regexps for which we don't modify the tray icon.")
+(defvar erc-tray-blink-channels nil
+  "List of regexps for which we blink the tray icon.")
+(defvar erc-tray-enable t
+  "Enable tray notifications if non nil.")
 (defun erc-tray-change-state-aux (arg)
-  "Enables or disable blinking, depending on arg (non-nil or nil)"
+  "Change the state of tray_daemon, depending on arg (D: default, R: red, B: blinking)"
   (shell-command-to-string
-   (concat "echo " (if arg "B" "b") " > /tmp/tray_daemon_control")))
+   (concat "echo " arg " > /tmp/tray_daemon_control")))
 (defun erc-tray-change-state (arg)
-  "Enables or disable blinking, depending on arg (t or nil).
-Additional support for inhibiting one activation (quick hack)"
+  "Enables or disable blinking, depending on arg (default, red, blinking)."
   (when erc-tray-enable
-    (if erc-tray-inhibit-one-activation
-		(setq erc-tray-inhibit-one-activation nil)
-      (erc-tray-change-state-aux arg))))
+	(erc-tray-change-state-aux (case arg
+								 ('default "D")
+								 ('red "R")
+								 ('blink "B")))))
 
 
 ;;;--------------------

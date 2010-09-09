@@ -47,8 +47,12 @@ gint timeout_callback( gpointer data ) {
 	while(read(fifo_fd, &command, 1) >= 1) {
 		switch(command)
 		{
-		case 'b':
+		case 'D':
 			gtk_status_icon_set_from_pixbuf(status, pixbuf_normal);
+			gtk_status_icon_set_blinking(status, FALSE);
+			break;
+		case 'R':
+			gtk_status_icon_set_from_pixbuf(status, pixbuf_beeping);
 			gtk_status_icon_set_blinking(status, FALSE);
 			break;
 		case 'B':
