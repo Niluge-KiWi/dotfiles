@@ -160,9 +160,13 @@
 (setq mouse-highlight t)
 (mouse-avoidance-mode 'jump)
 ;; control mouse clipboard. In particular, select-active-regions, activated in 23.2, sucks.
+;; selection by mouse is the window selection
+(setq select-active-regions 'only)
+;; window selection is put in the X primary selection
 (setq x-select-enable-primary t)
+;; and not in X clipboard
 (setq x-select-enable-clipboard nil)
-(setq select-active-regions nil)
+(setq mouse-drag-copy-region t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -233,7 +237,6 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 ;;no transient mark
 (transient-mark-mode -1)
-;; TODO check when selected by mouse
 
 ;; bypass emacs broken mechanism to detect browser
 (setq browse-url-browser-function
