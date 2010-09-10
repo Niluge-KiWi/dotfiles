@@ -308,11 +308,40 @@ Differs a bit from erc's implementation : robust to buffer kills and stuff like 
       (erc-track-switch-buffer arg)
     (let ((blist (buffer-list)))
       (while blist
-	(unless (or (eq 'erc-mode (buffer-local-value 'major-mode (car blist)))
-		    (minibufferp (car blist)))
-	  (switch-to-buffer (car blist))
-	  (setq blist nil))
-	(setq blist (cdr blist))))))
+		(unless (or (eq 'erc-mode (buffer-local-value 'major-mode (car blist)))
+					(minibufferp (car blist)))
+		  (switch-to-buffer (car blist))
+		  (setq blist nil))
+		(setq blist (cdr blist))))))
+
+(defvar erc-track-default-switch-buffer nil
+  "The buffer name to switch to when there is no more modified
+  ERC buffer.")
+(defun my-track-switch-buffer-default (arg)
+  "If there are unread messages, switch to them. Else, switch to erc-default-switch-buffer."
+  (interactive "p")
+  (if erc-modified-channels-alist
+	  ;; jump to the next active channel
+	  (switch-to-buffer (erc-track-get-active-buffer arg))
+	;; if no active channels, switch to default channel
+	(switch-to-buffer erc-track-default-switch-buffer)))
+(global-set-key [f10] 'my-track-switch-buffer-default)
+
+
+;;;--------------------
+;;; Switch ERC buffers, with ido
+;;;--------------------
+(defun erc-ido-switch-buffer (&optional arg)
+  "Use `ido-completing-read' to switch between ERC buffers."
+  (interactive)
+  (eval-when-compile
+    (require 'ido))
+  (let ((buffer-list (mapcar 'buffer-name (erc-buffer-list))))
+	(switch-to-buffer (ido-completing-read
+					   "ERC Buffer: "
+					   buffer-list
+					   nil t))))
+;; TODO set-key for erc-ido-switch-buffer
 
 
 ;;;--------------------
