@@ -1412,10 +1412,8 @@ displaying it has the focus."
   "Notify user by graphical display"
   (unless do-not-disturb
     (shell-command-to-string (format
-			      "notify-send %s %s --icon=%s"
-			      (shell-quote-argument title)
-			      (shell-quote-argument message)
-			      (shell-quote-argument "emacs")))))
+			      "notify-send '%s' '%s' --icon=%s"
+				  title message "emacs"))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
