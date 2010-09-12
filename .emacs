@@ -1074,7 +1074,7 @@ Ignores CHAR at point."
 (global-set-key (kbd "s-i") 'indent-whole-buffer)
 (global-set-key (kbd "s-x") 'exchange-point-and-mark)
 (global-set-key (kbd "s-SPC") 'pop-global-mark)
-(global-set-key (kbd "s-;") 'ede)
+(global-set-key (kbd "s-;") 'edit-emacs)
 (global-set-key (kbd "s-k") 'kill-whitespace)
 (global-set-key (kbd "<s-left>") 'winner-undo)
 (global-set-key (kbd "<s-right>") 'winner-redo)
