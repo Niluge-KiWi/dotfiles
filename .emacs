@@ -1265,23 +1265,23 @@ Ignores CHAR at point."
   "Toggle flyspell-mode with the given lang, or prompt with ido."
   (interactive)
   (let* ((old-language ispell-local-dictionary)
-	 (language (if lang lang
-		     (ido-completing-read
-		      "Spell Language:"
-		      ;; set old language as first value, for simple toggle
-		      (if (member old-language my-languages)
-			  (cons old-language (remove old-language my-languages))
-			my-languages)
-		      nil t))))
+		 (language (if lang lang
+					 (ido-completing-read
+					  "Spell Language:"
+					  ;; set old language as first value, for simple toggle
+					  (if (member old-language my-languages)
+						  (cons old-language (remove old-language my-languages))
+						my-languages)
+					  nil t))))
     (if (and flyspell-mode
-	     (string= old-language language))
-	;; toggle off
-	(flyspell-mode 0)
-      ;; start flyspell
-      (progn
-	(flyspell-mode t)
-	(ispell-change-dictionary language)
-	(flyspell-buffer)))))
+			 (string= old-language language))
+		;; toggle off
+		(flyspell-mode 0)
+      ;; use language
+	  (ispell-change-dictionary language)
+	  (unless flyspell-mode
+		(flyspell-mode t)))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
