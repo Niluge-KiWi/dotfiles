@@ -79,7 +79,7 @@
 			   :url "git://github.com/yoshiki/yaml-mode.git")
 		))
 
-(el-get)
+(el-get 'sync)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Desktop and server
