@@ -205,8 +205,8 @@
       (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
-(defun rde () (interactive) (load-file "~/.emacs"))
-(defun ede () (interactive) (find-file "~/.emacs"))
+(defun reload-emacs () (interactive) (load-file "~/.emacs"))
+(defun edit-emacs () (interactive) (find-file "~/.emacs"))
 
 (defun indent-whole-buffer ()
   "Indent whole buffer"
