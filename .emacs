@@ -841,7 +841,7 @@ sys.path.insert(0, '')"))
  org-agenda-files (list "~/.emacs.d/org/todo.org")
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-agenda-ndays 7
- org-log-done 'time
+ org-log-done 'note
  ;; org-startup-folded 'content
  org-deadline-warning-days 4
  org-agenda-show-all-dates t
@@ -856,6 +856,7 @@ sys.path.insert(0, '')"))
  ;; 				(110 "* %?" "~/.emacs.d/org/notes.org" "Notes")))
  remember-annotation-functions (quote (org-remember-annotation))
  remember-handler-functions (quote (org-remember-handler))
+ org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "|" "DONE(d)" "WONTDO(w)"))
  )
 
 (add-hook 'org-load-hook
