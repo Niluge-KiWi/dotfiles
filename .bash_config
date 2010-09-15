@@ -124,7 +124,8 @@ export HISTFILESIZE=5000
 alias o='gnome-open'
 alias ll='ls -l'
 alias la='ls -A'
-alias l='ls -latr'
+alias l='ls -latrh'
+alias lh='ls -latr'
 
 alias g='grep -nriI --color --exclude=*~'
 alias gg='grep -nrI --color --exclude=*~'
