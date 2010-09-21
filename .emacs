@@ -408,11 +408,13 @@
 ;;C-x v s as main svn entry point
 ;;note : dired customisations have to be done BEFORE this
 (require 'psvn)
-(global-set-key (kbd "C-x v s") 'svn-examine)
+;;(global-set-key (kbd "C-x v s") 'svn-examine)
+;; TODO merge with magit C-c s: check if .svn is in current dir
 ;;default to a clean view.
 (setq svn-status-hide-unknown t)
 (setq svn-status-hide-unmodified t)
-;; TODO test this
+;; svn status in big repositories is too slow with verbose
+(setq svn-status-verbose nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
