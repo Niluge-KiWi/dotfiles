@@ -1205,6 +1205,9 @@ sys.path.insert(0, '')"))
  ;; org-reverse-note-order t
  org-remember-store-without-prompt t
  org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")))
+ org-remember-templates '(("Tasks" ?t "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
+                          ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
+                          ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
  org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "|" "DONE(d)" "WONTDO(w)"))
  )
 
