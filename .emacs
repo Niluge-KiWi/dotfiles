@@ -1165,8 +1165,7 @@ sys.path.insert(0, '')"))
 (require 'org-install)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (setq org-startup-indented t)
-(require 'remember)
-(add-hook 'remember-mode-hook 'org-remember-apply-template)
+(org-remember-insinuate)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
 (global-set-key (kbd "C-c r") 'remember)
@@ -1205,11 +1204,7 @@ sys.path.insert(0, '')"))
  org-agenda-repeating-timestamp-show-all t
  ;; org-reverse-note-order t
  org-remember-store-without-prompt t
- ;; TODO what it this?
- ;; org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
- ;; 				(110 "* %?" "~/.emacs.d/org/notes.org" "Notes")))
- remember-annotation-functions (quote (org-remember-annotation))
- remember-handler-functions (quote (org-remember-handler))
+ org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")))
  org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "|" "DONE(d)" "WONTDO(w)"))
  )
 
