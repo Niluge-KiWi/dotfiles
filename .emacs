@@ -932,7 +932,9 @@ or list all recent files if prefixed"
 ;; Parse a whole project:
 ;; export SEMANTIC_PATH=~/.emacs.d/el-get/cedet/semantic/
 ;; find . -name "*.h" -o -name "*.cpp" | xargs ~/.emacs.d/el-get/cedet/semantic/semanticdb.sh
-;; and in emacs, for system databases: (semanticdb-create-ebrowse-database dir)
+;;
+;; And to generate include-path:
+;; find . \( -name "*.h" -o -name "*.hh" -o -name "*.hxx" -o -name "*.cpp" -o -name "*.cc" -o -name "*.c" \) -exec dirname "{}" \; | sort | uniq
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
