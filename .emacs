@@ -694,6 +694,7 @@
   (local-set-key (kbd "C-c d") 'semantic-ia-show-summary)
   (local-set-key (kbd "C-c p") 'semantic-analyze-proto-impl-toggle)
   (local-set-key (kbd "C-c r") 'semantic-symref)
+  (local-set-key (kbd "C-c C-r") 'semantic-symref-symbol)
   ;; senator
   ;; TODO toggle folding
   (local-set-key (kbd "C-c -") 'senator-fold-tag)
