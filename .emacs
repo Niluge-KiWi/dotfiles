@@ -1391,6 +1391,13 @@ Ignores CHAR at point."
       (occur (if isearch-regexp isearch-string
 	       (regexp-quote isearch-string))))))
 
+;; isearch ends at the beginning of word
+(add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
+(defun my-goto-match-beginning ()
+  (when (and isearch-forward
+			 (not isearch-mode-end-hook-quit))
+    (goto-char isearch-other-end)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Dictionnaries
