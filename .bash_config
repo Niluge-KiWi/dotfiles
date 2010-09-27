@@ -94,7 +94,7 @@ alias w='w -h | sort | uniq -w 4'
 
 # svn
 alias sd='svn diff --diff-cmd colordiff'
-alias sdl='sd | less -RXF'
+function sdl { sd $@ | less -RXF; }
 
 # git
 alias ga='git add'
