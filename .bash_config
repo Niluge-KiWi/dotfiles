@@ -90,6 +90,7 @@ alias gdb='gdb --args'
 # alias autres
 alias p='ps aux | grep'
 alias c='cd ..'
+alias ..='cd ..'
 alias w='w -h | sort | uniq -w 4'
 
 # svn
