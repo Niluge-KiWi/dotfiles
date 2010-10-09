@@ -349,6 +349,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;visual paren matching
 (show-paren-mode t)
+;;rainbow parentheses highlighting ! \o/
+(require 'highlight-parentheses)
+(setq hl-paren-colors
+      '("red" "orange" "yellow" "green" "light blue" "dark blue" "black"))
+;;highlight-parentheses is a buffer-local minor mode : create a global
+;;minor mode of our own
+(define-globalized-minor-mode global-highlight-parentheses-mode
+  highlight-parentheses-mode
+  (lambda ()
+    (highlight-parentheses-mode t)))
+(global-highlight-parentheses-mode t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
