@@ -352,7 +352,10 @@
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
 (setq hl-paren-colors
-      '("red" "orange" "yellow" "green" "light blue" "dark blue" "black"))
+      `(,zenburn-red-4 ,zenburn-orange ,zenburn-yellow-green+1 ,zenburn-green ,zenburn-blue ,zenburn-dark-blue+2 ,zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
+(setq hl-paren-background-colors
+	  (make-list (length hl-paren-colors) zenburn-bg-1))
+
 ;;highlight-parentheses is a buffer-local minor mode : create a global
 ;;minor mode of our own
 (define-globalized-minor-mode global-highlight-parentheses-mode
