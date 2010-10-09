@@ -595,17 +595,3 @@ Use this defun with `erc-insert-modify-hook'."
 	  (replace-match "********" nil t nil 1))))
 
 (add-hook 'erc-send-modify-hook 'erc-dont-display-passwords)
-
-
-
-;;;--------------------
-;;; TMP TO check
-;;;--------------------
-
-;; (setq erc-mode-hook
-;;       (cons erc-mode-hook
-;; 	    '(erc-add-scroll-to-bottom ;; very important : keep prompt at the last line
-;; 	      erc-move-to-prompt-setup
-;; 	      erc-munge-invisibility-spec
-;; 	      erc-setup-my-commands
-;; 	      erc-imenu-setup)))
