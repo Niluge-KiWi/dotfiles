@@ -74,6 +74,9 @@
 			   :url "http://www.xsteve.at/prg/emacs/psvn.el")
 		(:name rainbow-mode :type http
 			   :url "http://git.naquadah.org/?p=rainbow.git;a=blob_plain;f=rainbow-mode.el;hb=HEAD")
+		(:name ropemacs :type http-tar
+			   :options ("zxf")
+			   :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz")
 		(:name widen-window :type http
 			   :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
 		(:name window-numbering :type http

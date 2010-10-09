@@ -6,6 +6,10 @@
 ;; URL: http://www.brockman.se/software/zenburn/zenburn.el
 ;; Updated: 2010-07-19 20:10
 
+;; Changes (2010-10), Thomas Riccardi
+;; - Magit: item-highlight : use zenburn-highlight-subtle:
+;;    more readable with magit-diff-del
+
 ;; Changes (2010-09), Thomas Riccardi
 ;; - Reverted font-lock-function-name
 ;; - Removed underline on paren-match
@@ -973,7 +977,7 @@ static char *gnus-pointer[] = {
 	'(magit-diff-add ((t (:inherit diff-added))))
 	'(magit-diff-none ((t (:inherit diff-context))))
 	'(magit-diff-del ((t (:inherit diff-removed))))
-	`(magit-item-highlight ((t (:foreground nil :background ,zenburn-bg+1))))
+	'(magit-item-highlight ((t (:inherit zenburn-highlight-subtle))))
 
 	'(flyspell-duplicate ((t (:foreground "#e69c89" :background nil :underline t))))
 	'(flyspell-incorrect ((t (:foreground "#e37170" :background nil :underline t))))
