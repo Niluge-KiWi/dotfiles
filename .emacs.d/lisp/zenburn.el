@@ -7,10 +7,12 @@
 ;; Updated: 2010-07-19 20:10
 
 ;; Changes (2010-10), Thomas Riccardi
+;; - New blue/purple colors
 ;; - Magit: item-highlight : use zenburn-highlight-subtle:
 ;;    more readable with magit-diff-del
 
 ;; Changes (2010-09), Thomas Riccardi
+;; - New green/yellow colors
 ;; - Reverted font-lock-function-name
 ;; - Removed underline on paren-match
 ;; - Modified button : less different than standard text:
@@ -138,16 +140,30 @@
 (defvar zenburn-blue-4 "#4c7073")
 (defvar zenburn-blue-5 "#366060")
 (defvar zenburn-magenta "#dc8cc3")
+
 (defvar zenburn-green-yellow-2 "#89a610")
 (defvar zenburn-green-yellow-1 "#99b32f")
 (defvar zenburn-green-yellow "#afd21c")
 (defvar zenburn-green-yellow+1 "#d1ed5d")
 (defvar zenburn-green-yellow+2 "#daed8d")
+
 (defvar zenburn-yellow-green-2 "#a3ab10")
 (defvar zenburn-yellow-green-1 "#b1b831")
 (defvar zenburn-yellow-green "#cfd81d")
 (defvar zenburn-yellow-green+1 "#e8ef5e")
 (defvar zenburn-yellow-green+2 "#eaef8f")
+
+(defvar zenburn-dark-blue-2 "#1f3076")
+(defvar zenburn-dark-blue-1 "#293c87")
+(defvar zenburn-dark-blue "#354897")
+(defvar zenburn-dark-blue+1 "#4457a4")
+(defvar zenburn-dark-blue+2 "#5666ab")
+
+(defvar zenburn-purple-2 "#612e7e")
+(defvar zenburn-purple-1 "#6d368a")
+(defvar zenburn-purple "#784097")
+(defvar zenburn-purple+1 "#814c9e")
+(defvar zenburn-purple+2 "#8959a4")
 
 (eval-after-load 'term
   '(setq ansi-term-color-vector
