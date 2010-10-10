@@ -352,7 +352,7 @@
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
 (setq hl-paren-colors
-      `(,zenburn-red-4 ,zenburn-orange ,zenburn-yellow-green+1 ,zenburn-green ,zenburn-blue ,zenburn-dark-blue+2 ,zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
+      (list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
 (setq hl-paren-background-colors
 	  (make-list (length hl-paren-colors) zenburn-bg-1))
 
