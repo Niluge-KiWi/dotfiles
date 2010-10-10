@@ -7,6 +7,7 @@
 ;; Updated: 2010-07-19 20:10
 
 ;; Changes (2010-10), Thomas Riccardi
+;; - Added ediff colors
 ;; - New blue/purple colors
 ;; - Magit: item-highlight : use zenburn-highlight-subtle:
 ;;    more readable with magit-diff-del
@@ -597,6 +598,25 @@ static char *gnus-pointer[] = {
 	'(diff-removed ((t (:foreground "#d9430b"))))
 	'(diff-context ((t (:inherit font-lock-comment))))
 	'(diff-refine-change ((t (:inherit zenburn-background-2))))
+
+
+	'(ediff-current-diff-A ((t (:background "#3e473e"))))
+	'(ediff-current-diff-B ((t (:background "#47453e"))))
+	'(ediff-current-diff-C ((t (:background "#433e47"))))
+
+	`(ediff-even-diff-A ((t (:background ,zenburn-bg+2))))
+	`(ediff-even-diff-B ((t (:background ,zenburn-bg+1))))
+	`(ediff-even-diff-C ((t (:background ,zenburn-bg+2))))
+
+	`(ediff-odd-diff-A ((t (:background ,zenburn-bg+1))))
+	`(ediff-odd-diff-B ((t (:background ,zenburn-bg+2))))
+	`(ediff-odd-diff-C ((t (:background ,zenburn-bg+1))))
+
+	'(ediff-fine-diff-A ((t (:background "#3a593a"))))
+	'(ediff-fine-diff-B ((t (:background "#59523a"))))
+	'(ediff-fine-diff-C ((t (:background "#4b3a59"))))
+	;;TODO ancestors
+
 
 	`(emms-pbi-song ((t (:foreground ,zenburn-yellow))))
 	'(emms-pbi-current ((t (:inherit zenburn-primary-1))))
