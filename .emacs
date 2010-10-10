@@ -496,6 +496,10 @@
 	  (recenter 0))))
 (add-hook 'magit-log-edit-mode-hook 'my-magit-display-diff)
 
+;; fyspell on log
+(add-hook 'magit-log-edit-mode-hook 'flyspell-mode)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Window management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
