@@ -476,6 +476,25 @@
 	(magit-section-set-hidden untracked t)))
 (add-hook 'magit-status-mode-hook 'my-magit-hide-untracked)
 
+;; display staged diff when writing commit log
+(defun my-magit-display-diff ()
+  "Show magit-status window and make staged section visible."
+  (let ((buf (magit-find-buffer 'status default-directory)))
+	(unless buf
+	  ;; no magit-status, create it
+	  (let ((curbuf (current-buffer)))
+		(magit-status default-directory)
+		(setq buf (current-buffer))
+		(switch-to-buffer curbuf)))
+	(unless buf
+	  (error "Error finding/creating magit-status buffer"))
+	;; we now have the right magit-status in buf
+	(display-buffer buf t)
+	(with-selected-window (get-buffer-window buf)
+	  (magit-jump-to-staged)
+	  (magit-section-expand (magit-find-section '(staged) magit-top-section))
+	  (recenter 0))))
+(add-hook 'magit-log-edit-mode-hook 'my-magit-display-diff)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Window management
