@@ -467,6 +467,13 @@
   (magit-diff "remotes/trunk..HEAD"))
 (define-key magit-svn-map (kbd "d") 'magit-svn-remote-diff)
 
+;; hide untracked section when opening magit-status
+(defun my-magit-hide-untracked ()
+  "Hide untracked section."
+  (let ((untracked (magit-find-section '(untracked) magit-top-section)))
+	(magit-section-set-hidden untracked t)))
+(add-hook 'magit-status-mode-hook 'my-magit-hide-untracked)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Window management
