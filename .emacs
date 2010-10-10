@@ -453,6 +453,8 @@
 ;; no subdirectories for unstaged files
 ;; TODO get them when open subsection on directory
 (setq magit-omit-untracked-dir-contents t)
+;; no buffer saving when magit-status
+(setq magit-save-some-buffers nil)
 ;; M-arrows is for window-switching
 (define-key magit-mode-map (kbd "<M-left>") nil)
 ;; "u" and "U" are already taken by unstage...
