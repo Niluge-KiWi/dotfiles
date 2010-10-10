@@ -12,7 +12,7 @@
 	url = git@github.com:Niluge-KiWi/erc-view-log.git
 [submodule ".emacs.d/el-get/magit"]
 	path = .emacs.d/el-get/magit
-	url = git://github.com/philjackson/magit.git
+	url = git@github.com:Niluge-KiWi/magit.git
 [submodule ".emacs.d/el-get/gitsum"]
 	path = .emacs.d/el-get/gitsum
 	url = git://github.com/chneukirchen/gitsum.git

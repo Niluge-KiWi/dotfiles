@@ -64,8 +64,8 @@
 			   :url "git://git.naquadah.org/google-weather-el.git")
 		(:name magit :type git
 			   :info "."
-			   :build ("./autogen.sh" "./configure" "make")
-			   :url "git://github.com/philjackson/magit.git")
+			   :build ("make all")
+			   :url "git@github.com:Niluge-KiWi/magit.git")
 		(:name minimap :type http
 			   :url "http://randomsample.de/minimap.el")
 		(:name php-mode :type http
@@ -467,7 +467,7 @@
 (magit-define-command svn-remote-diff ()
   (interactive)
   (magit-diff "remotes/trunk..HEAD"))
-(define-key magit-svn-map (kbd "d") 'magit-svn-remote-diff)
+(magit-key-mode-insert-action 'svn "d" "Remote diff" 'magit-svn-remote-diff)
 
 ;; hide untracked section when opening magit-status
 (defun my-magit-hide-untracked ()
