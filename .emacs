@@ -718,7 +718,7 @@
 
 ;; Semantic-idle: what do do when idle
 (global-semantic-idle-scheduler-mode 1)
-(setq semantic-idle-scheduler-idle-time 0.1)
+(setq semantic-idle-scheduler-idle-time 2)
 ;; header-line: current context
 (global-semantic-idle-breadcrumbs-mode 1)
 
