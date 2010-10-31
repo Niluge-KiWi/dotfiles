@@ -343,6 +343,49 @@
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'post-forward)
 
+;; plus some useful functions
+(defun uniquify-get-filename (filename depth)
+  "Get 'uniquified' filename, given a filename and a prefix depth."
+  (let ((dir (file-name-directory filename))
+		(file (file-name-nondirectory filename)))
+	;; remove trailing slash
+	(if (string-match "/$" dir)
+		(setq dir (substring dir 0 -1)))
+	(uniquify-get-proposed-name file dir depth)))
+
+(defun uniquify-filename-list (file-list &optional depth)
+  "Uniquify a list of filenames by returning an alist of filename and uniquified filenames.
+Optional depth is for internal use."
+  (unless depth
+	(setq depth 0))
+  (let ((conflicting-list ())
+		(uniq-file-alist ())
+		file
+		uniq-file
+		(found nil))
+	(while file-list
+	  (catch 'break
+		(setq file (car file-list))
+		(setq file-list (cdr file-list))
+		(setq uniq-file (uniquify-get-proposed-name-from-filename file depth))
+		;; Search for conflict in conflicting list + remaining list
+		(dolist (item (append conflicting-list file-list))
+		  (if (string= uniq-file (uniquify-get-proposed-name-from-filename item depth))
+			  ;; Found conflict
+			  (progn
+				(push file conflicting-list)
+				(throw 'break t))))
+		;; No collision
+		(push `(,file ,uniq-file) uniq-file-alist)))
+	;; now recurse with colliding files
+	(if conflicting-list
+		(setq uniq-file-alist
+			  (append
+			   uniq-file-alist
+			   (uniquify-filename-list conflicting-list (+ 1 depth)))))
+	uniq-file-alist))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Parenthesis editing
@@ -563,26 +606,34 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;recent files, interaction with ido
 (require 'recentf)
+
 (defun recentf-ido-find-file-or-maybe-list (&optional arg)
-  "Find a recent file using Ido, or list all recent files if prefixed"
+  "Find a recent file using Ido and uniquify,
+or list all recent files if prefixed"
   (interactive "P")
   (if arg
-      (recentf-open-files)
-    ;;build alist basename->name, offer user a choice of basenames,
-    ;;then get matching file and find it
-    (let ((file-alist (mapcar 'basename-cons recentf-list))
-	  (basename-list (mapcar 'file-name-nondirectory recentf-list)))
-      (let ((file (ido-completing-read
-		   "Choose recent file: "
-		   (mapcar 'file-name-nondirectory
-			   recentf-list)
-		   nil t)))
-	(when file
-	  (find-file (cdr (assoc file file-alist))))))))
+	  (recentf-open-files)
+	(let* ((uniq-file-alist (uniquify-filename-list recentf-list))
+		   ;; ask user
+		   (file (ido-completing-read
+				  (format "%s: " recentf-menu-title)
+				  (mapcar (lambda (filename)
+							(cdr (assoc filename uniq-file-alist)))
+						  recentf-list)
+				  nil t)))
+	  ;; now find full filename back
+	  (when file
+		(catch 'break
+		  (dolist (item uniq-file-alist)
+			(if (string= (cadr item) file)
+				;; Found it
+				(progn
+				  (find-file (car item))
+				  (throw 'break t)))))))))
+
 (setq recentf-max-saved-items nil)
 (recentf-mode 1)
 (global-set-key (kbd "C-x C-r") 'recentf-ido-find-file-or-maybe-list)
-;; TODO uniquify this
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
