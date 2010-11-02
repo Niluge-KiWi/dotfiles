@@ -367,10 +367,10 @@ Optional depth is for internal use."
 	  (catch 'break
 		(setq file (car file-list))
 		(setq file-list (cdr file-list))
-		(setq uniq-file (uniquify-get-proposed-name-from-filename file depth))
+		(setq uniq-file (uniquify-get-filename file depth))
 		;; Search for conflict in conflicting list + remaining list
 		(dolist (item (append conflicting-list file-list))
-		  (if (string= uniq-file (uniquify-get-proposed-name-from-filename item depth))
+		  (if (string= uniq-file (uniquify-get-filename item depth))
 			  ;; Found conflict
 			  (progn
 				(push file conflicting-list)
