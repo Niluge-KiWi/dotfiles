@@ -233,6 +233,14 @@
 	  (re-search-forward "[ \t\r\n]+" nil t)
 	  (replace-match " " nil nil))))))
 
+(defun truncate-list (list n)
+  "Truncate LIST to at most N elements destructively."
+  (when n
+	(let ((here (nthcdr (1- n) list)))
+	  (when (consp here)
+		(setcdr here nil))))
+  list)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc. settings
@@ -607,19 +615,28 @@ Optional depth is for internal use."
 ;;recent files, interaction with ido
 (require 'recentf)
 
+(defcustom recentf-ido-max-items 50
+  "Maximum number of items of the recent list selection with ido
+(recentf-ido-find-file-or-maybe-list).
+If nil, do not limit."
+  :group 'recentf)
+
 (defun recentf-ido-find-file-or-maybe-list (&optional arg)
   "Find a recent file using Ido and uniquify,
 or list all recent files if prefixed"
   (interactive "P")
   (if arg
 	  (recentf-open-files)
-	(let* ((uniq-file-alist (uniquify-filename-list recentf-list))
+	(let* ((file-list (truncate-list
+					   (copy-list recentf-list)
+					   recentf-ido-max-items))
+		   (uniq-file-alist (uniquify-filename-list file-list))
 		   ;; ask user
 		   (file (ido-completing-read
 				  (format "%s: " recentf-menu-title)
 				  (mapcar (lambda (filename)
 							(cdr (assoc filename uniq-file-alist)))
-						  recentf-list)
+						  file-list)
 				  nil t)))
 	  ;; now find full filename back
 	  (when file
