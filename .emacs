@@ -367,33 +367,40 @@ Optional depth is for internal use."
   (unless depth
 	(setq depth 0))
   (let ((conflicting-list ())
-		(uniq-file-alist ())
-		file
-		uniq-file
+		(final-uniq-file-alist ())
+		(uniq-file-alist (mapcar
+						  (lambda (file)
+							`(,file . ,(uniquify-get-filename file depth)))
+						  file-list))
+		uniq-file-alist2
+		item
+		item2
 		conflict)
-	(while file-list
-	  (setq file (car file-list)
-			file-list (cdr file-list)
-			uniq-file (uniquify-get-filename file depth)
+	(while uniq-file-alist
+	  (setq item (car uniq-file-alist)
+			uniq-file-alist (cdr uniq-file-alist)
 			conflict nil)
 	  ;; Search for and remove all conflicts from remaining list
-	  (dolist (item file-list)
-		(if (string= uniq-file (uniquify-get-filename item depth))
-			;; Found conflict
-			(progn
-			  (setq conflict t)
-			  (push item conflicting-list)
-			  (setq file-list (delq item file-list)))))
+	  (setq uniq-file-alist2 uniq-file-alist)
+	  (while uniq-file-alist2
+		(setq item2 (car uniq-file-alist2)
+			  uniq-file-alist2 (cdr uniq-file-alist2))
+		(when (string= (cdr item) (cdr item2))
+		  ;; Found conflict
+		  (setq conflict t)
+		  (push (car item2) conflicting-list)
+		  (setq uniq-file-alist1 (delq item2 uniq-file-alist))
+		  (setq uniq-file-alist2 (delq item2 uniq-file-alist2))))
 	  (if conflict
-		  (push file conflicting-list)
-		(push `(,file ,uniq-file) uniq-file-alist)))
+		  (push (car item) conflicting-list)
+		(push item final-uniq-file-alist)))
 	;; now recurse with colliding files
 	(if conflicting-list
-		(setq uniq-file-alist
+		(setq final-uniq-file-alist
 			  (append
-			   uniq-file-alist
+			   final-uniq-file-alist
 			   (uniquify-filename-list conflicting-list (+ 1 depth)))))
-	uniq-file-alist))
+	final-uniq-file-alist))
 
 
 
@@ -617,7 +624,7 @@ Optional depth is for internal use."
 ;;recent files, interaction with ido
 (require 'recentf)
 
-(defcustom recentf-ido-max-items 50
+(defcustom recentf-ido-max-items 200
   "Maximum number of items of the recent list selection with ido
 (recentf-ido-find-file-or-maybe-list).
 If nil, do not limit."
@@ -642,13 +649,7 @@ or list all recent files if prefixed"
 				  nil t)))
 	  ;; now find full filename back
 	  (when file
-		(catch 'break
-		  (dolist (item uniq-file-alist)
-			(if (string= (cadr item) file)
-				;; Found it
-				(progn
-				  (find-file (car item))
-				  (throw 'break t)))))))))
+		(find-file (cdr (rassoc file uniq-file-alist)))))))
 
 (setq recentf-max-saved-items nil)
 (recentf-mode 1)
