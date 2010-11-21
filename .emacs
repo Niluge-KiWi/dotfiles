@@ -370,20 +370,22 @@ Optional depth is for internal use."
 		(uniq-file-alist ())
 		file
 		uniq-file
-		(found nil))
+		conflict)
 	(while file-list
-	  (catch 'break
-		(setq file (car file-list))
-		(setq file-list (cdr file-list))
-		(setq uniq-file (uniquify-get-filename file depth))
-		;; Search for conflict in conflicting list + remaining list
-		(dolist (item (append conflicting-list file-list))
-		  (if (string= uniq-file (uniquify-get-filename item depth))
-			  ;; Found conflict
-			  (progn
-				(push file conflicting-list)
-				(throw 'break t))))
-		;; No collision
+	  (setq file (car file-list)
+			file-list (cdr file-list)
+			uniq-file (uniquify-get-filename file depth)
+			conflict nil)
+	  ;; Search for and remove all conflicts from remaining list
+	  (dolist (item file-list)
+		(if (string= uniq-file (uniquify-get-filename item depth))
+			;; Found conflict
+			(progn
+			  (setq conflict t)
+			  (push item conflicting-list)
+			  (setq file-list (delq item file-list)))))
+	  (if conflict
+		  (push file conflicting-list)
 		(push `(,file ,uniq-file) uniq-file-alist)))
 	;; now recurse with colliding files
 	(if conflicting-list
