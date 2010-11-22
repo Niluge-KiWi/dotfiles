@@ -379,9 +379,9 @@ Optional depth is for internal use."
 	(while uniq-file-alist
 	  (setq item (car uniq-file-alist)
 			uniq-file-alist (cdr uniq-file-alist)
-			conflict nil)
+			conflict nil
+			uniq-file-alist2 uniq-file-alist)
 	  ;; Search for and remove all conflicts from remaining list
-	  (setq uniq-file-alist2 uniq-file-alist)
 	  (while uniq-file-alist2
 		(setq item2 (car uniq-file-alist2)
 			  uniq-file-alist2 (cdr uniq-file-alist2))
@@ -389,7 +389,7 @@ Optional depth is for internal use."
 		  ;; Found conflict
 		  (setq conflict t)
 		  (push (car item2) conflicting-list)
-		  (setq uniq-file-alist1 (delq item2 uniq-file-alist))
+		  (setq uniq-file-alist (delq item2 uniq-file-alist))
 		  (setq uniq-file-alist2 (delq item2 uniq-file-alist2))))
 	  (if conflict
 		  (push (car item) conflicting-list)
@@ -649,7 +649,7 @@ or list all recent files if prefixed"
 				  nil t)))
 	  ;; now find full filename back
 	  (when file
-		(find-file (cdr (rassoc file uniq-file-alist)))))))
+		(find-file (car (rassoc file uniq-file-alist)))))))
 
 (setq recentf-max-saved-items nil)
 (recentf-mode 1)
