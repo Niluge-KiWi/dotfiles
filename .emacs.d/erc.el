@@ -78,6 +78,7 @@ Activity means that there was no user input in the last 10 seconds."
       erc-prompt ">"
       erc-minibuffer-ignored t
       erc-query-display 'buffer
+	  erc-join-buffer 'bury
       erc-auto-query 'bury
       erc-current-nick-highlight-type 'all
       erc-interpret-mirc-color t
@@ -468,7 +469,8 @@ Blinking, if in erc-tray-blink-channels."
 	  (target (completing-read "Query sur: "
 				   (erc-get-server-nickname-alist)
 				   nil ;;no predicate, require match
-				   t)))
+				   t))
+	  (erc-join-buffer 'buffer))
       (erc-query target server))))
 (defun erc-whois-prompt ()
   "Prompt for someone to do whois on"
