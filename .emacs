@@ -101,8 +101,18 @@
 		"ps x | grep emacs | grep -v grep | grep -v emacs-bin | grep -v emacsclient | wc -l"))
   (setq emacs-is-master t)
   ;;(server-start)
-  (desktop-save-mode 1))
+  )
 ;;TODO desktop-save-mode
+
+ ;; desktop
+(setq desktop-load-locked-desktop t
+	  desktop-path '("~/.emacs.d/")
+	  desktop-dirname "~/.emacs.d/"
+	  desktop-base-file-name "emacs.desktop")
+(desktop-save-mode 1)
+;; save every 10mins
+(run-with-timer (* 10 60) (* 10 60) (lambda () (flet ((message (&rest args) nil))
+												 (desktop-save-in-desktop-dir)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
