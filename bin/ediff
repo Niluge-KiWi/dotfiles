@@ -1,2 +1,16 @@
 #!/bin/bash
-emacsclient -a emacs --eval "(ediff-files \"$1\" \"$2\")" -c
+function usage()
+{
+	echo <<EOF
+ediff file1 file2 [file3]
+EOF
+}
+if [ -z "$1" -o -z "$2" ]; then
+	usage
+	exit 1
+fi
+if [ -z "$3" ]; then
+	emacsclient -a emacs --eval "(ediff-files \"$1\" \"$2\")" -c
+else
+	emacsclient -a emacs --eval "(ediff-files3 \"$1\" \"$2\" \"$3\")" -c
+fi
