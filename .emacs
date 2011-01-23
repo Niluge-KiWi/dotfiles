@@ -77,6 +77,8 @@
 		(:name ropemacs :type http-tar
 			   :options ("zxf")
 			   :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz")
+		(:name undo-tree  :type git
+		        :url "http://www.dr-qubit.org/git/undo-tree.git")
 		(:name widen-window :type http
 			   :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
 		(:name window-numbering :type http
@@ -440,6 +442,14 @@ Optional depth is for internal use."
 			   (uniquify-filename-list conflicting-list (+ 1 depth)))))
 	final-uniq-file-alist))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Undo-tree
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'undo-tree)
+(setq undo-tree-mode-lighter "")
+(global-undo-tree-mode)
+(set-default 'undo-tree-visualizer-timestamps t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
