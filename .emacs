@@ -206,7 +206,7 @@
 (defun launch-command (command filename)
   "Launches command with argument filename, discarding all output"
   (let ((process-connection-type nil))
-    (start-process "" nil command filename)))
+	(start-process-shell-command command nil (concat "nohup " (shell-quote-argument command) " " (shell-quote-argument filename) " &"))))
 
 (defun gnome-open-file (filename)
   "gnome-opens the specified file."
