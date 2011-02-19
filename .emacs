@@ -1719,12 +1719,23 @@ displaying it has the focus."
 ;;   (unless do-not-disturb
 ;;     `(notifications-notify ,@PARAM)))
 ;; temporary macro with notify-send, because there is a bug with utf8 and dbus in emacs
+(defun notify-raw (title message &optional backshash-escape html-escape)
+  "Notify user by graphical display.
+If escape is not nil, then disable interpretation of backshash escapes.
+If html is not nil, then disable interpretation of html code."
+  (unless do-not-disturb
+	(if backshash-escape
+		(setq message (replace-regexp-in-string (regexp-quote "\\")
+												(regexp-quote "\\\\\\")
+												message)))
+	(if html-escape
+		(setq message (xml-escape-string message)))
+	(shell-command-to-string (format
+							  "notify-send '%s' '%s' --icon=%s"
+							  title message "emacs"))))
 (defun notify (title message)
   "Notify user by graphical display"
-  (unless do-not-disturb
-    (shell-command-to-string (format
-			      "notify-send '%s' '%s' --icon=%s"
-				  title message "emacs"))))
+  (notify-raw title message t t))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
