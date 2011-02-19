@@ -1296,22 +1296,6 @@ brake whatever split of windows we might have in the frame."
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
 
-;;make use of that useless ^2 key to do something useful. This can fail on some terminals,
-;;so protect
-(condition-case err
-    (progn
-      ;;normal
-      (global-set-key (kbd "²") (lambda () (interactive) (insert "\\")))
-      ;;isearch
-      (define-key isearch-mode-map (kbd "²")
-	(lambda ()
-	  (interactive)
-	  (if current-input-method
-	      (isearch-process-search-multibyte-characters ?\\)
-	    (isearch-process-search-char ?\\)))))
-  (error
-   (message "Failed to bind key to \\. Live with it.")))
-
 ;; replace $$ in M-! by the name of the associated buffer
 (defun shell-command-replace (command &optional output-buffer error-buffer)
   "Same as shell-command, but replace occurences of $$ by the current buffer name"
@@ -1365,10 +1349,6 @@ Ignores CHAR at point."
 (global-set-key (kbd "<insertchar>") nil)
 (global-set-key (kbd "<insert>") nil)
 (global-set-key (kbd "<f5>") nil)
-;; some packages, e.g. gnus-summary, don't define deletechar but only delete. Fix that by aliasing
-(global-set-key (kbd "<deletechar>") (kbd "<delete>"))
-
-
 ;;shortcuts to two-keys commands I often use
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "s-b") 'switch-to-buffer)
