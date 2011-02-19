@@ -104,13 +104,12 @@
   (setq emacs-is-master t)
   ;;(server-start)
   )
-;;TODO desktop-save-mode
 
- ;; desktop
+;; desktop
 (setq desktop-load-locked-desktop t
 	  desktop-path '("~/.emacs.d/")
 	  desktop-dirname "~/.emacs.d/"
-	  desktop-base-file-name "emacs.desktop")
+	  desktop-base-file-name "desktop")
 (desktop-save-mode 1)
 ;; save every 10mins
 (run-with-timer (* 10 60) (* 10 60) (lambda () (flet ((message (&rest args) nil))
@@ -664,6 +663,7 @@ Optional depth is for internal use."
 
 ;;save last edit place in files
 (setq-default save-place t)
+(setq save-place-file "~/.emacs.d/places")
 (require 'saveplace)
 
 
