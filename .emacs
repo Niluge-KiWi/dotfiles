@@ -581,7 +581,8 @@ Optional depth is for internal use."
 (defun my-magit-hide-untracked ()
   "Hide untracked section."
   (let ((untracked (magit-find-section '(untracked) magit-top-section)))
-	(magit-section-set-hidden untracked t)))
+	(if untracked
+		(magit-section-set-hidden untracked t))))
 (add-hook 'magit-status-mode-hook 'my-magit-hide-untracked)
 
 ;; display staged diff when writing commit log
