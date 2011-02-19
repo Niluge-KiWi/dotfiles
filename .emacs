@@ -604,6 +604,18 @@ Optional depth is for internal use."
 	  (recenter 0))))
 (add-hook 'magit-log-edit-mode-hook 'my-magit-display-diff)
 
+(defun my-magit-display-log-ranged (log-range &rest extra-args)
+  "Like magit-display-log-ranged, but with log-range parameter."
+  (interactive)
+  (let* ((topdir (magit-get-top-dir default-directory))
+		 (args (nconc (list (magit-rev-range-to-git log-range))
+                      magit-custom-options
+                      extra-args)))
+    (switch-to-buffer magit-log-buffer-name)
+    (magit-mode-init topdir 'log #'magit-refresh-log-buffer log-range
+					 "--pretty=oneline" args)
+    (magit-log-mode t)))
+
 ;; fyspell on log
 (add-hook 'magit-log-edit-mode-hook 'flyspell-mode)
 
