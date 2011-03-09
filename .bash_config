@@ -67,10 +67,7 @@ fi
 ## des alias ! ##
 
 # alias d'éditeurs (from smeuuh)
-alias e='emacs'
-alias enw='emacs -nw'
 alias ec='emacsclient -a "" -c'
-alias re='emacsclient -t'
 export EDITOR='emacsclient -a emacs -c'
 
 # gdb
