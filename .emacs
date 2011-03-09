@@ -634,7 +634,7 @@ Optional depth is for internal use."
     (magit-log-mode t)))
 
 ;; fyspell on log
-(add-hook 'magit-log-edit-mode-hook 'flyspell-mode)
+(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-mode 1)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
