@@ -79,8 +79,6 @@
 			   :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz")
 		(:name undo-tree  :type git
 		        :url "http://www.dr-qubit.org/git/undo-tree.git")
-		(:name sml-modeline :type http
-			   :url "http://bazaar.launchpad.net/~nxhtml/nxhtml/main/download/head:/smlmodeline.el-20100318165023-n7kkswg6dlq8l6b3-1/sml-modeline.el")
 		(:name widen-window :type http
 			   :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
 		(:name window-numbering :type http
@@ -331,11 +329,6 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (setq scroll-conservatively 100000000)
 ;;keep cursor at current position when scrolling
 (setq scroll-preserve-screen-position t)
-;;scrollbar like indicator in mode-line
-(require 'sml-modeline)
-(setq sml-modeline-borders '("[" . "]"))
-(setq sml-modeline-len 20)
-(sml-modeline-mode 1)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
