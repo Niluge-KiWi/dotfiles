@@ -91,6 +91,7 @@
 
 (el-get 'sync)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Desktop and server
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -306,8 +307,12 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (blink-cursor-mode -1)
 
 ;;display buffer name in title bar
-(setq frame-title-format '("%b" " - " invocation-name "@" system-name))
-(setq icon-title-format '("%b" " - " invocation-name "@" system-name))
+(setq my-title '("" (:eval (if (buffer-file-name)
+							   (abbreviate-file-name (buffer-file-name))
+							 "%b"))
+				 " - " invocation-name "@" system-name))
+(setq frame-title-format my-title)
+(setq icon-title-format my-title)
 
 
 ;; ;;backups/autosaves : no autosaves, and backups in one centralised place
@@ -535,6 +540,7 @@ Optional depth is for internal use."
 
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
 (add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Psvn
