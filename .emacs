@@ -307,9 +307,10 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (blink-cursor-mode -1)
 
 ;;display buffer name in title bar
-(setq my-title '("" (:eval (if (buffer-file-name)
-							   (abbreviate-file-name (buffer-file-name))
-							 "%b"))
+(setq my-title '("%b" (:eval (if (buffer-file-name)
+                                 `(" - "
+                                   ,(file-name-directory
+									 (abbreviate-file-name (buffer-file-name))))))
 				 " - " invocation-name "@" system-name))
 (setq frame-title-format my-title)
 (setq icon-title-format my-title)
