@@ -65,7 +65,7 @@
 		(:name magit :type git
 			   :info "."
 			   :build ("make all")
-			   :url "git@github.com:Niluge-KiWi/magit.git")
+			   :url "git://github.com/philjackson/magit.git")
 		(:name minimap :type http
 			   :url "http://randomsample.de/minimap.el")
 		(:name php-mode :type http
