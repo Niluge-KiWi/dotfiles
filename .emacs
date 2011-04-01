@@ -327,6 +327,11 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 ;; TODO use own pastebin
 (require 'pastebin)
 
+;; occure: force unique name
+(add-hook 'occur-hook
+          #'(lambda ()
+              (occur-rename-buffer t)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Scrolling
