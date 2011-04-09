@@ -232,25 +232,28 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
   (let* ((filename (or filename (buffer-file-name)))
          (parsed (when (tramp-tramp-file-p filename)
                    (coerce (tramp-dissect-file-name filename)
-                           'list))))
+                           'list)))
+		 (old-pnt (point)))
     (unless filename
       (error "No file in this buffer."))
 
-    (find-alternate-file
-     (if (equal '("sudo" "root") (butlast parsed 2))
-         ;; As non-root
-         (if (or
-              (string= "localhost" (nth 2 parsed))
-              (string= (system-name) (nth 2 parsed)))
-             (nth -1 parsed)
-           (apply 'tramp-make-tramp-file-name
-                  (append (list tramp-default-method nil) (cddr parsed))))
-
-       ;; As root
-       (if parsed
-           (apply 'tramp-make-tramp-file-name
-                  (append '("sudo" "root") (cddr parsed)))
-         (tramp-make-tramp-file-name "sudo" "root" "localhost" filename))))))
+	(unwind-protect
+		(find-alternate-file
+		 (if (equal '("sudo" "root") (butlast parsed 2))
+			 ;; As non-root
+			 (if (or
+				  (string= "localhost" (nth 2 parsed))
+				  (string= (system-name) (nth 2 parsed)))
+				 (nth 3 parsed)
+			   (apply 'tramp-make-tramp-file-name
+					  (append (list tramp-default-method nil) (cddr parsed))))
+		   
+		   ;; As root
+		   (if parsed
+			   (apply 'tramp-make-tramp-file-name
+					  (append '("sudo" "root") (cddr parsed)))
+			 (tramp-make-tramp-file-name "sudo" "root" "localhost" filename))))
+	  (goto-char old-pnt))))
 (global-set-key (kbd "C-c C-r") 'toggle-alternate-file-as-root)
 
 (defun reload-emacs () (interactive) (load-file "~/.emacs"))
