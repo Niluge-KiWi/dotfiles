@@ -77,6 +77,7 @@ variable. Automatically applies expand-file-name to `path`."
         (:name pymacs :type git
                :build ("make")
                :url "http://github.com/pinard/Pymacs.git"
+               :features pymacs
                :after (lambda ()
                         (add-to-pythonpath (concat el-get-dir "pymacs"))))
         (:name rope
@@ -98,7 +99,6 @@ variable. Automatically applies expand-file-name to `path`."
                :after (lambda ()
                         (add-to-pythonpath (concat el-get-dir "ropemacs/ropemacs"))
                         (setq ropemacs-local-prefix "C-c C-p")
-                        (require 'pymacs)
                         (pymacs-load "ropemacs" "rope-")))
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
@@ -1020,8 +1020,6 @@ or list all recent files if prefixed"
   (python-send-string "import sys
 sys.path.insert(0, '')"))
 (ad-activate 'run-python)
-
-(require 'pymacs)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
