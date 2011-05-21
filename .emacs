@@ -10,7 +10,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/auto-complete/"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/erc-5.3/"))
 
 ;;byte-recompile elisp files if they need to be
@@ -33,69 +32,57 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
 (require 'el-get)
 (setq el-get-sources
-      '((:name el-get :type git
-               :url "git://github.com/dimitri/el-get.git")
-		(:name apache-mode :type http
-			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
-		(:name auto-complete :type git
-			   :url "git://github.com/m2ym/auto-complete.git")
-		(:name auto-complete-etags :type http
-			   :url "http://www.emacswiki.org/emacs/download/auto-complete-etags.el")
-		(:name autopair :type http
-			   :url "http://autopair.googlecode.com/svn/trunk/autopair.el")
-		(:name browse-kill-ring :type http
-			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/browse-kill-ring.el")
-		(:name cedet :type http-tar
-			   :options ("xzf")
-			   :info "common"
-			   :build ("make")
-			   :url "https://sourceforge.net/projects/cedet/files/cedet/cedet-1.0.tar.gz/download")
-		(:name cmake :type http
-			   :url "http://www.cmake.org/CMakeDocs/cmake-mode.el")
-		(:name dired+ :type http
-			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/dired%2b.el")
+      '(
+        (:name apache-mode :type emacswiki)
+        auto-complete
+        auto-complete-etags
+        auto-complete-extension
+        autopair
+        browse-kill-ring
+        (:name cedet
+               :type bzr
+               :url "bzr://cedet.bzr.sourceforge.net/bzrroot/cedet/code/trunk"
+               :build ("make")
+               :load-path ("./common"))   
+        cmake-mode
+        dired+
         (:name ecb :type git
-               :url "https://github.com/razik/ecb.git"
+               :url "git@github.com:Niluge-KiWi/ecb.git"
                :build `(,(concat "make CEDET=~/.emacs.d/el-get/cedet" " EMACS=" el-get-emacs)))
-		(:name erc-view-log :type git
-			   :url "git@github.com:Niluge-KiWi/erc-view-log.git")
+        el-get
+        (:name erc-view-log :type git
+               :url "git@github.com:Niluge-KiWi/erc-view-log.git")
         (:name espresso :type http
                :url "http://download-mirror.savannah.gnu.org/releases/espresso/espresso.el")
-		(:name fold-dwim :type http
-			   :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
-		(:name gitsum :type git
-			   :url "git://github.com/chneukirchen/gitsum.git")
-		(:name google-weather :type git
-			   :url "git://git.naquadah.org/google-weather-el.git")
-		(:name magit :type git
-			   :info "."
-			   :build ("make all")
-			   :url "git://github.com/philjackson/magit.git")
-		(:name minimap :type http
-			   :url "http://randomsample.de/minimap.el")
+        (:name fold-dwim :type http
+               :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
+               :features fold-dwim)
+        (:name google-weather :type git
+               :url "git://git.naquadah.org/google-weather-el.git")
+        magit
+        minimap
         (:name multi-eshell :type git
-               :url "git@github.com:Niluge-KiWi/multi-eshell.git")
+               :url "git@github.com:Niluge-KiWi/multi-eshell.git"
+               :features multi-eshell)
         nxhtml
-		(:name php-mode :type http
-			   :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
-		(:name psvn :type http
-			   :url "http://www.xsteve.at/prg/emacs/psvn.el")
-		(:name rainbow-mode :type http
-			   :url "http://git.naquadah.org/?p=rainbow.git;a=blob_plain;f=rainbow-mode.el;hb=HEAD")
-		(:name ropemacs :type http-tar
-			   :options ("zxf")
-			   :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz")
-		(:name undo-tree  :type git
-		        :url "http://www.dr-qubit.org/git/undo-tree.git")
-		(:name widen-window :type http
-			   :url "http://coderepos.org/share/browser/lang/elisp/widen-window-mode/trunk/widen-window.el?format=txt")
-		(:name window-numbering :type http
-			   :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el")
-		(:name wuxch-dired-copy-paste :type http
-			   :url "http://www.emacswiki.org/emacs/download/wuxch-dired-copy-paste.el")
-		(:name yaml-mode :type git
-			   :url "git://github.com/yoshiki/yaml-mode.git")
-		))
+        php-mode-improved
+        psvn
+        rainbow-mode
+        (:name ropemacs :type http-tar
+               :options ("zxf")
+               :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz")
+        (:name undo-tree  :type git
+               :url "http://www.dr-qubit.org/git/undo-tree.git"
+               :features undo-tree)
+        (:name widen-window :type emacswiki
+               :features widen-window)
+        (:name window-numbering :type http
+               :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el"
+               :features window-numbering)
+        (:name wuxch-dired-copy-paste :type emacswiki
+               :features wuxch-dired-copy-paste)
+        yaml-mode
+        ))
 
 (el-get 'sync)
 
@@ -148,7 +135,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Minimap
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'minimap)
 ;; 50ms is more than the repeat period for standard keyboards,
 ;; so no slow down when scrolling
 (setq minimap-update-delay 0.05)
@@ -177,8 +163,6 @@
   (interactive)
   (load-file (expand-file-name "~/.emacs.d/lisp/zenburn.el"))
   (color-theme-zenburn))
-
-(require 'rainbow-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -472,7 +456,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Undo-tree
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'undo-tree)
 (setq undo-tree-mode-lighter "")
 (global-undo-tree-mode)
 (set-default 'undo-tree-visualizer-timestamps t)
@@ -502,7 +485,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Autopair
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'autopair)
 (autopair-global-mode t) ;; enable autopair in all buffers
 
 (setq autopair-blink nil) ;; no blink
@@ -549,7 +531,6 @@ Optional depth is for internal use."
 
 (require 'dired+)
 ;; copy/pasting in dired
-(require 'wuxch-dired-copy-paste)
 (define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
 (define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
 (define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
@@ -576,7 +557,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;C-x v s as main svn entry point
 ;;note : dired customisations have to be done BEFORE this
-(require 'psvn)
 ;;(global-set-key (kbd "C-x v s") 'svn-examine)
 ;; TODO merge with magit C-c s: check if .svn is in current dir
 ;;default to a clean view.
@@ -587,19 +567,8 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Gitsum
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; for something like git add --patch, but better:
-;;  can split hunks where git add cant
-;;  and can also manually edit the patch
-(require 'gitsum)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Something like Egg, but still maintained and developped
-(require 'magit)
 (require 'magit-svn)
 
 ;; no subdirectories for unstaged files
@@ -674,7 +643,6 @@ Optional depth is for internal use."
 
 ;; TODO test this
 ;; widen window : widen selected window
-;; (require 'widen-window)
 ;; (global-widen-window-mode t)
 ;; ;; et on ajoute les fonctions utilisées par windmove, comme ça on a tout ce qu'il faut!
 ;; (add-to-list 'ww-advised-functions 'windmove-up)
@@ -706,8 +674,6 @@ Optional depth is for internal use."
 ;; For instance, to always assign the calculator window the number 9, add the following to your .emacs file:
 ;; (setq window-numbering-assign-func
 ;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
-
-(require 'window-numbering)
 (window-numbering-mode t)
 
 
@@ -987,7 +953,6 @@ or list all recent files if prefixed"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; CMake
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'cmake-mode)
 (setq auto-mode-alist
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
                 ("\\.cmake\\'" . cmake-mode))
@@ -1028,12 +993,6 @@ sys.path.insert(0, '')"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; PHP
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'php-mode)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Javascript
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (autoload #'espresso-mode "espresso" "Start espresso-mode" t)
@@ -1048,18 +1007,6 @@ sys.path.insert(0, '')"))
                                       (setq mumamo-background-colors nil)
                                       (font-lock-mode 0)
                                       (font-lock-mode 1)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; YAML
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
-(add-hook 'yaml-mode-hook
-	  '(lambda ()
-	     (setq indent-tabs-mode nil)
-	     (setq c-indent-level 2)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1152,7 +1099,8 @@ sys.path.insert(0, '')"))
   "Only outline on ;;;, thank you."
   (setq outline-regexp ";;; "))
 (add-hook 'emacs-lisp-mode-hook 'setup-outline-lisp)
-(require 'fold-dwim)
+
+;; fold-dwim
 (setq fold-dwim-outline-style 'nested)
 ;; Have two toggles, one for the header we're in, and one general
 (global-set-key (kbd "<f6>")  'fold-dwim-toggle)
@@ -1165,7 +1113,6 @@ sys.path.insert(0, '')"))
       (fold-dwim-show-all)
     (fold-dwim-hide-all))
   (toggle-variable 'fold-dwim-general-toggle))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1217,7 +1164,6 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Eshell
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'multi-eshell)
 (setq multi-eshell-shell-function '(eshell))
 (setq multi-eshell-name "*eshell*")
 (global-set-key (kbd "M-<f1>") 'multi-eshell)
@@ -1393,7 +1339,6 @@ brake whatever split of windows we might have in the frame."
 (global-set-key (kbd "M-à") 'delete-window)
 
 ;;browse kill ring to look for forgotten copy/paste
-(require 'browse-kill-ring)
 (global-set-key (kbd "C-c k") 'browse-kill-ring)
 
 ;; kill-whitespace seems more usefull than kill-sentence
@@ -1724,10 +1669,6 @@ Ignores CHAR at point."
 
 ;; auto-complete mode : dropdown menu
 ;; see http://cx4a.org/software/auto-complete/manual.html
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/el-get/auto-complete/dict")
-(setq ac-comphist-file "~/.emacs.d/el-get/auto-complete/ac-comphist.dat")
-(ac-config-default)
 (setq ac-delay 0.1)
 
 ;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
