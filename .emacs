@@ -1294,6 +1294,7 @@ brake whatever split of windows we might have in the frame."
 (global-set-key (kbd "M-q") 'backward-kill-word)
 (global-set-key (kbd "C-M-q") 'backward-kill-sexp)
 (global-set-key (kbd "C-q") 'backward-delete-char)
+(global-set-key (kbd "C-Q") 'quoted-insert)
 ;;rebind previous M-q binding to M-s
 (global-set-key (kbd "M-s") 'fill-paragraph)
 ;;nice to have, coherent with other keybindings, and bound to nothing
