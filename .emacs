@@ -389,7 +389,7 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
       ido-max-window-height 1)
 (ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
-;; to have the buffers and files open in the selected-window, as done by switch-to-buffer
+;; open the buffers and files in the selected-window, like switch-to-buffer
 (setq ido-default-file-method 'selected-window)
 (setq ido-default-buffer-method 'selected-window)
 
@@ -502,7 +502,7 @@ Optional depth is for internal use."
 ;;; Autopair
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'autopair)
-(autopair-global-mode) ;; enable autopair in all buffers
+(autopair-global-mode t) ;; enable autopair in all buffers
 
 (setq autopair-blink nil) ;; no blink
 (setq autopair-autowrap t) ;; wrap region with character to insert
@@ -727,6 +727,7 @@ Optional depth is for internal use."
 (recentf-ido-find-file-or-maybe-list).
 If nil, do not limit."
   :group 'recentf)
+(setq recentf-ido-max-items 300)
 
 (defun recentf-ido-find-file-or-maybe-list (&optional arg)
   "Find a recent file using Ido and uniquify,
@@ -943,7 +944,7 @@ or list all recent files if prefixed"
 
 ;; Parse a whole project:
 ;; export SEMANTIC_PATH=~/.emacs.d/el-get/cedet/semantic/
-;; find . -name "*.h" -o -name "*.cpp" | xargs ~/.emacs.d/el-get/cedet/semantic/semanticdb.sh
+;; find . -name "*.h" -o -name "*.hh" -o -name "*.hxx" -o -name "*.hpp" -o -name "*.cpp" -o -name "*.cc" -o -name "*.c" | xargs ${SEMANTIC_PATH}/semanticdb.sh
 ;;
 ;; And to generate include-path:
 ;; find . \( -name "*.h" -o -name "*.hh" -o -name "*.hxx" -o -name "*.cpp" -o -name "*.cc" -o -name "*.c" \) -exec dirname "{}" \; | sort | uniq
@@ -1212,6 +1213,7 @@ sys.path.insert(0, '')"))
 (setq multi-eshell-shell-function '(eshell))
 (setq multi-eshell-name "*eshell*")
 (global-set-key (kbd "M-<f1>") 'multi-eshell)
+(setq eshell-aliases-file "~/.emacs.d/eshell/alias")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

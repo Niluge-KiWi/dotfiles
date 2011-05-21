@@ -29,6 +29,7 @@
   ;; Your init file should contain only one such instance.
   ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(ecb-options-version "2.40")
  '(global-font-lock-mode t)
  '(inhibit-startup-echo-area-message (user-login-name))
  '(inhibit-startup-screen t)
