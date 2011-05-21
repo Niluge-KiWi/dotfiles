@@ -59,6 +59,8 @@
                :build `(,(concat "make CEDET=~/.emacs.d/el-get/cedet" " EMACS=" el-get-emacs)))
 		(:name erc-view-log :type git
 			   :url "git@github.com:Niluge-KiWi/erc-view-log.git")
+        (:name espresso :type http
+               :url "http://download-mirror.savannah.gnu.org/releases/espresso/espresso.el")
 		(:name fold-dwim :type http
 			   :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el")
 		(:name gitsum :type git
@@ -1024,6 +1026,14 @@ sys.path.insert(0, '')"))
 	  (lambda ()
 	    (global-set-key [f5] 'php-mode)))
 ;; TODO use Nxhtml instead http://www.emacswiki.org/emacs/NxhtmlMode
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Javascript
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload #'espresso-mode "espresso" "Start espresso-mode" t)
+(add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
