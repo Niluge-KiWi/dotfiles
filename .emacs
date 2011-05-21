@@ -488,6 +488,7 @@ Optional depth is for internal use."
 (setq undo-tree-mode-lighter "")
 (global-undo-tree-mode)
 (set-default 'undo-tree-visualizer-timestamps t)
+(add-hook 'erc-mode-hook #'(lambda () (setq undo-tree-dont-activate t)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
