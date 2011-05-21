@@ -35,7 +35,7 @@
 (setq el-get-sources
       '((:name el-get :type git
                :url "git://github.com/dimitri/el-get.git")
-		(:name apache :type http
+		(:name apache-mode :type http
 			   :url "http://www.emacswiki.org/cgi-bin/wiki/download/apache-mode.el")
 		(:name auto-complete :type git
 			   :url "git://github.com/m2ym/auto-complete.git")
