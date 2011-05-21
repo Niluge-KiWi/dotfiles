@@ -75,6 +75,7 @@
 			   :url "http://randomsample.de/minimap.el")
         (:name multi-eshell :type git
                :url "git@github.com:Niluge-KiWi/multi-eshell.git")
+        nxhtml
 		(:name php-mode :type http
 			   :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 		(:name psvn :type http
@@ -1030,15 +1031,6 @@ sys.path.insert(0, '')"))
 ;;; PHP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'php-mode)
-;; Toggle between PHP & HTML mode.  Useful when working on
-;; php files, that can been intertwined with HTML code
-(add-hook 'php-mode-hook
-	  (lambda ()
-	    (global-set-key [f5] 'html-mode)))
-(add-hook 'html-mode-hook
-	  (lambda ()
-	    (global-set-key [f5] 'php-mode)))
-;; TODO use Nxhtml instead http://www.emacswiki.org/emacs/NxhtmlMode
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1047,6 +1039,15 @@ sys.path.insert(0, '')"))
 (autoload #'espresso-mode "espresso" "Start espresso-mode" t)
 (add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; nXhtml
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'nxhtml-mumamo-mode-hook '(lambda ()
+                                      (setq mumamo-background-colors nil)
+                                      (font-lock-mode 0)
+                                      (font-lock-mode 1)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
