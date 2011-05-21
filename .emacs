@@ -325,6 +325,11 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (setq frame-title-format my-title)
 (setq icon-title-format my-title)
 
+;; occur: force unique name
+(add-hook 'occur-hook
+          #'(lambda ()
+              (occur-rename-buffer t)))
+
 
 ;; ;;backups/autosaves : no autosaves, and backups in one centralised place
 ;; (setq auto-save-default nil)
