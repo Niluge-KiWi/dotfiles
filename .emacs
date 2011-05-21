@@ -68,6 +68,8 @@
 			   :url "git://github.com/philjackson/magit.git")
 		(:name minimap :type http
 			   :url "http://randomsample.de/minimap.el")
+        (:name multi-eshell :type git
+               :url "git@github.com:Niluge-KiWi/multi-eshell.git")
 		(:name php-mode :type http
 			   :url "http://php-mode.svn.sourceforge.net/svnroot/php-mode/tags/php-mode-1.5.0/php-mode.el")
 		(:name psvn :type http
@@ -1157,6 +1159,15 @@ sys.path.insert(0, '')"))
 ;;dirtrack
 (setq dirtrack-list '("^\\([^@]*\\)@\\([^:]*\\):\\([^$]*\\)" 3))
 (add-hook 'shell-mode-hook 'dirtrack-mode)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Eshell
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'multi-eshell)
+(setq multi-eshell-shell-function '(eshell))
+(setq multi-eshell-name "*eshell*")
+(global-set-key (kbd "M-<f1>") 'multi-eshell)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
