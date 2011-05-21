@@ -951,8 +951,9 @@ or list all recent files if prefixed"
 (require 'cc-mode)
 ;;linux style
 (setq c-default-style "linux")
-(setq-default c-basic-offset 4)
-(setq-default tab-width 4)
+(setq-default c-basic-offset 2)
+(setq-default tab-width 2)
+(setq-default indent-tabs-mode nil)
 
 ;;'electric' indentation : indent on newline
 (define-key c-mode-base-map "\C-m"
