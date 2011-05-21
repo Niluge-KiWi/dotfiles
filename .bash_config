@@ -66,9 +66,23 @@ fi
 
 ## des alias ! ##
 
-# alias d'éditeurs (from smeuuh)
-alias ec='emacsclient -a "" -c'
-export EDITOR='emacsclient -a emacs -c'
+# emacs
+function emacs-client
+{
+    emacsclient -a "" -c $*
+}
+function ec
+{
+    if [ -z "$DISPLAY" ]; then
+        # no x term
+        emacs-client $*
+    else
+        # x term: we fork
+        emacs-client $* > /dev/null &
+    fi
+}
+alias e='ec'
+export EDITOR='emacsclient -a "" -c'
 
 # gdb
 alias gdb='gdb --args'
