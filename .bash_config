@@ -138,6 +138,8 @@ alias ggg='gg --exclude-dir=\.git'
 
 alias f='find . -iname'
 
+alias sum="awk '{sum+=\$1} END {print sum}'"
+
 # useless mais bon
 alias jacadi='sudo'
 alias siteuplait='sudo'
