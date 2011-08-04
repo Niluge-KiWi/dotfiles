@@ -136,7 +136,7 @@ alias gs='g --exclude-dir=\.svn'
 alias ggs='gg --exclude-dir=\.svn'
 alias ggg='gg --exclude-dir=\.git'
 
-alias f='find . -name'
+alias f='find . -iname'
 
 # useless mais bon
 alias jacadi='sudo'
