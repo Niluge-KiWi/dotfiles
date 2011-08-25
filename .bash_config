@@ -114,9 +114,6 @@ alias gst='git status | less -RXF'
 alias gl='git log'
 alias gk='gitk --all&'
 
-#M-q = delete backward
-bind '"\eq":backward-kill-word'
-
 # bash history
 #export HISTIGNORE="&:ls:[bf]g:cd:c"
 export HISTSIZE=5000

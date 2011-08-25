@@ -1,1 +1,4 @@
 set completion-ignore-case on
+
+#M-q = delete backward
+"\eq":          backward-kill-word
