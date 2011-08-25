@@ -137,6 +137,8 @@ alias f='find . -iname'
 
 alias sum="awk '{sum+=\$1} END {print sum}'"
 
+alias w='wc -l'
+
 # useless mais bon
 alias jacadi='sudo'
 alias siteuplait='sudo'
