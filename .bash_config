@@ -69,16 +69,16 @@ fi
 # emacs
 function emacs-client
 {
-    emacsclient -a "" -c $*
+    emacsclient -a "" -c "$@"
 }
 function ec
 {
     if [ -z "$DISPLAY" ]; then
         # no x term
-        emacs-client $*
+        emacs-client "$@"
     else
         # x term: we fork
-        emacs-client $* > /dev/null &
+        emacs-client "$@" > /dev/null &
     fi
 }
 alias e='ec'
