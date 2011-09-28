@@ -1732,6 +1732,31 @@ Ignores CHAR at point."
                  (add-to-list 'ac-sources 'ac-source-ropemacs)))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; XML
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun xml-unescape-string (s)
+  "Unescape protected entities in S."
+  (let ((re (concat "&\\("
+                    (mapconcat (lambda (e)
+                                 (car e)) xml-entity-alist "\\|")
+                    "\\);")))
+    (while (string-match re s)
+      (setq s (replace-match
+               (cdr (assoc (match-string 1 s) xml-entity-alist)) nil nil s)))
+    s))
+
+(defun xml-escape-region (beg end)
+  (interactive "*r")
+  (let ((escaped (xml-escape-string (buffer-substring beg end))))
+    (delete-region beg end)
+    (insert escaped)))
+
+(defun xml-unescape-region (beg end)
+  (interactive "*r")
+  (let ((unescaped (xml-unescape-string (buffer-substring beg end))))
+    (delete-region beg end)
+    (insert unescaped)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
