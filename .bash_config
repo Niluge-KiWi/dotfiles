@@ -127,8 +127,8 @@ alias l='ls -latrh'
 alias lh='ls -latr'
 alias lS='ls -laSrh'
 
-alias g='grep -nriI --color --exclude=*~'
-alias gg='grep -nrI --color --exclude=*~'
+alias g='grep -nriI --color --exclude=*~ --exclude ".#*"'
+alias gg='grep -nrI --color --exclude=*~ --exclude ".#*"'
 alias gs='g --exclude-dir=\.svn'
 alias ggs='gg --exclude-dir=\.svn'
 alias ggg='gg --exclude-dir=\.git'
@@ -156,7 +156,7 @@ cd() {
 
 
 # un copy par ssh
-# tar cvf - /tarred_up_director | ssh -l root Linux_Server 'cd /tmp ; tar xf -' 
+# tar cvf - /tarred_up_director | ssh -l root Linux_Server 'cd /tmp ; tar xf -'
 
 # multiline sed (from http://austinmatzko.com/2008/04/26/sed-multi-line-search-and-replace/)
 sedml() {
