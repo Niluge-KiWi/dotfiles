@@ -542,6 +542,7 @@ Blinking, if in erc-tray-blink-channels."
   (global-set-key (kbd "C-c C-&") (lambda () (interactive) (switch-to-buffer im-gateway-channel-name)))
   (local-set-key (kbd "C-c C-a") 'erc-toggle-away)
   (local-set-key (kbd "C-c C-u") 'browse-url-before-point)
+  (local-set-key (kbd "C-c C-g") 'google-search-region)
   (local-set-key (kbd "C-c C-q") 'erc-query-prompt)
   (local-set-key (kbd "C-c C-n") 'erc-names-prompt)
   (local-set-key (kbd "C-c C-w") 'erc-whois-prompt)

@@ -1758,6 +1758,14 @@ Ignores CHAR at point."
     (delete-region beg end)
     (insert unescaped)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Web related
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun google-search-region (beg end)
+  (interactive "*r")
+  (browse-url (format "http://www.google.com/search?sourceid=emacs&ie=UTF-8&q=%s"
+                      (url-hexify-string (buffer-substring beg end)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Notification framework (used in ERC)
