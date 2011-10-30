@@ -32,12 +32,6 @@
                          ("marmalade" . "http://marmalade-repo.org/packages/")))
 
 ;;-------el-get
-(defun add-to-pythonpath (path)
-  "Adds a directory to the PYTHONPATH environment
-variable. Automatically applies expand-file-name to `path`."
-  (setenv "PYTHONPATH"
-    (concat (expand-file-name path) ":" (getenv "PYTHONPATH"))))
-
 ;; Manage the external elisp bits and pieces you depend upon
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
 (unless (require 'el-get nil t)
@@ -84,32 +78,6 @@ variable. Automatically applies expand-file-name to `path`."
         php-mode-improved
         psvn
         rainbow-mode
-        (:name pymacs :type git
-               :build ("make")
-               :url "http://github.com/pinard/Pymacs.git"
-               :features pymacs
-               :after (lambda ()
-                        (add-to-pythonpath (concat el-get-dir "pymacs"))))
-        (:name rope
-               :type http-tar
-               :options ("zxf")
-               :url "http://bitbucket.org/agr/rope/get/tip.tar.gz"
-               :after (lambda ()
-                        (add-to-pythonpath (concat el-get-dir "rope/rope"))))
-        (:name ropemode
-               :type http-tar
-               :options ("zxf")
-               :url "http://bitbucket.org/agr/ropemode/get/tip.tar.gz"
-               :after (lambda ()
-                        (add-to-pythonpath (concat el-get-dir "ropemode/ropemode"))))
-        (:name ropemacs
-               :type http-tar
-               :options ("zxf")
-               :url "http://bitbucket.org/agr/ropemacs/get/tip.tar.gz"
-               :after (lambda ()
-                        (add-to-pythonpath (concat el-get-dir "ropemacs/ropemacs"))
-                        (setq ropemacs-local-prefix "C-c C-p")
-                        (pymacs-load "ropemacs" "rope-")))
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
