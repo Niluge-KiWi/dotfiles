@@ -40,7 +40,13 @@ variable. Automatically applies expand-file-name to `path`."
 
 ;; Manage the external elisp bits and pieces you depend upon
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/el-get/el-get"))
-(require 'el-get)
+(unless (require 'el-get nil t)
+  (url-retrieve
+   "https://raw.github.com/dimitri/el-get/master/el-get-install.el"
+   (lambda (s)
+     (end-of-buffer)
+     (eval-print-last-sexp))))
+
 (setq el-get-sources
       '(
         (:name apache-mode :type emacswiki)
@@ -117,7 +123,8 @@ variable. Automatically applies expand-file-name to `path`."
         yaml-mode
         ))
 
-(el-get 'sync)
+(setq my-packages (mapcar 'el-get-source-name el-get-sources))
+(el-get 'sync my-packages)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
