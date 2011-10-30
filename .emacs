@@ -77,7 +77,6 @@
         nxhtml
         php-mode-improved
         psvn
-        rainbow-mode
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
