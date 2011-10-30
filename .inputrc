@@ -1,3 +1,4 @@
+set show-all-if-ambiguous on
 set completion-ignore-case on
 
 #M-q = delete backward
