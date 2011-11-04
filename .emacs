@@ -43,7 +43,7 @@
 
 (setq el-get-sources
       '(
-        (:name apache-mode :type emacswiki)
+        apache-mode
         auto-complete
         auto-complete-etags
         auto-complete-extension
@@ -577,7 +577,9 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'magit)
 (require 'magit-svn)
+(require 'magit-key-mode)
 
 ;; no subdirectories for unstaged files
 ;; TODO get them when open subsection on directory
@@ -1017,6 +1019,7 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Apache
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(load (expand-file-name "~/.emacs.d/el-get/apache-mode/apache-mode.el"))
 (autoload 'apache-mode "apache-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.htaccess\\'"   . apache-mode))
 (add-to-list 'auto-mode-alist '("httpd\\.conf\\'"  . apache-mode))
