@@ -1,5 +1,6 @@
 set show-all-if-ambiguous on
 set completion-ignore-case on
+set skip-completed-text on
 
 #M-q = delete backward
 "\eq":          backward-kill-word
