@@ -599,3 +599,17 @@ Use this defun with `erc-insert-modify-hook'."
 	  (replace-match "********" nil t nil 1))))
 
 (add-hook 'erc-send-modify-hook 'erc-dont-display-passwords)
+
+;;;--------------------
+;;; SPC DWIM scroll & insert SPC
+;;;--------------------
+(defun my-erc-space-dwim ()
+  "SPC DWIM:
+- scrolls up if we are not at the bottom of the buffer,
+- else insert SPC."
+  (interactive)
+  (condition-case nil (insert " ")
+    (text-read-only
+     (condition-case nil (scroll-up)
+       (end-of-buffer (recenter 0))))))
+(define-key erc-mode-map (kbd "SPC") 'my-erc-space-dwim)
