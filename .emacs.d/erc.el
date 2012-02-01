@@ -62,12 +62,11 @@ Activity means that there was no user input in the last 10 seconds."
 (setq im-gateway-channel-name "&friends")
 ; erc general conf
 (setq erc-modules '(autojoin button completion
-			     irccontrols list
-			     log match menu move-to-prompt
-			     netsplit networks noncommands
-			     readonly ring scrolltobottom
-			     services stamp spelling track
-			     autoaway truncate))
+                             irccontrols list
+                             log match menu move-to-prompt
+                             netsplit networks noncommands
+                             readonly ring services stamp
+                             spelling track autoaway truncate))
 
 ;;301 : "x is away"
 ;;305 306 : away messages

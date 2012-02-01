@@ -344,7 +344,7 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 ;;; Scrolling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;scroll one line at a time
-(setq scroll-conservatively 100000000)
+(setq scroll-conservatively 200)
 ;;keep cursor at current position when scrolling
 (setq scroll-preserve-screen-position t)
 
