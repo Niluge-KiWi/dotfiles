@@ -181,7 +181,7 @@ This function is a possible value for `erc-generate-log-file-name-function'."
     (convert-standard-filename file)))
 (setq erc-generate-log-file-name-function 'erc-generate-log-file-name-like-xchat)
 
-(defun erc-browse-log-dedi ()
+(defun erc-browse-log ()
   "Open current channel logfile."
   (interactive)
   (find-file (erc-current-logfile))
@@ -563,6 +563,12 @@ Blinking, if in erc-tray-blink-channels."
   (local-set-key (kbd "C-c C-w") 'erc-whois-prompt)
   (local-set-key (kbd "C-c C-l") 'erc-browse-log-dedi))
 (add-hook 'erc-mode-hook 'erc-setup-my-commands)
+
+(defun erc-view-log-setup-my-commands ()
+  (interactive)
+  (local-set-key (kbd "C-c C-u") 'browse-url-before-point)
+  (local-set-key (kbd "C-c C-s") 'google-search-region))
+(add-hook 'erc-view-log-mode-hook 'erc-view-log-setup-my-commands)
 
 ;; I don't know why, something messes up with erc-bol, so I'm redefining it
 (defun erc-bol ()
