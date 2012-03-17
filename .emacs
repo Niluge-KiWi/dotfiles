@@ -49,6 +49,8 @@
         auto-complete-extension
         autopair
         browse-kill-ring
+        (:name buffer-move :type http
+               :url "https://raw.github.com/martialboniou/emacs-revival/master/buffer-move.el")
         (:name cedet
                :type bzr
                :url "bzr://cedet.bzr.sourceforge.net/bzrroot/cedet/code/trunk"
@@ -685,6 +687,30 @@ Optional depth is for internal use."
 ;; (setq window-numbering-assign-func
 ;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
 (window-numbering-mode t)
+
+;; buffer move
+(require 'buffer-move)
+(global-set-key (kbd "S-M-<left>")  'buf-move-left)
+(global-set-key (kbd "S-M-<right>") 'buf-move-right)
+(global-set-key (kbd "S-M-<up>")    'buf-move-up)
+(global-set-key (kbd "S-M-<down>")  'buf-move-down)
+
+(defun buf-move-number (&optional window-number)
+    "Swap the current buffer and the buffer on the given number window.
+If window-number is invalid, an error is signaled."
+    (interactive "NSwap with window number: ")
+    (let* ((other-win (save-window-excursion
+                        (select-window-by-number window-number)
+                        (selected-window)))
+           (buf-this-buf (window-buffer (selected-window))))
+      (if (null other-win)
+          (error "Invalid window number")
+        ;; swap other window with this one
+        (set-window-buffer (selected-window) (window-buffer other-win))
+        ;; move this window to other one
+        (set-window-buffer other-win buf-this-buf)
+        (select-window other-win))))
+(global-set-key (kbd "S-M-SPC") 'buf-move-number)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
