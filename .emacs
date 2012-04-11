@@ -80,6 +80,7 @@
                :features multi-eshell)
         nxhtml
         php-mode-improved
+        pkgbuild-mode
         psvn
         (:name rainbow-mode :type elpa)
         (:name smex :type elpa)
@@ -1162,8 +1163,13 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Markdown
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'markdown-mode)
 (add-to-list 'auto-mode-alist '("\\.md" . markdown-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; PKGBUILD
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("/PKGBUILD$" . pkgbuild-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1172,7 +1178,6 @@ sys.path.insert(0, '')"))
 ; Temporary files when editing commandline from bash in emacs (C-x C-e in bash)
 ;  are bash scripts
 (setq auto-mode-alist (cons '("/bash-fc-[0-9]*$" . sh-mode) auto-mode-alist))
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

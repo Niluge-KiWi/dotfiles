@@ -123,7 +123,10 @@ void enter_window(const char* window_name)
 		return;
 	}
 
-	if(buffer_name[0]=='#') { // has to start with #
+	//if(buffer_name[0]=='#') {
+	// private messages buffers don't start with #
+	{
+		// TODO lowercase on buffername
 		char* format = "emacsclient --eval '(progn (select-window (get-buffer-window \"%s\" t)) (erc-modified-channels-update))'";
 		size_t cmd_size = strlen(format) + strlen(buffer_name);
 		char* cmd = (char*) malloc(sizeof(char)*(cmd_size+1));
