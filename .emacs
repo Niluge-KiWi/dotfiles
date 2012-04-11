@@ -22,10 +22,11 @@
 ;;-------ELAP
 ;; This provides support for the package system and
 ;; interfacing with ELPA, the package archive.
-(when
-    (load
-     (expand-file-name "~/.emacs.d/elpa/package.el"))
-  (package-initialize))
+(unless (boundp 'list-packages)
+  (when
+      (load
+       (expand-file-name "~/.emacs.d/elpa/package.el"))
+    (package-initialize)))
 ;; several archives for elpa
 (setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
                          ("gnu" . "http://elpa.gnu.org/packages/")
@@ -66,11 +67,13 @@
                :url "git@github.com:Niluge-KiWi/erc-view-log.git")
         (:name espresso :type http
                :url "http://download-mirror.savannah.gnu.org/releases/espresso/espresso.el")
+        (:name expand-region :type elpa)
         (:name fold-dwim :type http
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
                :features fold-dwim)
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
+        (:name highlight-parentheses :type elpa)
         magit
         minimap
         (:name multi-eshell :type git
@@ -79,6 +82,8 @@
         nxhtml
         php-mode-improved
         psvn
+        (:name rainbow-mode :type elpa)
+        (:name smex :type elpa)
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
@@ -92,7 +97,7 @@
         yaml-mode
         ))
 
-(setq my-packages (mapcar 'el-get-source-name el-get-sources))
+(setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
 
 
