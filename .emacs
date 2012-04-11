@@ -73,6 +73,7 @@
         (:name keyfreq :type http
                :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
+        markdown-mode
         minimap
         (:name multi-eshell :type git
                :url "git@github.com:Niluge-KiWi/multi-eshell.git"
@@ -1156,6 +1157,13 @@ sys.path.insert(0, '')"))
       (fold-dwim-show-all)
     (fold-dwim-hide-all))
   (toggle-variable 'fold-dwim-general-toggle))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Markdown
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'markdown-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Bash
