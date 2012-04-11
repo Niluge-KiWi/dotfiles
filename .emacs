@@ -384,7 +384,8 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (setq ido-create-new-buffer 'always
       ido-enable-flex-matching t
       ;;ido-max-prospects 12
-      ido-max-window-height 1)
+      ido-max-window-height 1
+      ido-save-directory-list-file "~/.emacs.d/ido.last")
 (ido-mode 'both) ;; for buffers and files
 (ido-everywhere 1)
 ;; open the buffers and files in the selected-window, like switch-to-buffer
@@ -399,7 +400,8 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 ;;-------smex
 ;; super M-x : ido + frequency
 (require 'smex)
-(setq smex-history-length 32)
+(setq smex-history-length 32
+      smex-save-file "~/.emacs.d/smex-items")
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -480,6 +482,7 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;visual paren matching
 (show-paren-mode t)
+
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
 (setq hl-paren-colors
@@ -499,6 +502,7 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Autopair
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'autopair)
 (autopair-global-mode t) ;; enable autopair in all buffers
 
 (setq autopair-blink nil) ;; no blink
@@ -725,9 +729,9 @@ If window-number is invalid, an error is signaled."
 (savehist-mode 1)
 
 ;;save last edit place in files
+(require 'saveplace)
 (setq-default save-place t)
 (setq save-place-file "~/.emacs.d/places")
-(require 'saveplace)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -741,7 +745,6 @@ If window-number is invalid, an error is signaled."
 (recentf-ido-find-file-or-maybe-list).
 If nil, do not limit."
   :group 'recentf)
-(setq recentf-ido-max-items 300)
 
 (defun recentf-ido-find-file-or-maybe-list (&optional arg)
   "Find a recent file using Ido and uniquify,
@@ -764,7 +767,9 @@ or list all recent files if prefixed"
 	  (when file
 		(find-file (car (rassoc file uniq-file-alist)))))))
 
-(setq recentf-max-saved-items nil)
+(setq recentf-max-saved-items nil
+      recentf-save-file "~/.emacs.d/recentf"
+      recentf-ido-max-items 300)
 (recentf-mode 1)
 (global-set-key (kbd "C-x C-r") 'recentf-ido-find-file-or-maybe-list)
 
@@ -873,7 +878,7 @@ or list all recent files if prefixed"
 ;; Semantic Database
 (require 'semanticdb)
 (global-semanticdb-minor-mode 1)
-(setq semanticdb-default-save-directory (expand-file-name "~/.semanticdb"))
+(setq semanticdb-default-save-directory (expand-file-name "~/.emacs.d/semanticdb"))
 ;;(setq semanticdb-project-roots (list (expand-file-name "~/dev")))
 
 ;; Where to search for tags
