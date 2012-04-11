@@ -70,6 +70,8 @@
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
         (:name highlight-parentheses :type elpa)
+        (:name keyfreq :type http
+               :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
         minimap
         (:name multi-eshell :type git
@@ -1435,6 +1437,16 @@ Ignores CHAR at point."
   (zap-up-to-char -1 char))
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char-back)
+
+;; typematrix
+(global-set-key (kbd "C-M-<") 'end-of-buffer)
+
+;; key frequency
+(require 'keyfreq)
+(setq keyfreq-file "~/.emacs.d/keyfreq"
+      keyfreq-file-lock "~/.emacs.d/keyfreq.lock")
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
