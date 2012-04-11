@@ -3,9 +3,8 @@
 
 ## How to use : add this to .bashrc
 
-# if [ -f ~/.bash_config ]; then
-#    . ~/.bash_config
-# fi
+# [ -f ~/.bash_config ] && . ~/.bash_config
+
 
 ## from debian ##
 
@@ -14,6 +13,9 @@
 
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoredups
+
+# append to the history file, don't overwrite it
+shopt -s histappend
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -48,23 +50,15 @@ xterm*|rxvt*)
     ;;
 esac
 
-# enable color support of ls and also add handy aliases
+# enable color support of ls and grep
 if [ "$TERM" != "dumb" ]; then
     eval "`dircolors -b`"
     alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
 fi
 
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-if [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-fi
-
-
-
-## des alias ! ##
+## alias and functions ##
 
 # emacs
 function emacs-client
@@ -115,7 +109,6 @@ alias gl='git log'
 alias gk='gitk --all&'
 
 # bash history
-#export HISTIGNORE="&:ls:[bf]g:cd:c"
 export HISTSIZE=5000
 export HISTFILESIZE=5000
 
@@ -176,3 +169,7 @@ $ {
 }
 '
 }
+
+
+# own bin
+export PATH=$HOME/bin:$PATH
