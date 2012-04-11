@@ -52,11 +52,7 @@
         browse-kill-ring
         (:name buffer-move :type http
                :url "https://raw.github.com/martialboniou/emacs-revival/master/buffer-move.el")
-        (:name cedet
-               :type bzr
-               :url "bzr://cedet.bzr.sourceforge.net/bzrroot/cedet/code/trunk"
-               :build ("make")
-               :load-path ("./common"))   
+        cedet
         cmake-mode
         dired+
         (:name ecb :type git
@@ -99,6 +95,9 @@
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
+
+;; loaded asap to avoid double load of EIEIO
+(load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -838,7 +837,8 @@ or list all recent files if prefixed"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Cedet
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
+;; loaded earlier, to avoid double load of EIEIO
+;; (load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
 ;; Choose one level of features
 (semantic-load-enable-minimum-features)
 ;; (semantic-load-enable-code-helpers) 
@@ -854,9 +854,6 @@ or list all recent files if prefixed"
 
 ;; Project management
 (global-ede-mode t)
-
-;; Templates
-(global-srecode-minor-mode 1)
 
 ;; Bookmarks on tags, to navigate through them
 ;; TODO use ido for the bookmark ring
