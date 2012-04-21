@@ -1682,7 +1682,9 @@ Ignores CHAR at point."
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 ;;delete active region when inserting text in it
-(pending-delete-mode t)
+(delete-selection-mode t)
+;; and still no transient mark please
+(transient-mark-mode -1)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
