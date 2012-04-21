@@ -310,7 +310,7 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 (setq browse-url-browser-function
       (lambda (url &rest args)
 	(interactive)
-	(launch-command "x-www-browser" url)))
+	(launch-command "xdg-open" url)))
 
 ;;just type y/n instead of yes/no RET. this should be default
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -557,11 +557,11 @@ Optional depth is for internal use."
 (define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
 (define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
 ;;add gnome-open as C-ret
-(defun dired-gnome-open-file ()
-  "Opens the current file in a Dired buffer."
+(defun dired-xdg-open-file ()
+  "Opens the current file from a Dired buffer."
   (interactive)
-  (launch-command "gnome-open" (dired-get-file-for-visit)))
-(define-key dired-mode-map (kbd "<C-return>") 'dired-gnome-open-file)
+  (launch-command "xdg-open" (dired-get-file-for-visit)))
+(define-key dired-mode-map (kbd "<C-return>") 'dired-kde-open-file)
 
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
 (add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
