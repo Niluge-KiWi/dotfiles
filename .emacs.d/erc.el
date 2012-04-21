@@ -196,7 +196,10 @@ With prefix, rsync & browse dedi logfile."
       (erc-browse-log)
     ;; rsync & browse dedi logfile
     (let ((erc-log-channels-directory (concat erc-log-channels-directory "-dedi")))
-      (start-process "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "/bin/bash" (expand-file-name "~/scripts/erc-logs-dedi-rsync.sh"))
+      (set-process-sentinel
+       (start-process-shell-command  "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "~/scripts/erc-logs-dedi-rsync.sh")
+       '(lambda (process event)
+          (notify "ERC dedi rsync" event)))
       (erc-browse-log))))
 
 
