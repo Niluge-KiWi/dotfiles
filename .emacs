@@ -1362,7 +1362,10 @@ brake whatever split of windows we might have in the frame."
 ;;for it
 (defun kill-current-buffer ()
   (interactive)
-  (kill-buffer (current-buffer)))
+  (when (or (not (and (fbound-p 'erc-server-buffer-live-p)
+                      (erc-server-buffer-live-p)))
+            (yes-or-no-p "Really kill erc buffer?"))
+    (kill-buffer)))
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 ;;like C-x k, but nicer :-)
 (global-set-key (kbd "C-x l") 'bury-buffer)
