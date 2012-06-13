@@ -542,13 +542,16 @@ Blinking, if in erc-tray-blink-channels."
 ;;; Browse url before point with just a keystroke
 ;;;--------------------
 (require 'thingatpt)
-(defun browse-url-before-point ()
+(defun browse-url-before-end-of-line ()
+  "Ask a WWW browser to load the first URL found before the end of
+current line."
   (interactive)
   (save-excursion
     (save-match-data
+      (end-of-line)
       (if (re-search-backward thing-at-point-url-regexp 0 t)
-	  (browse-url (match-string 0))
-	(message "Pas d'URL dans le buffer")))))
+          (browse-url (match-string 0))
+        (warn "No URL found before end of current line.")))))
 
 
 ;;;--------------------
@@ -559,7 +562,7 @@ Blinking, if in erc-tray-blink-channels."
   (global-set-key [escape] 'irc-dwim)
   (global-set-key (kbd "C-c C-&") (lambda () (interactive) (switch-to-buffer im-gateway-channel-name)))
   (local-set-key (kbd "C-c C-a") 'erc-toggle-away)
-  (local-set-key (kbd "C-c C-u") 'browse-url-before-point)
+  (local-set-key (kbd "C-c C-u") 'browse-url-before-end-of-line)
   (local-set-key (kbd "C-c C-s") 'google-search-region)
   (local-set-key (kbd "C-c C-q") 'erc-query-prompt)
   (local-set-key (kbd "C-c C-n") 'erc-names-prompt)
@@ -569,7 +572,7 @@ Blinking, if in erc-tray-blink-channels."
 
 (defun erc-view-log-setup-my-commands ()
   (interactive)
-  (local-set-key (kbd "C-c C-u") 'browse-url-before-point)
+  (local-set-key (kbd "C-c C-u") 'browse-url-before-end-of-line)
   (local-set-key (kbd "C-c C-s") 'google-search-region))
 (add-hook 'erc-view-log-mode-hook 'erc-view-log-setup-my-commands)
 
