@@ -74,6 +74,8 @@
                :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
         markdown-mode
+        (:name miniedit :type git
+               :url "https://github.com/emacsmirror/miniedit.git")
         minimap
         (:name multi-eshell :type git
                :url "git@github.com:Niluge-KiWi/multi-eshell.git"
@@ -1413,6 +1415,10 @@ brake whatever split of windows we might have in the frame."
 (global-set-key (kbd "M-k") 'kill-whitespace)
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
+
+;; miniedit: edit minibuffer in real buffer
+(autoload 'miniedit "miniedit" nil t)
+(define-key minibuffer-local-map (kbd "C-M-e") 'miniedit)
 
 ;; replace $$ in M-! by the name of the associated buffer
 (defun shell-command-replace (command &optional output-buffer error-buffer)
