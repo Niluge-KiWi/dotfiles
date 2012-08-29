@@ -113,7 +113,7 @@ export HISTSIZE=5000
 export HISTFILESIZE=5000
 
 # divers
-alias o='gnome-open'
+alias o='xdg-open'
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -latrh'
