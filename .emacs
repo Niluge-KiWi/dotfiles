@@ -1368,7 +1368,7 @@ brake whatever split of windows we might have in the frame."
 ;;for it
 (defun kill-current-buffer ()
   (interactive)
-  (when (or (not (and (fbound-p 'erc-server-buffer-live-p)
+  (when (or (not (and (fboundp 'erc-server-buffer-live-p)
                       (erc-server-buffer-live-p)))
             (yes-or-no-p "Really kill erc buffer?"))
     (kill-buffer)))
