@@ -187,7 +187,17 @@ This function is a possible value for `erc-generate-log-file-name-function'."
   (find-file (erc-current-logfile))
   (end-of-buffer))
 
-(defun erc-browse-log-dedi (&optional arg)
+(defun erc-browse-log-dedi ()
+  "rsync & browse dedi logfile."
+  (interactive)
+  (let ((erc-log-channels-directory (concat erc-log-channels-directory "-dedi")))
+    (set-process-sentinel
+     (start-process-shell-command  "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "~/scripts/erc-logs-dedi-rsync.sh")
+     '(lambda (process event)
+        (notify "ERC dedi rsync" event)))
+    (erc-browse-log)))
+
+(defun erc-browse-log-or-dedi (&optional arg)
   "Open current channel logfile.
 With prefix, rsync & browse dedi logfile."
   (interactive "P")
@@ -195,12 +205,8 @@ With prefix, rsync & browse dedi logfile."
       ;; brows logfile
       (erc-browse-log)
     ;; rsync & browse dedi logfile
-    (let ((erc-log-channels-directory (concat erc-log-channels-directory "-dedi")))
-      (set-process-sentinel
-       (start-process-shell-command  "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "~/scripts/erc-logs-dedi-rsync.sh")
-       '(lambda (process event)
-          (notify "ERC dedi rsync" event)))
-      (erc-browse-log))))
+    (erc-browse-log-dedi)))
+
 
 
 ;;;--------------------
@@ -567,7 +573,7 @@ current line."
   (local-set-key (kbd "C-c C-q") 'erc-query-prompt)
   (local-set-key (kbd "C-c C-n") 'erc-names-prompt)
   (local-set-key (kbd "C-c C-w") 'erc-whois-prompt)
-  (local-set-key (kbd "C-c C-l") 'erc-browse-log-dedi))
+  (local-set-key (kbd "C-c C-l") 'erc-browse-log-or-dedi))
 (add-hook 'erc-mode-hook 'erc-setup-my-commands)
 
 (defun erc-view-log-setup-my-commands ()
