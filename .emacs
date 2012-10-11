@@ -295,6 +295,19 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 		(setcdr here nil))))
   list)
 
+(defun eval-and-replace ()
+  "Evaluate the sexp at point and replace it with its value
+
+Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
+    (interactive)
+    (backward-kill-sexp)
+    (condition-case nil
+        (prin1 (eval (read (current-kill 0)))
+               (current-buffer))
+      (error (message "Invalid expression")
+             (insert (current-kill 0)))))
+(global-set-key (kbd "C-c C-e") 'eval-and-replace)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc. settings
