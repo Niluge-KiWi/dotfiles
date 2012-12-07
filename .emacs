@@ -44,6 +44,7 @@
 
 (setq el-get-sources
       '(
+        ace-jump-mode
         apache-mode
         auto-complete
         auto-complete-clang
@@ -2047,3 +2048,8 @@ If html is not nil, then disable interpretation of html code."
 ;; (virtual-desktops-init)
 
 ;; (frame-parameter nil 'vd-buffers)
+;; ace
+(require 'ace-jump-mode)
+(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+(global-set-key (kbd "C-c C-SPC") 'ace-jump-mode)
+
