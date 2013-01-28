@@ -93,6 +93,8 @@
         (:name miniedit :type git
                :url "https://github.com/emacsmirror/miniedit.git")
         minimap
+        (:name mo-git-blame :type git
+               :url "https://github.com/mbunkus/mo-git-blame.git")
         (:name multi-eshell :type git
                :url "git@github.com:Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
@@ -693,6 +695,22 @@ Optional depth is for internal use."
 
 ;; fyspell on log
 (add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-mode 1)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; mo-git-blame
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload 'mo-git-blame-file "mo-git-blame" nil t)
+(autoload 'mo-git-blame-current "mo-git-blame" nil t)
+
+;; display commits with magit
+;; TODO load this after mo-git-blame
+(defun mo-git-blame-show-revision (revision)
+  (let ((buffer (mo-git-blame-get-output-buffer)))
+    (with-current-buffer buffer
+      (let ((magit-commit-buffer-name (buffer-name)))
+        (magit-show-commit revision)))
+    (display-buffer buffer)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
