@@ -1419,6 +1419,11 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ergo emacs
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
+
 ;;see http://www.emacswiki.org/emacs/IgnacioKeyboardQuit , with a little bit of modifications
 (defun my-keyboard-quit()
   "Escape the minibuffer or cancel region consistently using 'Control-g'.
