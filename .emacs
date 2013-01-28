@@ -1458,7 +1458,9 @@ sys.path.insert(0, '')"))
  org-remember-templates '(("Tasks" ?t "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
                           ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
                           ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
- org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "|" "DONE(d)" "WONTDO(w)"))
+ org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "MAYBE(m)" "|" "DONE(d)" "WONTDO(w)"))
+ org-todo-keyword-faces '(("IDEA" . "#d0bf8f") ("MAYBE" . "#d0bf8f") ;; zenburn-yellow-2
+                          ("WONTDO" . "#8cd0d3")) ;; zenburn-blue
  )
 
 (add-hook 'org-load-hook
