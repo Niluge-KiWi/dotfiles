@@ -1348,8 +1348,7 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Temporary files when editing commandline from bash in emacs (C-x C-e in bash)
 ;  are bash scripts
-(setq auto-mode-alist (cons '("/bash-fc-[0-9]*$" . sh-mode) auto-mode-alist))
-
+(add-to-list 'auto-mode-alist '("/bash-fc-[0-9]*$" . sh-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Shell
