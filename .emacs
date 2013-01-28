@@ -713,7 +713,7 @@ Optional depth is for internal use."
 (magit-key-mode-insert-action 'logging "b" "Branch" 'my-magit-log-rev)
 
 ;; fyspell on log
-(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-lang "british")))
+(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-lang "american")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1978,7 +1978,8 @@ Ignores CHAR at point."
 ;;; Dictionnaries
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'flyspell)
-(setq my-languages '("british" "francais"))
+(setq my-languages '("american" "francais"))
+(setq-default ispell-local-dictionary (car my-languages))
 (defun flyspell-lang (&optional lang)
   "Toggle flyspell-mode with the given lang, or prompt with ido."
   (interactive)
