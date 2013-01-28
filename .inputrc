@@ -4,3 +4,45 @@ set skip-completed-text on
 
 #M-q = delete backward
 "\eq":          backward-kill-word
+
+# If set to On, menu completion displays the common prefix of the list of possible completions (which may be empty) before cycling
+# through the list.
+set menu-complete-display-prefix on
+
+# If set to On, readline uses an internal more-like pager to display a screenful of possible completions at a time.
+set page-completions on
+
+# If set to On, readline will display completions with matches sorted horizontally in alphabetical order, rather than down the
+# screen.
+set print-completions-horizontally on
+
+# This alters the default behavior of the completion functions. If set to On, words which have more than one possible completion
+# cause the matches to be listed immediately instead of ringing the bell.
+set show-all-if-ambiguous on
+
+# This alters the default behavior of the completion functions in a fashion similar to show-all-if-ambiguous. If set to On, words
+# which have more than one possible completion without any possible partial completion (the possible completions don't share a common
+# prefix) cause the matches to be listed immediately instead of ringing the bell.
+set show-all-if-unmodified on
+
+# If set to On, this alters the default completion behavior when inserting a single match into the line. It's only active when per‐
+# forming completion in the middle of a word. If enabled, readline does not insert characters from the completion that match charac‐
+# ters after point in the word being completed, so portions of the word following the cursor are not duplicated.
+set skip-completed-text on
+
+
+# ####################################################################################################
+# BINDINGS, to know the console character used when typing something, use cat
+# and change ^[ by \e ou \033
+# ####################################################################################################
+
+# shift-tab does navigate in menu-complete
+"\e[Z":menu-complete
+
+# C-p and C-n to navigate in completion
+"\C-n":menu-complete
+"\C-p":"\e-1\C-n"
+
+# C-s and C-r like in emacs
+"\C-r":reverse-search-history
+"\C-s":forward-search-history
