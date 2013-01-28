@@ -1529,6 +1529,26 @@ sys.path.insert(0, '')"))
 (global-set-key (kbd "C-c C-c") 'compile)
 ;;(global-set-key (kbd "C-M-c C-M-c") 'compile)
 
+;; term color in *Compilation*
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  (toggle-read-only)
+  (let* ((ansi-color-names-vector
+         (vector zenburn-bg+2
+                 "#e37170" zenburn-green
+                 zenburn-yellow zenburn-blue+1
+                 zenburn-magenta zenburn-cyan))
+         (ansi-color-map (ansi-color-make-color-map)))
+    (ansi-color-apply-on-region (point-min) (point-max)))
+  (toggle-read-only))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+(defun my-compile ()
+  (interactive)
+  ;; force non EMACS to bypass CMake check
+  (server-with-environment '("EMACS=nil") '("EMACS")
+    (call-interactively 'compile)))
+(global-set-key (kbd "C-c C-c") 'my-compile)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
