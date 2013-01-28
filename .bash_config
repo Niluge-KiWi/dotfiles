@@ -138,25 +138,44 @@ export HISTFILESIZE=5000
 
 # divers
 alias o='xdg-open'
-alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -latrh'
+alias ll='ls -l'
+alias lll='l --full-time'
 alias lh='ls -latr'
 alias lS='ls -laSrh'
 
-alias g='grep -nriI --color --exclude=*~ --exclude ".#*"'
-alias gg='grep -nrI --color --exclude=*~ --exclude ".#*"'
-alias gs='g --exclude-dir=\.svn'
-alias ggs='gg --exclude-dir=\.svn'
-alias ggg='gg --exclude-dir=\.git'
+alias le='less -RXF'
+
+alias gg='grep -nrI --color --exclude=*~ --exclude ".#*" --exclude-dir=\.git --exclude-dir=\.svn --exclude-dir node_modules'
+alias g='gg -i'
 
 alias f='find . -iname'
+ff()
+{
+    keyword="$1"
+    shift
+    f "*$keyword*" "$@"
+}
+
+function gcmake() { find . -name CMakeLists.txt -exec grep -niIH --color "$@" {} \;; }
+function ggcmake() { find . -name CMakeLists.txt -exec grep -nIH --color "$@" {} \;; }
+
+function gdoc() { find . -name doc.org -exec grep -niIH --color "$@" {} \;; }
+function ggdoc() { find . -name doc.org -exec grep -nIH --color "$@" {} \;; }
 
 alias sum="awk '{sum+=\$1} END {print sum}'"
 
 alias w='wc -l'
 
 alias t='tail -F'
+
+# valgrind
+alias vgdb='valgrind --leak-check=full --num-callers=50 --db-attach=yes'
+alias vxml='valgrind --leak-check=full --num-callers=50 --xml=yes --xml-file=valgrind.memcheck.xml --suppressions=/home/riccardi/git/core-tmp/tools/valgrind/stl.supp'
+alias v='vgdb'
+alias vl='valkyrie -l'
+
 # useless mais bon
 alias jacadi='sudo'
 alias siteuplait='sudo'
