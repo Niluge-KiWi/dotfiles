@@ -1468,6 +1468,19 @@ sys.path.insert(0, '')"))
 	    (setq shift-select-mode nil) ;; to modify dates
 	    ))
 
+;; babel src blocks
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (perl . t)
+   (python . t)
+   (emacs-lisp . t)
+   (gnuplot . t)
+   (R . t)
+   ))
+;; fontify in org mode
+(setq org-src-fontify-natively t)
+
 ;; (setq org-clock-persist 'history)
 ;; (org-clock-persistence-insinuate)
 
