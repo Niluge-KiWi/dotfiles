@@ -166,7 +166,7 @@ alias siteuplait='sudo'
 cd() {
     builtin cd "$@"
     # pas réussi à faire ça en un seul test...
-    if [ -z $(echo "$PWD" | grep "^/usr\|^/lib") ] && [ "$PWD" != "$HOME" ]; then
+    if [ -z $(echo "$PWD" | grep "^/usr\|^/lib") ] && [ "$PWD" != "$HOME" ] && [ "$(ls -1 | wc -l)" -lt 200 ]; then
 	ls
     fi
 }
