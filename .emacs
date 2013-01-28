@@ -100,6 +100,8 @@
                :features multi-eshell)
         nxhtml
         php-mode-improved
+        (:name popwin :type git
+               :url "https://github.com/m2ym/popwin-el.git")
         prolog-el
         pkgbuild-mode
         psvn
@@ -779,6 +781,20 @@ If window-number is invalid, an error is signaled."
         (set-window-buffer other-win buf-this-buf)
         (select-window other-win))))
 (global-set-key (kbd "S-M-SPC") 'buf-move-number)
+
+;; popwin
+(require 'popwin)
+(setq display-buffer-function 'popwin:display-buffer)
+;; (push '(compilation-mode :noselect t) popwin:special-display-config)
+;; (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
+
+(setq popwin:special-display-config
+      '((compilation-mode :stick t)
+        ;; TODO do not kill the grep popup window when following a match (RET)
+        ;;(grep-mode        :stick t :width 0.3 :position right)
+        (" *undo-tree*"   :stick t :width 0.3 :position right)
+        ("*Help*"         :stick t)
+        ("*Completions*" :noselect t)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
