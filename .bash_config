@@ -101,6 +101,10 @@ function ec
 }
 alias e='ec'
 export EDITOR='emacsclient -a "" -c'
+alias vi='ec'
+alias vim='ec'
+alias eg='ec -e "(magit-status \"`pwd`\")"'
+alias mg='eg'
 
 # gdb
 alias gdb='gdb --args'
