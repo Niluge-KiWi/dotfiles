@@ -100,6 +100,7 @@
                :features multi-eshell)
         nxhtml
         php-mode-improved
+        prolog-el
         pkgbuild-mode
         psvn
         (:name rainbow-mode :type elpa)
@@ -1156,6 +1157,14 @@ sys.path.insert(0, '')"))
 (add-to-list 'auto-mode-alist '("srm\\.conf\\'"    . apache-mode))
 (add-to-list 'auto-mode-alist '("access\\.conf\\'" . apache-mode))
 (add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Prolog
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'prolog)
+(setq-default prolog-system 'gnu)
+(add-to-list 'auto-mode-alist '("\\.pl$" . prolog-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
