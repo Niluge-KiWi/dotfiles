@@ -75,6 +75,7 @@
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
+        (:name hide-lines :type emacswiki)
         (:name highlight-parentheses :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
@@ -376,6 +377,13 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (add-hook 'occur-hook
           #'(lambda ()
               (occur-rename-buffer t)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Hide lines
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload 'hide-lines "hide-lines" "Hide lines based on a regexp" t)
+(global-set-key (kbd "C-c h") 'hide-lines)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
