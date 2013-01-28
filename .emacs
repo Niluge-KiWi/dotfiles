@@ -532,6 +532,8 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;visual paren matching
 (show-paren-mode t)
+(setq show-paren-style 'expression)
+(setq show-paren-delay 0)
 
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
