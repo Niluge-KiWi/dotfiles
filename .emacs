@@ -46,8 +46,10 @@
       '(
         apache-mode
         auto-complete
+        auto-complete-clang
         auto-complete-etags
         auto-complete-extension
+        auto-complete-yasnippet
         autopair
         browse-kill-ring
         (:name buffer-move :type http
@@ -1794,8 +1796,24 @@ Ignores CHAR at point."
 ;; auto-complete mode : dropdown menu
 ;; see http://cx4a.org/software/auto-complete/manual.html
 (setq ac-delay 0.1)
+;; correct popup display, but more expensive
+(setq popup-use-optimized-column-computation nil)
 
-;;(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-semantic)))
+
+;; clang for auto-complete
+(require 'auto-complete-clang)
+
+(setq ac-auto-start nil)
+(setq ac-quick-help-delay 0.5)
+
+(ac-set-trigger-key "TAB")
+;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
+
+
+(defun my-ac-cc-mode-setup ()
+  ;; ac-source-semantic
+  (setq ac-sources (append '(ac-source-clang ac-source-yasnippet) ac-sources)))
+(add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
 (add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
 (add-to-list 'ac-modes 'shell-mode)
 
