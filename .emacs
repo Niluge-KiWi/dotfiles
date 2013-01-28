@@ -643,6 +643,8 @@ Optional depth is for internal use."
 (require 'magit-svn)
 (require 'magit-key-mode)
 
+(add-hook 'magit-mode-hook 'turn-on-magit-svn)
+
 ;; no subdirectories for unstaged files
 ;; TODO get them when open subsection on directory
 (setq magit-omit-untracked-dir-contents t)
@@ -659,7 +661,7 @@ Optional depth is for internal use."
 ;; Diff with remote svn head
 (magit-define-command svn-remote-diff ()
   (interactive)
-  (magit-diff "remotes/trunk..HEAD"))
+  (magit-diff "remotes/trunk..HEAD")) ;; TODO fix this: do not hardcode remote
 (magit-key-mode-insert-action 'svn "d" "Remote diff" 'magit-svn-remote-diff)
 
 ;; hide untracked section when opening magit-status
