@@ -31,15 +31,23 @@ if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-# set a fancy prompt (non-color, unless we know we "want" color)
+
+
+# set a fancy prompt (no color if dumb term)
 case "$TERM" in
-xterm-color)
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+dumb)
+    PS1='[${debian_chroot:+($debian_chroot)}\u@\h \w][\A]$ '
     ;;
 *)
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    DEFAULT="\[\033[0m\]"
+    BOLD="\[\033[1m\]"
+    UNDERLINE="\[\033[4m\]"
+    BLUE="\[\033[1;34m\]"
+    LIGHT_BLUE="\[\033[0;34m\]"
+    PS1="[\${debian_chroot:+(\$debian_chroot)}$BLUE\u$DEFAULT@$UNDERLINE\h$DEFAULT \w][\A](\$?)\$ "
     ;;
 esac
+export PS1
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
