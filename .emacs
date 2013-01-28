@@ -1490,6 +1490,9 @@ sys.path.insert(0, '')"))
 ;; C-x n w to un-narrow
 (put 'narrow-to-region 'disabled nil)
 
+;; disable end-of-visual-line in org-mode
+(setq line-move-visual nil)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Google-weather (and mode for org)
