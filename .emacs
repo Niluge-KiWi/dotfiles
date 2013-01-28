@@ -28,7 +28,7 @@
        (expand-file-name "~/.emacs.d/elpa/package.el"))
     (package-initialize)))
 ;; several archives for elpa
-(setq package-archives '(("ELPA" . "http://tromey.com/elpa/") 
+(setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")))
 
@@ -63,8 +63,6 @@
         el-get
         (:name erc-view-log :type git
                :url "git@github.com:Niluge-KiWi/erc-view-log.git")
-        (:name espresso :type http
-               :url "http://download-mirror.savannah.gnu.org/releases/espresso/espresso.el")
         (:name expand-region :type elpa)
         (:name fold-dwim :type http
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
@@ -72,6 +70,8 @@
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
         (:name highlight-parentheses :type elpa)
+        (:name js2 :type git
+               :url "https://github.com/mooz/js2-mode.git")
         (:name keyfreq :type http
                :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
@@ -261,7 +261,7 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 				 (nth 3 parsed)
 			   (apply 'tramp-make-tramp-file-name
 					  (append (list tramp-default-method nil) (cddr parsed))))
-		   
+
 		   ;; As root
 		   (if parsed
 			   (apply 'tramp-make-tramp-file-name
@@ -868,9 +868,9 @@ or list all recent files if prefixed"
 ;; (load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
 ;; Choose one level of features
 (semantic-load-enable-minimum-features)
-;; (semantic-load-enable-code-helpers) 
+;; (semantic-load-enable-code-helpers)
 ;; (semantic-load-enable-gaudy-code-helpers)
-;; (semantic-load-enable-excessive-code-helpers) 
+;; (semantic-load-enable-excessive-code-helpers)
 
 ;; This enables parsing of header files.
 (setq semantic-idle-work-update-headers-flag t)
@@ -1060,9 +1060,11 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Javascript
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(autoload #'espresso-mode "espresso" "Start espresso-mode" t)
-(add-to-list 'auto-mode-alist '("\\.js$" . espresso-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . espresso-mode))
+(autoload 'js2-mode "js2-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
+
+(setq js2-enter-indents-newline t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1660,7 +1662,7 @@ Ignores CHAR at point."
 			(add-hook 'ediff-before-setup-hook
 					  (lambda ()
 						(setq ediff-saved-window-configuration (current-window-configuration))))
-			
+
 			(let ((restore-window-configuration
 				   (lambda ()
 					 (set-window-configuration ediff-saved-window-configuration))))
