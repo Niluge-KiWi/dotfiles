@@ -72,6 +72,8 @@
         (:name highlight-parentheses :type elpa)
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
+        (:name js2-highlight-vars :type http
+               :url "http://mihai.bazon.net/projects/editing-javascript-with-emacs-js2-mode/js2-highlight-vars-mode/js2-highlight-vars.el")
         (:name keyfreq :type http
                :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
@@ -1079,6 +1081,10 @@ sys.path.insert(0, '')"))
       (setq ad-return-value (js2-parse-assign-expr))
     ad-do-it))
 (ad-activate 'js2-parse-statement)
+
+(require 'js2-highlight-vars)
+(add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nXhtml
