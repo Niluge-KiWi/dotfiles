@@ -156,6 +156,7 @@ alias sum="awk '{sum+=\$1} END {print sum}'"
 
 alias w='wc -l'
 
+alias t='tail -F'
 # useless mais bon
 alias jacadi='sudo'
 alias siteuplait='sudo'
