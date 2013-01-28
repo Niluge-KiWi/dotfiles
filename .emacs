@@ -64,6 +64,8 @@
         (:name erc-view-log :type git
                :url "git@github.com:Niluge-KiWi/erc-view-log.git")
         (:name expand-region :type elpa)
+        (:name flymakemsg :type http
+               :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
         (:name fold-dwim :type http
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
                :features fold-dwim)
@@ -74,6 +76,8 @@
                :url "https://github.com/mooz/js2-mode.git")
         (:name js2-highlight-vars :type http
                :url "http://mihai.bazon.net/projects/editing-javascript-with-emacs-js2-mode/js2-highlight-vars-mode/js2-highlight-vars.el")
+        (:name js-hint :type git
+               :url "https://github.com/daleharvey/jshint-mode.git")
         (:name keyfreq :type http
                :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
         magit
@@ -1085,11 +1089,23 @@ sys.path.insert(0, '')"))
 (require 'js2-highlight-vars)
 (add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
 
+;; jshint flymake
+(require 'flymake-jshint)
+(add-hook 'js2-mode-hook
+          (lambda () (flymake-mode t)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nXhtml
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq mumamo-background-colors nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; flymake
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; flymakemsg
+(require 'flymakemsg)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
