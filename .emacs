@@ -97,6 +97,7 @@
         (:name wuxch-dired-copy-paste :type emacswiki
                :features wuxch-dired-copy-paste)
         yaml-mode
+        yasnippet
         ))
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
@@ -1776,6 +1777,14 @@ Ignores CHAR at point."
   (my-dabbrev-expand)
   nil)
 (setq completion-at-point-functions '(my-dabbrev-expand-and-nil))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; YASnippet
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'yasnippet)
+(yas/global-mode 1)
+(setq yas/trigger-key nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
