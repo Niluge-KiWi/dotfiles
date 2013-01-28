@@ -212,6 +212,18 @@
 ;;(setq mouse-yank-at-point t)
 (setq mouse-highlight t)
 (mouse-avoidance-mode 'jump)
+;; TODO better fix
+(defun mouse-avoidance-point-position ()
+  "Return the position of point as (FRAME X . Y).
+Analogous to `mouse-position'."
+  (let* ((inhibit-point-motion-hooks t)
+         (edges (window-inside-edges))
+	(x-y (posn-x-y (posn-at-point))))
+    (cons (selected-frame)
+	  (cons (+ (car edges)
+		   (/ (car x-y) (frame-char-width)))
+		(+ (car (cdr edges))
+		   (/ (cdr x-y) (frame-char-height)))))))
 ;; control mouse clipboard. In particular, select-active-regions, activated in 23.2, sucks.
 ;; selection by mouse is the window selection
 (setq select-active-regions 'only)
