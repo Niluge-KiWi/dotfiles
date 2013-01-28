@@ -650,6 +650,12 @@ Optional depth is for internal use."
 (setq magit-omit-untracked-dir-contents t)
 ;; no buffer saving when magit-status
 (setq magit-save-some-buffers nil)
+;; use ido in prompts
+(setq magit-completing-read-function 'magit-ido-completing-read)
+;; show process buffer for long operations
+(setq magit-process-popup-time 5)
+;; magit-status: switch to buffer instead of pop to buffer
+(setq magit-status-buffer-switch-function 'switch-to-buffer)
 ;; M-arrows is for window-switching
 (define-key magit-mode-map (kbd "<M-left>") nil)
 ;; "u" and "U" are already taken by unstage...
@@ -692,20 +698,22 @@ Optional depth is for internal use."
 	  (recenter 0))))
 (add-hook 'magit-log-edit-mode-hook 'my-magit-display-diff)
 
-(defun my-magit-display-log-ranged (log-range &rest extra-args)
-  "Like magit-display-log-ranged, but with log-range parameter."
+(defun my-magit-log-rev (&rest extra-args)
+  "Like magit-log-ranged, but only specify end of rev-range"
   (interactive)
-  (let* ((topdir (magit-get-top-dir default-directory))
-		 (args (nconc (list (magit-rev-range-to-git log-range))
+  (let* ((at (magit-read-rev "Log" "HEAD"))
+	 (topdir (magit-get-top-dir default-directory))
+	 (args (nconc (list (magit-rev-to-git at))
                       magit-custom-options
                       extra-args)))
-    (switch-to-buffer magit-log-buffer-name)
-    (magit-mode-init topdir 'log #'magit-refresh-log-buffer log-range
-					 "--pretty=oneline" args)
+    (magit-buffer-switch magit-log-buffer-name)
+    (magit-mode-init topdir 'log #'magit-refresh-log-buffer (concat "" at)
+		     "--pretty=oneline" args)
     (magit-log-mode t)))
+(magit-key-mode-insert-action 'logging "b" "Branch" 'my-magit-log-rev)
 
 ;; fyspell on log
-(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-mode 1)))
+(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-lang "british")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
