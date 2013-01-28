@@ -1066,6 +1066,19 @@ sys.path.insert(0, '')"))
 
 (setq js2-enter-indents-newline t)
 
+;; patch for json
+(defadvice js2-parse-statement (around json)
+  (if (and (= tt js2-LC)
+           (eq (+ (save-excursion
+                    (goto-char (point-min))
+                    (back-to-indentation)
+                    (while (eolp)
+                      (next-line)
+                      (back-to-indentation))
+                    (point)) 1) js2-ts-cursor))
+      (setq ad-return-value (js2-parse-assign-expr))
+    ad-do-it))
+(ad-activate 'js2-parse-statement)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nXhtml
