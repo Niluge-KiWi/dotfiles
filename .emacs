@@ -72,6 +72,8 @@
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
         (:name highlight-parentheses :type elpa)
+        (:name jade :type git
+               :url "https://github.com/brianc/jade-mode.git")
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name js2-highlight-vars :type http
@@ -1093,6 +1095,13 @@ sys.path.insert(0, '')"))
 (require 'flymake-jshint)
 (add-hook 'js2-mode-hook
           (lambda () (flymake-mode t)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Jade
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'jade-mode)
+(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
