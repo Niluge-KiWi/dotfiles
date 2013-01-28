@@ -1515,6 +1515,7 @@ sys.path.insert(0, '')"))
 	      (delete-windows-on buf)
 	      (bury-buffer buf)))))
 
+
 ;;misc compilation settings
 (setq-default
  compile-command "make"
