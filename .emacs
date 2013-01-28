@@ -71,6 +71,9 @@
                :features fold-dwim)
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
+        (:name grep-a-lot :type git
+               :url "https://github.com/emacsmirror/grep-a-lot.git"
+               :features grep-a-lot)
         (:name highlight-parentheses :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
