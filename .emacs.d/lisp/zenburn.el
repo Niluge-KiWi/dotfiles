@@ -112,7 +112,10 @@
 
 (defvar zenburn-fg "#dcdccc")
 
+(defvar zenburn-bg-2 "#1f1f1f")
 (defvar zenburn-bg-1 "#2b2b2b")
+(defvar zenburn-bg-0-2 "#2f2f2f")
+(defvar zenburn-bg-0-1 "#353535")
 (defvar zenburn-bg "#3f3f3f")
 (defvar zenburn-bg+1 "#4f4f4f")
 (defvar zenburn-bg+2 "#5f5f5f")
@@ -479,7 +482,7 @@ static char *gnus-pointer[] = {
 	'(highlight ((t (:underline t))))
 	'(paren ((t (:inherit zenburn-lowlight-1))))
 	'(show-paren-mismatch ((t (:inherit font-lock-warning))))
-	`(show-paren-match ((t (:foreground ,zenburn-blue-1))))
+	`(show-paren-match ((t (:background ,zenburn-bg-0-1))))
 	'(match ((t (:weight bold))))
 
 	`(button ((t (:foreground ,zenburn-yellow :underline t))))
@@ -595,10 +598,11 @@ static char *gnus-pointer[] = {
 	'(diff-hunk-header ((t (:inherit zenburn-highlight-subtle))))
 
 	'(diff-added ((t (:inherit zenburn-primary-3))))
-	'(diff-removed ((t (:foreground "#d9430b"))))
+	'(diff-removed ((t (:foreground "#0b9ed4"))))
 	'(diff-context ((t (:inherit font-lock-comment))))
 	'(diff-refine-change ((t (:inherit zenburn-background-2))))
 
+	'(ecb-default-highlight ((t (:background "#75507b"))))
 
 	'(ediff-current-diff-A ((t (:background "#3e473e"))))
 	'(ediff-current-diff-B ((t (:background "#47453e"))))
