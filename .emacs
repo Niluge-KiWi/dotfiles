@@ -930,6 +930,22 @@ or list all recent files if prefixed"
 (load-library "yank-indent")
 (add-to-list 'yank-indent-modes 'python-mode)
 
+;; ;;highlight operators
+;; ;;(defvar font-lock-operator-face 'font-lock-operator-face)
+;; (defface font-lock-operator-face
+;;   '((t (:inherit 'font-lock-function-name-face)))
+;;   "Basic face for highlighting operators."
+;;   :group 'font-lock-faces)
+
+;; ;; c family
+;; (defun highlight-operators-c-family()
+;;   (font-lock-add-keywords
+;;    nil '(("[-|!.+=&/%*,<>:^~$]" . font-lock-operator-face))) t)
+;; (add-hook 'c-mode-common-hook 'highlight-operators-c-family)
+;; ;; lisp
+;; (font-lock-add-keywords 'emacs-lisp-mode
+;;                         '(("['#,`]" . font-lock-operator-face)) t)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Cedet
