@@ -353,12 +353,6 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq frame-title-format my-title)
 (setq icon-title-format my-title)
 
-;; occur: force unique name
-(add-hook 'occur-hook
-          #'(lambda ()
-              (occur-rename-buffer t)))
-
-
 ;; ;;backups/autosaves : no autosaves, and backups in one centralised place
 ;; (setq auto-save-default nil)
 ;; (defvar backup-dir "~/.emacsbackups/")
@@ -370,7 +364,11 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;; TODO use own pastebin
 (require 'pastebin)
 
-;; occure: force unique name
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Occur
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; occur: force unique name
 (add-hook 'occur-hook
           #'(lambda ()
               (occur-rename-buffer t)))
@@ -1733,12 +1731,7 @@ Ignores CHAR at point."
 (define-key isearch-mode-map (kbd "M-z") 'zap-to-isearch)
 
 ;;C-o in isearch brings up every hit
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda ()
-    (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp isearch-string
-	       (regexp-quote isearch-string))))))
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 ;; isearch ends at the beginning of word
 (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
