@@ -69,6 +69,7 @@
         (:name fold-dwim :type http
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
                :features fold-dwim)
+        (:name gnuplot :type elpa)
         (:name google-weather :type git
                :url "git://git.naquadah.org/google-weather-el.git")
         (:name grep-a-lot :type git
