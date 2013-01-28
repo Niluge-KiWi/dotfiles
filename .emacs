@@ -1125,6 +1125,10 @@ or list all recent files if prefixed"
   'c-context-line-break)
 (define-key c-mode-base-map (kbd "M-q") nil)
 
+;; subword mode
+(add-hook 'c-mode-common-hook
+          (lambda () (c-subword-mode 1)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; C++
