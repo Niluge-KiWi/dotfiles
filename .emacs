@@ -375,6 +375,10 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;; TODO use own pastebin
 (require 'pastebin)
 
+;; hl current line everywhere
+(global-hl-line-mode t)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Occur
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
