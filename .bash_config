@@ -71,6 +71,22 @@ fi
 # emacs
 function emacs-client
 {
+    # if only one argument, and is a grep result, open file on the good line
+    if [ $# -eq 1 ]; then
+        local fileline="$1"
+        if echo "$fileline" | grep -q '.*:[0-9]\+:.*$'; then
+            local file="$(echo "$fileline" | awk -F: '{print $1'})"
+            local line="$(echo "$fileline" | awk -F: '{print $(NF-1)'})"
+            emacsclient -a "" -c +$line "$file"
+            return
+        fi
+        if echo "$fileline" | grep -q '.*:[0-9]\+$'; then
+            local file="$(echo "$fileline" | awk -F: '{print $1'})"
+            local line="$(echo "$fileline" | awk -F: '{print $NF'})"
+            emacsclient -a "" -c +$line "$file"
+            return
+        fi
+    fi
     emacsclient -a "" -c "$@"
 }
 function ec
