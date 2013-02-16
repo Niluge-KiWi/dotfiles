@@ -2211,7 +2211,7 @@ If html is not nil, then disable interpretation of html code."
 							  title message "emacs"))))
 (defun notify (title message)
   "Notify user by graphical display"
-  (notify-raw title message t t))
+  (notify-raw title message nil t))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
