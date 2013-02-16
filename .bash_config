@@ -218,6 +218,8 @@ $ {
 '
 }
 
+alias boobank='boobank -n -1'
+
 
 # own bin
 export PATH=$HOME/bin:$PATH
