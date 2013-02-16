@@ -293,8 +293,10 @@ erc-modified-channels-alist. Should be executed on window change."
 (defun irc-reco ()
   "Kill all server buffers, and connect again"
   (interactive)
-  (irc-deco)
+  (when (erc-server-process-alive)
+    (irc-deco))
   (irc))
+
 
 ;;;--------------------
 ;;; Channel change commands
