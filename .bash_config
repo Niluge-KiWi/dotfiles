@@ -99,6 +99,11 @@ function ec
         emacs-client "$@" > /dev/null &
     fi
 }
+function ecs
+{
+    file=$(readlink -f "$1")
+    ec "/sudo::$file"
+}
 alias e='ec'
 export EDITOR='emacsclient -a "" -c'
 alias vi='ec'
