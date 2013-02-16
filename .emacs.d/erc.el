@@ -630,3 +630,13 @@ Use this defun with `erc-insert-modify-hook'."
     (text-read-only (goto-char (point-max))
                     (recenter (window-body-height)))))
 (define-key erc-mode-map (kbd "SPC") 'my-erc-space-dwim)
+
+
+;;;--------------------
+;;; ZNC playback
+;;;--------------------
+(defun my-znc-playback-to-erc-logs ()
+  (interactive)
+  "Convert playback from znc to erc logs."
+  (while (re-search-forward (format "\\(<%s>\\) \\([A-Z][a-z]\\{2\\} [0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}\\)" erc-valid-nick-regexp) nil t)
+    (replace-match "\\2 \\1")))
