@@ -191,17 +191,28 @@ This function is a possible value for `erc-generate-log-file-name-function'."
   "Open current channel logfile."
   (interactive)
   (find-file (erc-current-logfile))
-  (end-of-buffer))
+  (goto-char (point-max))
+  (current-buffer))
 
 (defun erc-browse-log-dedi ()
   "rsync & browse dedi logfile."
   (interactive)
-  (let ((erc-log-channels-directory (concat erc-log-channels-directory "-dedi")))
+  (let* ((erc-log-channels-directory (concat erc-log-channels-directory "-dedi"))
+         (process (start-process-shell-command  "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "~/scripts/erc-logs-dedi-rsync.sh"))
+         (log-buffer (erc-browse-log)))
+    (with-current-buffer (process-buffer process)
+      (make-local-variable 'erc-view-log-buffer)
+      (setq erc-view-log-buffer log-buffer))
     (set-process-sentinel
-     (start-process-shell-command  "erc-logs-dedi-rsync" "*erc-browse-log-dedi-rsync-process*" "~/scripts/erc-logs-dedi-rsync.sh")
+     process
      '(lambda (process event)
-        (notify "ERC dedi rsync" event)))
-    (erc-browse-log)))
+        (notify "ERC dedi rsync" event)
+        (when (string= event "finished\n")
+          (with-current-buffer
+              (with-current-buffer (process-buffer process)
+                erc-view-log-buffer)
+            (erc-view-log-reload-file)
+            (goto-char (point-max))))))))
 
 (defun erc-browse-log-or-dedi (&optional arg)
   "Open current channel logfile.
