@@ -71,8 +71,6 @@
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
                :features fold-dwim)
         (:name gnuplot :type elpa)
-        (:name google-weather :type git
-               :url "git://git.naquadah.org/google-weather-el.git")
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -1507,12 +1505,6 @@ sys.path.insert(0, '')"))
 ;; disable end-of-visual-line in org-mode
 (setq line-move-visual nil)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Google-weather (and mode for org)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'google-weather)
-(require 'org-google-weather)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
