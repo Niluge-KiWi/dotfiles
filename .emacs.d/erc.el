@@ -83,7 +83,7 @@ Activity means that there was no user input in the last 10 seconds."
       erc-prompt ">"
       erc-minibuffer-ignored t
       erc-query-display 'buffer
-	  erc-join-buffer 'bury
+      erc-join-buffer 'bury
       erc-auto-query 'bury
       erc-current-nick-highlight-type 'all
       erc-interpret-mirc-color t
@@ -100,7 +100,7 @@ Activity means that there was no user input in the last 10 seconds."
       ;;329 : chan created on
       ;;324 : chan modes
       ;;333 : X set the topic
-	  ;;332 : welcome/topic messages
+      ;;332 : welcome/topic messages
       erc-track-exclude-types '("JOIN" "NICK" "PART" "QUIT" "305" "306" "333" "353" "324" "329" "MODE" "TOPIC" "332")
       erc-track-position-in-mode-line t
       erc-track-showcount t
@@ -109,8 +109,8 @@ Activity means that there was no user input in the last 10 seconds."
       ;; only fontify indicator on HLs
       erc-track-faces-priority-list
       '((erc-nick-default-face erc-current-nick-face)
-	erc-current-nick-face erc-keyword-face
-	erc-default-face)
+        erc-current-nick-face erc-keyword-face
+        erc-default-face)
       erc-timestamp-only-if-changed-flag nil
       erc-timestamp-format "%Y %h %d %H:%M:%S "
       erc-pcomplete-order-nickname-completions t
@@ -138,12 +138,12 @@ Activity means that there was no user input in the last 10 seconds."
   (let ((pointbefore (point)))
     (when (> (point) (erc-beg-of-input-line))
       (let ((last-command (if (eq last-command 'erc-complete-word)
-			      'pcomplete
-			    last-command)))
-	(call-interactively 'pcomplete)
-	(if (> (point) pointbefore)
-	    t
-	  nil)))))
+                              'pcomplete
+                            last-command)))
+        (call-interactively 'pcomplete)
+        (if (> (point) pointbefore)
+            t
+          nil)))))
 (setq erc-complete-functions '(erc-pcomplete my-dabbrev-expand))
 
 ;; TODO setup a source for auto-complete?
@@ -156,8 +156,8 @@ Activity means that there was no user input in the last 10 seconds."
 (add-hook 'erc-insert-modify-hook 'erc-put-color-on-nick)
 ;; special colors for some people
 (setq erc-nick-color-alist '(("Nick1" . "blue")
-			     ("Nick2" . "green")
-			     ))
+                             ("Nick2" . "green")
+                             ))
 
 
 ;;;--------------------
@@ -178,11 +178,11 @@ This results in a file name of the form network-(#channel|nick).log.
 This function is a possible value for `erc-generate-log-file-name-function'."
   (require 'erc-networks)
   (let* ((network (or (with-current-buffer buffer (erc-network-name)) server))
-	 (file (concat
-		network
-		"-"
-		(or target network)
-		".log")))
+         (file (concat
+                network
+                "-"
+                (or target network)
+                ".log")))
     ;; we need a make-safe-file-name function.
     (convert-standard-filename file)))
 (setq erc-generate-log-file-name-function 'erc-generate-log-file-name-like-xchat)
@@ -225,7 +225,6 @@ With prefix, rsync & browse dedi logfile."
     (erc-browse-log-dedi)))
 
 
-
 ;;;--------------------
 ;;; Unread messages bar
 ;;;--------------------
@@ -241,17 +240,17 @@ With prefix, rsync & browse dedi logfile."
 erc-modified-channels-alist. Should be executed on window change."
        (interactive)
        (let* ((info (assq (current-buffer) erc-modified-channels-alist))
-	      (count (cadr info)))
-	 (if (and info (> count erc-bar-threshold))
-	     (save-excursion
-	       (end-of-buffer)
-	       (when (erc-bar-move-back count)
-		 (let ((inhibit-field-text-motion t))
-		   (move-overlay erc-bar-overlay
-				 (line-beginning-position)
-				 (line-end-position)
-				 (current-buffer)))))
-	   (delete-overlay erc-bar-overlay))))
+              (count (cadr info)))
+         (if (and info (> count erc-bar-threshold))
+             (save-excursion
+               (end-of-buffer)
+               (when (erc-bar-move-back count)
+                 (let ((inhibit-field-text-motion t))
+                   (move-overlay erc-bar-overlay
+                                 (line-beginning-position)
+                                 (line-end-position)
+                                 (current-buffer)))))
+           (delete-overlay erc-bar-overlay))))
 
      (defvar erc-bar-threshold 1
        "Display bar when there are more than erc-bar-threshold unread messages.")
@@ -261,12 +260,12 @@ erc-modified-channels-alist. Should be executed on window change."
      (overlay-put erc-bar-overlay 'face '(:underline "black"))
      ;;put the hook before erc-modified-channels-update
      (defadvice erc-track-mode (after erc-bar-setup-hook
-				      (&rest args) activate)
+                                      (&rest args) activate)
        ;;remove and add, so we know it's in the first place
        (remove-hook 'window-configuration-change-hook 'erc-bar-update-overlay)
        (add-hook 'window-configuration-change-hook 'erc-bar-update-overlay))
      (add-hook 'erc-send-completed-hook (lambda (str)
-					  (erc-bar-update-overlay)))))
+                                          (erc-bar-update-overlay)))))
 
 
 ;;;--------------------
@@ -394,11 +393,11 @@ Blinking, if in erc-tray-blink-channels."
 						(when (string-match reg (buffer-name buf)
 											(setq modified-notify-list
 												  (remove el modified-notify-list)))))
-						erc-tray-ignored-channels)
+                      erc-tray-ignored-channels)
 				;; add buff to modified-blink-list if channel can blink
 				(mapc (lambda (reg)
 						(when (string-match reg (buffer-name buf))
-						  (setq modified-blink-list 
+						  (setq modified-blink-list
 								(cons el modified-blink-list))))
 					  erc-tray-blink-channels))))
 		  erc-modified-channels-alist)
@@ -418,7 +417,7 @@ Blinking, if in erc-tray-blink-channels."
 (defun erc-notify-if-hl (matched-type nick msg)
   "Notify whenever someone highlights you and you're away"
   (when (and (eq matched-type 'current-nick)
-	     (not (buffer-focus-p)))
+             (not (buffer-focus-p)))
     (notify (format "HL \<%s\>" (erc-extract-nick nick)) msg)))
 ;;notify if away and highlighted
 (add-hook 'erc-text-matched-hook 'erc-notify-if-hl)
@@ -428,22 +427,22 @@ Blinking, if in erc-tray-blink-channels."
 (defun my-notify-JOIN (proc parsed)
   "Display notification of user connections on bitlbee"
   (let ((nick (erc-extract-nick (erc-response.sender parsed)))
-	(chan (erc-response.contents parsed)))
+        (chan (erc-response.contents parsed)))
     (when (string= chan im-gateway-channel-name)
       (notify (format "%s s'est connecté" nick))))
   nil)
 ;;notify if someone joins on bitlbee
-;(add-hook 'erc-server-JOIN-functions 'my-notify-JOIN)
+                                        ;(add-hook 'erc-server-JOIN-functions 'my-notify-JOIN)
 
 (defun my-notify-PRIVMSG (proc parsed)
   "Popup whenever someone privmsgs you and you're not seeing it"
   (let ((nick (car (erc-parse-user (erc-response.sender parsed))))
-	(target (car (erc-response.command-args parsed)))
-	(msg (erc-response.contents parsed)))
+        (target (car (erc-response.command-args parsed)))
+        (msg (erc-response.contents parsed)))
 
     (when (and (string= target (erc-current-nick))
-	       (not (buffer-focus-p))
-	       (not (erc-is-message-ctcp-and-not-action-p msg)))
+               (not (buffer-focus-p))
+               (not (erc-is-message-ctcp-and-not-action-p msg)))
       (notify (format "PM \<%s\>" nick) msg)))
   nil)
 ;;notify if away and pmed
@@ -460,7 +459,7 @@ Blinking, if in erc-tray-blink-channels."
 
 (defun my-notify-in-privmsg-JOIN (proc parsed)
   (let* ((nick (erc-extract-nick (erc-response.sender parsed)))
-	 (buff (erc-get-buffer nick proc)))
+         (buff (erc-get-buffer nick proc)))
     (when buff
       (erc-display-message
        parsed 'notice buff
@@ -470,7 +469,7 @@ Blinking, if in erc-tray-blink-channels."
 
 (defun my-notify-in-privmsg-QUIT (proc parsed)
   (let* ((nick (erc-extract-nick (erc-response.sender parsed)))
-	 (buff (erc-get-buffer nick proc)))
+         (buff (erc-get-buffer nick proc)))
     (when buff
       (erc-display-message
        parsed 'notice buff
@@ -487,27 +486,27 @@ Blinking, if in erc-tray-blink-channels."
   (interactive)
   (let ((completion-ignore-case t))
     (let ((server (erc-server-buffer))
-	  (target (completing-read "Query sur: "
-				   (erc-get-server-nickname-alist)
-				   nil ;;no predicate, require match
-				   t))
-	  (erc-join-buffer 'buffer))
+          (target (completing-read "Query sur: "
+                                   (erc-get-server-nickname-alist)
+                                   nil ;;no predicate, require match
+                                   t))
+          (erc-join-buffer 'buffer))
       (erc-query target server))))
 (defun erc-whois-prompt ()
   "Prompt for someone to do whois on"
   (interactive)
   (let ((completion-ignore-case t))
     (let ((target (completing-read "Whois sur: "
-				   (erc-get-server-nickname-alist)
-				   nil ;;no predicate, require match
-				   t)))
+                                   (erc-get-server-nickname-alist)
+                                   nil ;;no predicate, require match
+                                   t)))
       (erc-cmd-WHOIS target))))
 
 (defun erc-names-prompt ()
   "Get names of channel, either using /names or blist if using bitlbee"
   (interactive)
   (if (or (string-match im-gateway-channel-name (buffer-name))
-	  (string-match "&bitlbee" (buffer-name)))
+          (string-match "&bitlbee" (buffer-name)))
       (erc-send-message "root: blist")
     (erc-channel-names)))
 
@@ -531,13 +530,13 @@ Blinking, if in erc-tray-blink-channels."
   (interactive)
   (let ((name (buffer-name (current-buffer))))
     (if (member name
-		erc-track-exclude)
-	(progn
-	  (setq erc-track-exclude (remove name erc-track-exclude))
-	  (message "Tracking on"))
+                erc-track-exclude)
+        (progn
+          (setq erc-track-exclude (remove name erc-track-exclude))
+          (message "Tracking on"))
       (progn
-	(add-to-list 'erc-track-exclude name)
-	(message "Tracking off")))))
+        (add-to-list 'erc-track-exclude name)
+        (message "Tracking off")))))
 
 
 ;;;--------------------
