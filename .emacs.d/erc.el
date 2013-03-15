@@ -442,7 +442,8 @@ Blinking, if in erc-tray-blink-channels."
 
     (when (and (string= target (erc-current-nick))
                (not (buffer-focus-p))
-               (not (erc-is-message-ctcp-and-not-action-p msg)))
+               (not (erc-is-message-ctcp-and-not-action-p msg))
+               (not (string= nick "*status")))
       (notify (format "PM \<%s\>" nick) msg)))
   nil)
 ;;notify if away and pmed
