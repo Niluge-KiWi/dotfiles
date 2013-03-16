@@ -51,7 +51,6 @@
         auto-complete-etags
         auto-complete-extension
         auto-complete-yasnippet
-        autopair
         browse-kill-ring
         (:name buffer-move :type http
                :url "https://raw.github.com/martialboniou/emacs-revival/master/buffer-move.el")
@@ -560,34 +559,6 @@ Optional depth is for internal use."
   (lambda ()
     (highlight-parentheses-mode t)))
 (global-highlight-parentheses-mode t)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Autopair
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'autopair)
-(autopair-global-mode t) ;; enable autopair in all buffers
-
-(setq autopair-blink nil) ;; no blink
-(setq autopair-autowrap t) ;; wrap region with character to insert
-
-;; not in ERC
-(add-hook 'erc-mode-hook
-	  #'(lambda () (setq autopair-dont-activate t)))
-;; pair $ correctly
-(add-hook 'LaTeX-mode-hook
-          #'(lambda ()
-              (modify-syntax-entry ?$ "\"")))
-;; fix issue with highlight-parentheses-mode
-(add-hook 'highlight-parentheses-mode-hook
-          '(lambda ()
-             (setq autopair-handle-action-fns
-                   (append
-					(if autopair-handle-action-fns
-						autopair-handle-action-fns
-					  '(autopair-default-handle-action))
-					'((lambda (action pair pos-before)
-						(hl-paren-color-update)))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
