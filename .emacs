@@ -99,6 +99,7 @@
                :url "git@github.com:Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
         nxhtml
+        (:name org :type elpa)
         php-mode-improved
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
@@ -1420,9 +1421,10 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'org-install)
+(require 'org)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 (setq org-startup-indented t)
+(require 'org-remember)
 (org-remember-insinuate)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
