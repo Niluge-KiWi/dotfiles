@@ -126,6 +126,13 @@ Activity means that there was no user input in the last 10 seconds."
 
 
 ;;;--------------------
+;;; SSL/TLS
+;;;--------------------
+(require 'tls)
+(setq tls-program '("gnutls-cli -p %p %h"))
+
+
+;;;--------------------
 ;;; Auto completion
 ;;;--------------------
 ;;-------nicks then dabbrev
@@ -292,7 +299,7 @@ erc-modified-channels-alist. Should be executed on window change."
 (defun irc ()
   "Connect to IRC."
   (interactive)
-  (mapcar (lambda (x) (eval `(erc ,@x))) my-irc-connections))
+  (mapcar (lambda (x) (eval `(erc-tls ,@x))) my-irc-connections))
 
 (defun irc-deco ()
   "Kill all server buffers"
