@@ -658,3 +658,15 @@ Use this defun with `erc-insert-modify-hook'."
   "Convert playback from znc to erc logs."
   (while (re-search-forward (format "\\(<%s>\\) \\([A-Z][a-z]\\{2\\} [0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}\\)" erc-valid-nick-regexp) nil t)
     (replace-match "\\2 \\1")))
+
+
+;;;--------------------
+;;; CLOSED: display a warning
+;;;--------------------
+(defun erc-warning-disconnected ()
+  "When sending message while disconnected, display a warning"
+  (goto-char (point-min))
+  (if (not erc-server-connected)
+      (insert "WARNING: Connection CLOSED... ")))
+(add-hook 'erc-send-modify-hook 'erc-warning-disconnected)
+
