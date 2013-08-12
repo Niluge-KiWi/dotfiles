@@ -1,7 +1,19 @@
-(require 'erc)
 ;;; ERC conf of Thomas Riccardi. Homepage : http://github.com/Niluge-KiWi/dotfiles
 
 ;; Can be viewed in outline mode
+
+;;;--------------------
+;;; ERC Modules
+;;;--------------------
+; needs to be set before (require 'erc) otherwise default modules not set here will still be active (erc-fill-mode)
+(setq erc-modules '(autojoin button completion
+                             irccontrols list
+                             log match menu move-to-prompt
+                             netsplit networks noncommands
+                             readonly ring scrolltobottom
+                             services stamp spelling track
+                             autoaway truncate))
+(require 'erc)
 
 
 ;;;--------------------
@@ -60,13 +72,6 @@ Activity means that there was no user input in the last 10 seconds."
 ;;;--------------------
 ; specific settings for IM gateways : minbif or bitlbee
 (setq im-gateway-channel-name "&friends")
-; erc general conf
-(setq erc-modules '(autojoin button completion
-                             irccontrols list
-                             log match menu move-to-prompt
-                             netsplit networks noncommands
-                             readonly ring services stamp
-                             spelling track autoaway truncate))
 
 ;;301 : "x is away"
 ;;305 306 : away messages
