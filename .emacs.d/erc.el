@@ -106,7 +106,7 @@ Activity means that there was no user input in the last 10 seconds."
 	erc-current-nick-face erc-keyword-face
 	erc-default-face)
       erc-timestamp-only-if-changed-flag nil
-      erc-timestamp-format "%h %d %H:%M:%S "
+      erc-timestamp-format "%Y %h %d %H:%M:%S "
       erc-pcomplete-order-nickname-completions t
       erc-hide-timestamps nil
       erc-insert-timestamp-function 'erc-insert-timestamp-left
