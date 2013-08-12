@@ -270,41 +270,18 @@ erc-modified-channels-alist. Should be executed on window change."
 ;;;--------------------
 ;;; Connect
 ;;;--------------------
-(defun assoc-regexp (key list)
-  "Like assoc-string, but returns whenever there is a match"
-  (if (null list) nil
-    (if (string-match (caar list) key)
-	(car list)
-      (assoc-regexp key (cdr list)))))
-
-(defvar my-irc-server-nick-alist '()
-  "alist irc server nick")
-(defvar my-irc-server-port-alist '()
-  "alist irc server port")
-(defvar my-irc-server-pass-alist '()
-  "alist irc server pass")
-(defvar my-irc-servers '()
-  "list irc server")
-
-(defun get-nick-for-server (serv)
-  (or (cadr (assoc-regexp serv my-irc-server-nick-alist))
-      erc-nick))
-(defun get-port-for-server (serv)
-  (or (cadr (assoc-regexp serv my-irc-server-port-alist))
-      6667))
-(defun get-pass-for-server (serv)
-  (or (cadr (assoc-regexp serv my-irc-server-pass-alist))
-      ""))
+(defvar my-irc-connections '()
+  "list of irc connection plist")
 
 (defun irc ()
   "Connect to IRC."
   (interactive)
-  (mapcar (lambda (x) (erc :server x :port (get-port-for-server x) :nick (get-nick-for-server x) :password (get-pass-for-server x))) my-irc-servers))
+  (mapcar (lambda (x) (eval `(erc ,@x))) my-irc-connections))
 
 (defun irc-deco ()
   "Kill all server buffers"
   (interactive)
-  (mapcar (lambda (x) (kill-buffer (format "%s:%d" x (get-port-for-server x)))) my-irc-servers))
+  (mapcar (lambda (x) (kill-buffer (format "%s:%s" (plist-get x :server) (plist-get x :port)))) my-irc-connections))
 
 
 (defun irc-reco ()
