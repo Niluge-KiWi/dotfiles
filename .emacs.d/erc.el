@@ -72,7 +72,8 @@ Activity means that there was no user input in the last 10 seconds."
 ;;305 306 : away messages
 (setq ;;erc-hide-list '("301" "305" "306" "324" "329" "333")
       erc-input-line-position -1
-      erc-server-reconnect-attempts 2
+      erc-server-reconnect-attempts t
+      erc-server-reconnect-timeout 10
       erc-server-send-ping-timeout 30
       erc-prompt ">"
       erc-minibuffer-ignored t
