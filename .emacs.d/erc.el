@@ -67,6 +67,7 @@ Activity means that there was no user input in the last 10 seconds."
 (require 'erc-track)
 (patch-erc-track-mode)
 
+
 ;;;--------------------
 ;;; Settings
 ;;;--------------------
@@ -226,7 +227,7 @@ This function is a possible value for `erc-generate-log-file-name-function'."
 With prefix, rsync & browse dedi logfile."
   (interactive "P")
   (if (null arg)
-      ;; brows logfile
+      ;; browse logfile
       (erc-browse-log)
     ;; rsync & browse dedi logfile
     (erc-browse-log-dedi)))
@@ -658,6 +659,16 @@ Use this defun with `erc-insert-modify-hook'."
   "Convert playback from znc to erc logs."
   (while (re-search-forward (format "\\(<%s>\\) \\([A-Z][a-z]\\{2\\} [0-9]\\{2\\} [0-9]\\{2\\}:[0-9]\\{2\\}:[0-9]\\{2\\}\\)" erc-valid-nick-regexp) nil t)
     (replace-match "\\2 \\1")))
+
+
+;;;--------------------
+;;; Reply to message
+;;;--------------------
+(defun my-erc-reply-to-message-at-point ()
+  "Reply to message at point by yanking current line to the end of the channel buffer."
+  (interactive)
+  ;;TODO
+  )
 
 
 ;;;--------------------
