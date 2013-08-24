@@ -228,7 +228,7 @@ $ {
 '
 }
 
-alias boobank='boobank -n -1'
+alias boobank='boobank -n 30'
 
 
 # own bin
