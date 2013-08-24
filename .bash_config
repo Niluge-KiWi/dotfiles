@@ -95,8 +95,12 @@ function ec
         # no x term
         emacs-client "$@"
     else
-        # x term: we fork
-        emacs-client "$@" > /dev/null &
+        # x term: get focus, and don't wait
+        if [ -z "$*" ]; then
+            emacs-client -e "(select-frame-set-input-focus (selected-frame))" --no-wait > /dev/null &
+        else
+            emacs-client --no-wait "$@" > /dev/null &
+        fi
     fi
 }
 function ecs
