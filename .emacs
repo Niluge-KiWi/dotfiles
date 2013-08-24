@@ -591,7 +591,7 @@ Optional depth is for internal use."
   "Opens the current file from a Dired buffer."
   (interactive)
   (launch-command "xdg-open" (dired-get-file-for-visit)))
-(define-key dired-mode-map (kbd "<C-return>") 'dired-kde-open-file)
+(define-key dired-mode-map (kbd "<C-return>") 'dired-xdg-open-file)
 
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
 (add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
