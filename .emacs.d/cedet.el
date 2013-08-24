@@ -1,27 +1,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Cedet
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; loaded earlier, to avoid double load of EIEIO
-;; (load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
-;; Choose one level of features
-(semantic-load-enable-minimum-features)
-;; (semantic-load-enable-code-helpers)
-;; (semantic-load-enable-gaudy-code-helpers)
-;; (semantic-load-enable-excessive-code-helpers)
+;; Load CEDET.
+;; See cedet/common/cedet.info for configuration details.
+;; IMPORTANT: Tou must place this *before* any CEDET component (including
+;; EIEIO) gets activated by another package (Gnus, auth-source, ...).
+;; Already loaded by el-get
+;;(load-file "~/.emacs.d/el-get/cedet/cedet-devel-load.el")
+
+;; Add further minor-modes to be enabled by semantic-mode.
+;; See doc-string of `semantic-default-submodes' for other things
+;; you can use here.
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode t)
+;; (add-to-list 'semantic-default-submodes 'global-cedet-m3-minor-mode t)
+
 
 ;; This enables parsing of header files.
 (setq semantic-idle-work-update-headers-flag t)
 
 ;; Tag decoration
-(global-semantic-decoration-mode 1)
-(require 'semantic-decorate-include)
+(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode t)
 
 ;; Project management
 (global-ede-mode t)
 
 ;; Bookmarks on tags, to navigate through them
 ;; TODO use ido for the bookmark ring
-(global-semantic-mru-bookmark-mode 1)
+(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode t)
 (defun semantic-ia-fast-jump-back ()
   (interactive)
   (if (ring-empty-p (oref semantic-mru-bookmark-ring ring))
@@ -35,8 +41,7 @@
     (ring-remove ring 0)))
 
 ;; Semantic Database
-(require 'semanticdb)
-(global-semanticdb-minor-mode 1)
+(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode t)
 (setq semanticdb-default-save-directory (expand-file-name "~/.emacs.d/semanticdb"))
 ;;(setq semanticdb-project-roots (list (expand-file-name "~/dev")))
 
@@ -46,16 +51,10 @@
 (setq-mode-local c++-mode semanticdb-find-default-throttle
                  '(local project unloaded system recursive))
 
-;; Automatically find system include path
-;; require GNU "global" program
-(require 'semantic-gcc)
+
 ;; Enable support for gnu global
-(require 'semanticdb-global)
 (semanticdb-enable-gnu-global-databases 'c-mode)
 (semanticdb-enable-gnu-global-databases 'c++-mode)
-
-;; Smart Completion and Jump
-(require 'semantic-ia)
 
 ;; Enable ctags for some languages:
 ;;  Unix Shell, Perl, Pascal, Tcl, Fortran, Asm
@@ -63,10 +62,13 @@
 ;;(semantic-load-enable-primary-exuberent-ctags-support)
 
 ;; Semantic-idle: what do do when idle
-(global-semantic-idle-scheduler-mode 1)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode t)
 (setq semantic-idle-scheduler-idle-time 2)
 ;; header-line: current context
-(global-semantic-idle-breadcrumbs-mode 1)
+(add-to-list 'semantic-default-submodes 'global-semantic-idle-breadcrumbs-mode t)
+
+;; Enable Semantic
+(semantic-mode t)
 
 ;; Pulse: less cpu
 (setq pulse-iterations 2)
