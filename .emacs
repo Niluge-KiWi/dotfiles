@@ -1946,6 +1946,9 @@ Ignores CHAR at point."
 (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
+(defun my-ac-emacs-lisp-mode ()
+  (setq ac-sources '(ac-source-abbrev ac-source-symbols ac-source-words-in-same-mode-buffers)))
+(add-hook 'emacs-lisp-mode-hook 'my-ac-emacs-lisp-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
