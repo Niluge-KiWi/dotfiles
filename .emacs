@@ -68,6 +68,7 @@
         (:name fold-dwim :type http
                :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
                :features fold-dwim)
+        git-modes
         (:name gnuplot :type elpa)
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
