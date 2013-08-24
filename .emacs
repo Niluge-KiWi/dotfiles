@@ -2038,15 +2038,8 @@ displaying it has the focus."
 If escape is not nil, then disable interpretation of backshash escapes.
 If html is not nil, then disable interpretation of html code."
   (unless do-not-disturb
-	(if backshash-escape
-		(setq message (replace-regexp-in-string (regexp-quote "\\")
-												(regexp-quote "\\\\\\")
-												message)))
-	(if html-escape
-		(setq message (xml-escape-string message)))
-	(shell-command-to-string (format
-							  "notify-send '%s' '%s' --icon=%s"
-							  title message "emacs"))))
+    (call-process "notify-send" nil nil nil
+                  title message (format "--icon=%s" "emacs"))))
 (defun notify (title message)
   "Notify user by graphical display"
   (notify-raw title message nil t))
