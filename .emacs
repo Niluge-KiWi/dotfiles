@@ -625,7 +625,7 @@ Optional depth is for internal use."
 
 ;; no subdirectories for unstaged files
 ;; TODO get them when open subsection on directory
-(setq magit-omit-untracked-dir-contents t)
+(setq magit-status-verbose-untracked nil)
 ;; no buffer saving when magit-status
 (setq magit-save-some-buffers nil)
 ;; use ido in prompts
