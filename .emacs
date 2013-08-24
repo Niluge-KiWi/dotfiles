@@ -1946,21 +1946,6 @@ Ignores CHAR at point."
 (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
-;; auto-complete for python
-;; Initialize Rope (for auto-complete)
-;; if this doesn't work, here is how to install this:
-;;  sudo aptitude install mercurial
-;;  mkdir /tmp/rope && cd /tmp/rope
-;;  hg clone http://bitbucket.org/agr/rope
-;;  hg clone http://bitbucket.org/agr/ropemacs
-;;  hg clone http://bitbucket.org/agr/ropemode
-;;  sudo easy_install rope
-;;  ln -s ../ropemode/ropemode ropemacs/
-;;  sudo easy_install ropemacs
-(ac-ropemacs-initialize)
-(add-hook 'python-mode-hook
-          (lambda ()
-                 (add-to-list 'ac-sources 'ac-source-ropemacs)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
