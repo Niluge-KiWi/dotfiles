@@ -77,17 +77,17 @@ function emacs-client
         if echo "$fileline" | grep -q '.*:[0-9]\+:.*$'; then
             local file="$(echo "$fileline" | awk -F: '{print $1'})"
             local line="$(echo "$fileline" | awk -F: '{print $(NF-1)'})"
-            emacsclient -a "" -c +$line "$file"
+            emacsclient -a "" --no-wait -c +$line "$file"
             return
         fi
         if echo "$fileline" | grep -q '.*:[0-9]\+$'; then
             local file="$(echo "$fileline" | awk -F: '{print $1'})"
             local line="$(echo "$fileline" | awk -F: '{print $NF'})"
-            emacsclient -a "" -c +$line "$file"
+            emacsclient -a "" --no-wait -c +$line "$file"
             return
         fi
     fi
-    emacsclient -a "" -c "$@"
+    emacsclient -a "" --no-wait -c "$@"
 }
 function ec
 {
@@ -97,9 +97,9 @@ function ec
     else
         # x term: get focus, and don't wait
         if [ -z "$*" ]; then
-            emacs-client -e "(select-frame-set-input-focus (selected-frame))" --no-wait > /dev/null &
+            emacs-client -e "(select-frame-set-input-focus (selected-frame))" > /dev/null &
         else
-            emacs-client --no-wait "$@" > /dev/null &
+            emacs-client "$@" > /dev/null &
         fi
     fi
 }
