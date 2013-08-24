@@ -178,6 +178,8 @@ function ggdoc() { find . -name doc.org -exec grep -nIH --color "$@" {} \;; }
 
 alias sum="awk '{sum+=\$1} END {print sum}'"
 
+alias jsonlint='python -mjson.tool'
+
 alias w='wc -l'
 
 alias t='tail -F'
