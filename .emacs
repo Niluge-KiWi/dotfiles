@@ -2097,6 +2097,14 @@ If html is not nil, then disable interpretation of html code."
 
 ;; (frame-parameter nil 'vd-buffers)
 
+(defun my-backward-up-list (&optional ARG)
+  (interactive)
+  ;; TODO: use advice instead of this, to make numeric argument work.
+  ;; (and how about negative argument?)
+  (let ((start (nth 8 (syntax-ppss))))
+    (if start
+        (goto-char start)
+      (backward-up-list ARG))))
 
 ;; fix gud override
 ;; TODO better than just copy & patch this function
