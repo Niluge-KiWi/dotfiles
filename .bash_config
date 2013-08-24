@@ -114,6 +114,9 @@ alias mg='eg'
 # gdb
 alias gdb='gdb --args'
 
+# wget
+alias wgett='wget --trust-server-names'
+
 # alias autres
 alias p='ps aux | grep -i'
 alias pp='ps aux | grep'
