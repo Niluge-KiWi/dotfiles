@@ -1361,6 +1361,8 @@ sys.path.insert(0, '')"))
 ;; disable end-of-visual-line in org-mode
 (setq line-move-visual nil)
 
+;; To make windmove work
+(setq org-replace-disputed-keys t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
