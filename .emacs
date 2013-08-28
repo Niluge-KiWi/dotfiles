@@ -69,6 +69,7 @@
         (:name erc-view-log :type git
                :url "git@github.com:Niluge-KiWi/erc-view-log.git")
         (:name expand-region :type elpa)
+        flx
         (:name flymakemsg :type http
                :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
         (:name fold-dwim :type http
@@ -470,6 +471,12 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; This is your old M-x.
 ;;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+
+;;-------flx
+(flx-ido-mode 1)
+;; disable ido faces to see flx highlights.
+(setq ido-use-faces nil)
+(setq flx-ido-threshhold 1000)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
