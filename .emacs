@@ -84,6 +84,7 @@
         (:name highlight-parentheses :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
+        jinja
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name js2-highlight-vars :type http
