@@ -127,7 +127,7 @@ void enter_window(const char* window_name)
 	// private messages buffers don't start with #
 	{
 		// TODO lowercase on buffername
-		char* format = "emacsclient --eval '(progn (select-window (get-buffer-window \"%s\" t)) (erc-modified-channels-update))'";
+		char* format = "emacsclient --eval '(with-current-buffer \"%s\" (erc-modified-channels-update))'";
 		size_t cmd_size = strlen(format) + strlen(buffer_name);
 		char* cmd = (char*) malloc(sizeof(char)*(cmd_size+1));
 		int ret = snprintf(cmd, (cmd_size+1), format, buffer_name);
