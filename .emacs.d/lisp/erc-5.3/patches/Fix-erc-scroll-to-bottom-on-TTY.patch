@@ -1,0 +1,86 @@
+From a1d63e03c3eda51dcec158d6027adf9dbdcfd8dd Mon Sep 17 00:00:00 2001
+From: Antoine Levitt <antoine.levitt@gmail.com>
+Date: Sat, 31 Dec 2011 08:25:48 +0000
+Subject: Fix bug #9246 with scrolling in ERC under word-wrap.
+
+ lisp/erc/erc-goodies.el (erc-scroll-to-bottom): Use post-command-hook
+ rather than window-scroll-functions.  Fixes a bug with scrolling under
+ word-wrap on a tty.
+---
+diff --git a/lisp/erc/ChangeLog b/lisp/erc/ChangeLog
+index 1b67835..354e863 100644
+--- a/lisp/erc/ChangeLog
++++ b/lisp/erc/ChangeLog
+@@ -1,3 +1,9 @@
++2011-12-31  Antoine Levitt  <antoine.levitt@gmail.com>
++
++	* erc-goodies.el (erc-scroll-to-bottom): Use post-command-hook
++	rather than window-scroll-functions.  Fixes a bug with word-wrap on
++	a tty.  (Bug#9246)
++
+ 2011-11-28  Mike Kazantsev  <mk.fraggod@gmail.com>  (tiny change)
+ 
+ 	* erc-dcc.el (erc-dcc-ctcp-query-send-regexp): Updated regexp to
+diff --git a/lisp/erc/erc-goodies.el b/lisp/erc/erc-goodies.el
+index b2cf9e3..6f24c59 100644
+--- a/lisp/erc/erc-goodies.el
++++ b/lisp/erc/erc-goodies.el
+@@ -60,7 +60,7 @@ argument to `recenter'."
+   ((remove-hook 'erc-mode-hook 'erc-add-scroll-to-bottom)
+    (dolist (buffer (erc-buffer-list))
+      (with-current-buffer buffer
+-       (remove-hook 'window-scroll-functions 'erc-scroll-to-bottom t)))))
++       (remove-hook 'post-command-hook 'erc-scroll-to-bottom t)))))
+ 
+ (defun erc-add-scroll-to-bottom ()
+   "A hook function for `erc-mode-hook' to recenter output at bottom of window.
+@@ -70,35 +70,29 @@ the value of `erc-input-line-position'.
+ 
+ This works whenever scrolling happens, so it's added to
+ `window-scroll-functions' rather than `erc-insert-post-hook'."
+-  ;;(make-local-hook 'window-scroll-functions)
+-  (add-hook 'window-scroll-functions 'erc-scroll-to-bottom nil t))
++  (add-hook 'post-command-hook 'erc-scroll-to-bottom nil t))
+ 
+-(defun erc-scroll-to-bottom (window display-start)
++(defun erc-scroll-to-bottom ()
+   "Recenter WINDOW so that `point' is on the last line.
+ 
+ This is added to `window-scroll-functions' by `erc-add-scroll-to-bottom'.
+ 
+ You can control which line is recentered to by customizing the
+-variable `erc-input-line-position'.
+-
+-DISPLAY-START is ignored."
+-  (if (window-live-p window)
++variable `erc-input-line-position'."
+       ;; Temporarily bind resize-mini-windows to nil so that users who have it
+       ;; set to a non-nil value will not suffer from premature minibuffer
+       ;; shrinkage due to the below recenter call.  I have no idea why this
+       ;; works, but it solves the problem, and has no negative side effects.
+       ;; (Fran Litterio, 2003/01/07)
+-      (let ((resize-mini-windows nil))
+-        (erc-with-selected-window window
+-          (save-restriction
+-            (widen)
+-            (when (and erc-insert-marker
+-                       ;; we're editing a line. Scroll.
+-                       (> (point) erc-insert-marker))
+-              (save-excursion
+-                (goto-char (point-max))
+-                (recenter (or erc-input-line-position -1))
+-                (sit-for 0))))))))
++  (let ((resize-mini-windows nil))
++    (save-restriction
++      (widen)
++      (when (and erc-insert-marker
++		 ;; we're editing a line. Scroll.
++		 (> (point) erc-insert-marker))
++	(save-excursion
++	  (goto-char (point-max))
++	  (recenter (or erc-input-line-position -1)))))))
+ 
+ ;;; Make read only
+ (define-erc-module readonly nil
+--
+cgit v0.9.0.2
