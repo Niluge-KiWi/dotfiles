@@ -297,15 +297,30 @@ erc-modified-channels-alist. Should be executed on window change."
 (defvar my-irc-connections '()
   "list of irc connection plist")
 
-(defun irc ()
-  "Connect to IRC."
-  (interactive)
-  (mapcar (lambda (x) (eval `(erc-tls ,@x))) my-irc-connections))
+(defun irc-get-server-list (msg select)
+  "Helper function to return either all servers, or one of them
+Used for `irc' and `irc-reco'."
+  (if (not select)
+      my-irc-connections
+    (let* ((servers (mapcar (lambda (x) (plist-get x :server)) my-irc-connections))
+           (server (ido-completing-read msg servers nil t (car servers))))
+      (if (string= "" server)
+          my-irc-connections
+        (list (car (member-if (lambda (x) (string= (plist-get x :server) server)) my-irc-connections)))))))
 
-(defun irc-deco ()
+(car (member-if (lambda (x) (string= (plist-get x :server) "serv.niluge-kiwi.info")) my-irc-connections))
+
+(defun irc (arg)
+  "Connect to IRC."
+  (interactive "P")
+  (mapcar (lambda (x) (eval `(erc-tls ,@x)))
+          (irc-get-server-list "Connect to IRC server: " arg)))
+
+(defun irc-deco (arg)
   "Kill all server buffers"
-  (interactive)
-  (mapcar (lambda (x) (kill-buffer (format "%s:%s" (plist-get x :server) (plist-get x :port)))) my-irc-connections))
+  (interactive "P")
+  (mapcar (lambda (x) (kill-buffer (format "%s:%s" (plist-get x :server) (plist-get x :port))))
+          (irc-get-server-list "Disconnect IRC server: " arg)))
 
 
 (defun irc-reco ()
