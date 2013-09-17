@@ -323,12 +323,12 @@ Used for `irc' and `irc-reco'."
           (irc-get-server-list "Disconnect IRC server: " arg)))
 
 
-(defun irc-reco ()
+(defun irc-reco (arg)
   "Kill all server buffers, and connect again"
-  (interactive)
+  (interactive "P")
   (when (erc-server-process-alive)
-    (irc-deco))
-  (irc))
+    (call-interactively 'irc-deco))
+  (call-interactively 'irc))
 
 
 ;;;--------------------
