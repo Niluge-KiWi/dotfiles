@@ -638,9 +638,6 @@ Optional depth is for internal use."
 
 (add-hook 'magit-mode-hook 'turn-on-magit-svn)
 
-;; no subdirectories for unstaged files
-;; TODO get them when open subsection on directory
-(setq magit-status-verbose-untracked nil)
 ;; no buffer saving when magit-status
 (setq magit-save-some-buffers nil)
 ;; use ido in prompts
