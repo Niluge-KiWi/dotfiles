@@ -663,7 +663,7 @@ Optional depth is for internal use."
 ;; hide untracked section when opening magit-status
 (defun my-magit-hide-untracked ()
   "Hide untracked section."
-  (let ((untracked (magit-find-section '(untracked) magit-top-section)))
+  (let ((untracked (magit-find-section '(untracked) magit-root-section)))
 	(if untracked
 		(magit-section-set-hidden untracked t))))
 (add-hook 'magit-refresh-status-hook 'my-magit-hide-untracked)
