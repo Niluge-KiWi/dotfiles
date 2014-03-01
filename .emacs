@@ -650,6 +650,9 @@ Optional depth is for internal use."
 (define-key magit-mode-map (kbd "<M-left>") nil)
 ;; "u" and "U" are already taken by unstage...
 (define-key magit-mode-map (kbd "o") 'magit-goto-parent-section)
+;; display full staged diff when committing
+(setq magit-expand-staged-on-commit 'full)
+
 
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
@@ -667,15 +670,6 @@ Optional depth is for internal use."
 	(if untracked
 		(magit-section-set-hidden untracked t))))
 (add-hook 'magit-refresh-status-hook 'my-magit-hide-untracked)
-
-;; display staged diff when committing
-(defun my-magit-display-staged-diff ()
-  "Expand staging section"
-  (with-local-quit
-    (magit-jump-to-staged)
-    (magit-expand-section)
-    (recenter 0)))
-(add-hook 'magit-key-mode-popup-committing-hook 'my-magit-display-staged-diff)
 
 (defun my-magit-log-rev (&rest extra-args)
   "Like magit-log-ranged, but only specify end of rev-range"
