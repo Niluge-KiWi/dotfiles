@@ -87,8 +87,6 @@
         jinja
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
-        (:name js2-highlight-vars :type http
-               :url "http://mihai.bazon.net/projects/editing-javascript-with-emacs-js2-mode/js2-highlight-vars-mode/js2-highlight-vars.el")
         (:name js-hint :type git
                :url "https://github.com/daleharvey/jshint-mode.git")
         (:name keyfreq :type http
@@ -103,9 +101,7 @@
         (:name multi-eshell :type git
                :url "git@github.com:Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
-        nxhtml
         (:name org :type elpa)
-        php-mode-improved
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
         pkgbuild-mode
@@ -1027,9 +1023,6 @@ sys.path.insert(0, '')"))
       (setq ad-return-value (js2-parse-assign-expr))
     ad-do-it))
 (ad-activate 'js2-parse-statement)
-
-(require 'js2-highlight-vars)
-(add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
 
 ;; jshint flymake
 (require 'flymake-jshint)
