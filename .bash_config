@@ -44,7 +44,9 @@ dumb)
     UNDERLINE="\[\033[4m\]"
     BLUE="\[\033[1;34m\]"
     LIGHT_BLUE="\[\033[0;34m\]"
-    PS1="[\${debian_chroot:+(\$debian_chroot)}$BLUE\u$DEFAULT@$UNDERLINE\h$DEFAULT \w][\A](\$?)\$ "
+    RED="\[\033[1;31m\]"
+    LIGHT_RED="\[\033[0;31m\]"
+    PS1="[\${debian_chroot:+(\$debian_chroot)}$BLUE\u$DEFAULT@$UNDERLINE\h$DEFAULT \w][\t](\$(rc=\$?; [ \$rc -eq 0 ] && echo \$rc || echo \"$RED\$rc$DEFAULT\"))\$ "
     ;;
 esac
 export PS1
@@ -69,20 +71,15 @@ fi
 ## alias and functions ##
 
 # emacs
+export ALTERNATE_EDITOR="" # to tell emacsclient to start emacs --daemon and then connect to it if it is not already started; currently redundant wi all the -a "" that should be removed (after testing)
 function emacs-client
 {
-    # if only one argument, and is a grep result, open file on the good line
+    # if only one argument, and is a grep result, open file on the right line
     if [ $# -eq 1 ]; then
         local fileline="$1"
-        if echo "$fileline" | grep -q '[^:]*:[0-9]\+:.*$'; then
-            local file="$(echo "$fileline" | awk -F: '{print $1'})"
-            local line="$(echo "$fileline" | awk -F: '{print $(NF-1)'})"
-            emacsclient -a "" --no-wait -c +$line "$file"
-            return
-        fi
-        if echo "$fileline" | grep -q '[^:]*:[0-9]\+$'; then
-            local file="$(echo "$fileline" | awk -F: '{print $1'})"
-            local line="$(echo "$fileline" | awk -F: '{print $NF'})"
+        if echo "$fileline" | grep -q '[^:]*:[0-9]\+\(:.*\)\?$'; then
+            local file="$(echo "$fileline" | awk -F: '{print $1}')"
+            local line="$(echo "$fileline" | awk -F: '{print $2}')"
             emacsclient -a "" --no-wait -c +$line "$file"
             return
         fi
@@ -109,24 +106,36 @@ function ecs
     ec "/sudo::$file"
 }
 alias e='ec'
+alias ect='emacsclient -a "" --tty'
 export EDITOR='emacsclient -a "" -c'
 alias vi='ec'
 alias vim='ec'
-alias eg='ec -e "(magit-status \"`pwd`\")"'
+alias eg='ec -e "(magit-status \"`pwd`/\")"'
 alias mg='eg'
+alias d='ec doc.org'
 
 # gdb
 alias gdb='gdb --args'
 
-# wget
-alias wgett='wget --trust-server-names'
+# ps
+function ps_grep ()
+{
+  processes=$(ps aux)
+  echo "$processes" | grep "$@"
+}
+function ps_igrep ()
+{
+  ps_grep -i "$@"
+}
+alias p='ps_igrep'
+alias pp='ps_grep'
 
 # alias autres
-alias p='ps aux | grep -i'
-alias pp='ps aux | grep'
 alias c='cd ..'
 alias ..='cd ..'
-alias tf='tail -F'
+
+# rsync
+alias rs='rsync -avzP'
 
 # svn
 alias sd='svn diff --diff-cmd colordiff'
@@ -140,7 +149,7 @@ alias gc='git commit'
 alias gcm='git commit -m'
 alias gd='git diff --color'
 alias gdc='git diff --color --cached'
-alias gf='git fetch'
+#alias gf='git fetch' # gf used for grep + find
 alias gu='gf && gr'
 alias gp='git push'
 alias gr='git rebase origin/master'
@@ -160,43 +169,117 @@ alias ll='ls -l'
 alias lll='l --full-time'
 alias lh='ls -latr'
 alias lS='ls -laSrh'
+function last { ls -t "$@" | head -1; }
 
+function cl { cd $(last "$@"); }
+
+export LESSQUIET=1
 alias le='less -RXF'
+function llast { le $(last "$@"); }
 
-alias gg='grep -nrI --color --exclude=*~ --exclude ".#*" --exclude-dir=\.git --exclude-dir=\.svn --exclude-dir node_modules'
+## Grep customization ##
+function declare_grep_exclude_arguments() {
+  # outputs exclude options for grep, according to global & local exclude config files
+  #TODO recursively find ignore files in parent directories
+  local __grep_exclude_arguments=()
+  while read -r pattern; do
+    [[ $pattern == '#'* || $pattern == '' ]] && continue
+    __grep_exclude_arguments+=("--exclude" "$pattern")
+  done < <(cat {$HOME,$PWD}/.grepignore 2> /dev/null)
+
+  while read -r pattern; do
+    [[ $pattern == '#'* || $pattern == '' ]] && continue
+    __grep_exclude_arguments+=("--exclude-dir" "$pattern")
+  done < <(cat {$HOME,$PWD}/.grepignore-dir 2> /dev/null)
+
+  # this outputs a definition of a bash array named "__grep_exclude_arguments" to be evaluated by the caller
+  declare -p __grep_exclude_arguments
+}
+export -f declare_grep_exclude_arguments
+
+function grep_custom() {
+  eval $(declare_grep_exclude_arguments)
+  grep -nrIH --color "${__grep_exclude_arguments[@]}" "$@"
+}
+export -f grep_custom
+
+alias gg='grep_custom'
 alias g='gg -i'
 
+alias gw='g -w'
+alias ggw='gg -w'
+
+alias gv='grep -v'
+
 alias f='find . -iname'
-ff()
-{
-    keyword="$1"
-    shift
-    f "*$keyword*" "$@"
-}
+function ff() { local keyword="$1"; shift; f "*$keyword*" "$@"; }
 
-function gcmake() { find . -name CMakeLists.txt -exec grep -niIH --color "$@" {} \;; }
-function ggcmake() { find . -name CMakeLists.txt -exec grep -nIH --color "$@" {} \;; }
+#TODO: handle grepignore for find too
+function ggf() { local filename="$1"; shift; find . -name "$filename" -exec bash -c 'grep_custom "$@"' grep_custom "$@" {} \;; }
+alias gf='ggf -i'
 
-function gdoc() { find . -name doc.org -exec grep -niIH --color "$@" {} \;; }
-function ggdoc() { find . -name doc.org -exec grep -nIH --color "$@" {} \;; }
+alias gcmake='gf CMakeLists.txt'
+alias ggcmake='ggf CMakeLists.txt'
+
+alias gdoc='gf doc.org'
+alias ggdoc='ggf doc.org'
+
+alias gpackage='gf package.json'
+alias ggpackage='ggf package.json'
+
+# sift
+alias s='n sift'
+
+alias scmake='s --files CMakeLists.txt --files "*.cmake"'
+alias sdoc='s --files doc.org'
+alias spackage='s --files package.json'
+
+
+alias sc='screen -OURd'
+alias sls='screen -ls'
+
+alias dus='du -shc * | sort -h'
 
 alias sum="awk '{sum+=\$1} END {print sum}'"
+alias avg="awk '{sum += \$1} END {if (NR > 0) print sum / NR}'"
 
 alias jsonlint='python -mjson.tool'
 
 alias w='wc -l'
 
 alias t='tail -F'
+function tl { t -v $(last "$@"); }
+
+alias ss='sshrc'
+complete -F _ssh ss
+
+export N_IONICE=3
+export N_NICE=10
+alias n='nice -n$N_NICE ionice -c $N_IONICE'
+function nice_process() { for pid in $@; do sudo renice -n $N_NICE -p $pid ; sudo ionice -c $N_IONICE -p $pid ; done }
+alias np='nice_process'
 
 # valgrind
-alias vgdb='valgrind --leak-check=full --num-callers=50 --db-attach=yes'
-alias vxml='valgrind --leak-check=full --num-callers=50 --xml=yes --xml-file=valgrind.memcheck.xml --suppressions=/home/riccardi/git/core-tmp/tools/valgrind/stl.supp'
-alias v='vgdb'
+alias v_gdb='valgrind --leak-check=full --num-callers=50 --leak-check-heuristics=all --keep-stacktraces=alloc-and-free  --soname-synonyms=somalloc=*tcmalloc* --suppressions=/home/riccardi/git/core-tmp/tools/valgrind/stl.supp --db-attach=yes'
+alias vxml='valgrind --leak-check=full --num-callers=50 --leak-check-heuristics=all --soname-synonyms=somalloc=*tcmalloc* --suppressions=/home/riccardi/git/core-tmp/tools/valgrind/stl.supp --xml=yes --xml-file=valgrind.memcheck.$RANDOM.xml'
+alias vmassif='valgrind --tool=massif --max-snapshots=1000 --threshold=0.1'
+alias v='v_gdb'
 alias vl='valkyrie -l'
+alias cg='valgrind --tool=callgrind'
+alias vh='valgrind --tool=helgrind'
+
+# http save request
+alias httpsave='http_proxy=localhost:8000'
 
 # useless mais bon
 alias jacadi='sudo'
 alias siteuplait='sudo'
+
+alias st='strace -f -s 256 -o strace.$$.out'
+
+alias xml='xmllint --format'
+
+alias xrestop-dump='xrestop -b -m 1 > xrestop-$(date +%s)'
 
 
 # cd does a ls after a cd
@@ -234,6 +317,87 @@ $ {
 
 alias boobank='boobank -n 30'
 
-
 # own bin
 export PATH=$HOME/bin:$PATH
+
+
+# Systran
+
+# clean svn dir
+#svn status | grep "^\?" | awk '{print $2}' | xargs rm -rf
+
+export MAKE_IONICE=5 # default level is 4, so use 5 to have lower priority than default
+export MAKE_PARALLEL=8
+export MAKE_NICE=10 # default level is 0
+alias nic='nice -n$MAKE_NICE ionice -c 2 -n $MAKE_IONICE'
+function make_nice() { nic make -j$MAKE_PARALLEL "$@"; }
+function ninja_nice() { nic ninja "$@"; }
+alias m='time make_nice'
+alias ni='time ninja_nice'
+
+# init work directory
+function mkwork {
+  local bug="$1"
+  local name="$2"
+  if [ -z "${name}" ]; then # TODO better test: if it starts with "id-" then it's the bug id: don't add the date
+    name=$bug
+    bug=$(date +%Y-%m-%d)
+  fi
+  local dir="${bug}-${name}"
+
+  mkdir -p "${dir}"
+  cd "${dir}"
+
+  # this is safe to do this multiple times
+  git init
+  git config --add magit.extension wip-save
+
+  if [ ! -f doc.org ]; then
+    cat > doc.org <<EOF
+* refs #${bug}: ${name}
+** commands
+** TODO
+EOF
+  fi
+
+  git add doc.org
+  git commit -m "First notes"
+
+  ec doc.org&
+}
+
+
+# docker
+alias dc='docker-compose'
+alias dcu='dc up --build -d'
+alias de='docker exec -it'
+alias dce='de $(dc ps -q | head -1)'
+alias dcb='dce bash'
+alias di='d-info'
+alias dip='d-ip'
+
+function d-ip-cid () {
+  docker inspect "$@" | jq -r '.[].NetworkSettings.Networks | map(.) | .[].IPAddress'
+}
+
+function d-info-cid () {
+  docker inspect "$@" | jq -r '.[] | { id: .Id[0:12], name: .Name, ips: [ .NetworkSettings.Networks | map(.) | .[].IPAddress ] }'
+}
+
+function d-ps () {
+  local name=$1
+  shift
+  docker ps -f name=$name "$@"
+}
+
+function d-get-cid () {
+  d-ps "$@" -q
+}
+
+function d-ip () {
+  d-ip-cid $(d-get-cid "$@")
+}
+
+function d-info() {
+  d-info-cid $(d-get-cid "$@")
+}

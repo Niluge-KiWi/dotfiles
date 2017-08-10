@@ -1,0 +1,4 @@
+(:name erc-view-log
+       :description "View ERC logs"
+       :type github
+       :pkgname "Niluge-KiWi/erc-view-log")

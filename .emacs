@@ -14,9 +14,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Path setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/erc-5.3/"))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/"))
+;;(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp/erc-5.3/"))
 
 ;;byte-recompile elisp files if they need to be
 ;;(byte-recompile-directory "~/.emacs.d" 0)
@@ -25,18 +24,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Package Management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;-------ELAP
-;; This provides support for the package system and
-;; interfacing with ELPA, the package archive.
-(unless (boundp 'list-packages)
-  (when
-      (load
-       (expand-file-name "~/.emacs.d/elpa/package.el"))
-    (package-initialize)))
+;; ;;-------ELPA
+;; ;; This provides support for the package system and
+;; ;; interfacing with ELPA, the package archive.
+;; (unless (boundp 'list-packages)
+;;   (when
+;;       (load
+;;        (expand-file-name "~/.emacs.d/elpa/package.el"))
+;;     (package-initialize)))
 ;; several archives for elpa
-(setq package-archives '(("ELPA" . "http://tromey.com/elpa/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")))
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+			 ("melpa" . "https://melpa.org/packages/")
+			 ("marmalade" . "http://marmalade-repo.org/packages/")
+			 ("org" . "http://orgmode.org/elpa/")))
+(package-initialize)
 
 ;;-------el-get
 ;; Manage the external elisp bits and pieces you depend upon
@@ -53,65 +55,126 @@
 (setq el-get-sources
       '(
         ace-jump-mode
+        (:name ace-window
+               :description "Quickly switch windows using `ace-jump-mode'"
+               :type git
+               :url "https://github.com/abo-abo/ace-window.git"
+               :depends (ace-jump-mode))
+        ag
+        (:name cmake-font-lock :type git
+               :url "https://github.com/Lindydancer/cmake-font-lock.git")
         apache-mode
-        auto-complete
-        auto-complete-clang
-        auto-complete-etags
-        auto-complete-extension
-        auto-complete-yasnippet
+        ;; auto-complete
+        ;; auto-complete-clang
+        ;; auto-complete-etags
+        ;; auto-complete-extension
+        ;; auto-complete-yasnippet
         browse-kill-ring
         buffer-move
-        cedet
         cmake-mode
+        (:name coffee-mode
+               :type git
+               :url "https://github.com/defunkt/coffee-mode"
+               :description "Emacs Major Mode for CoffeeScript"
+               :features coffee-mode
+               :prepare (progn
+                          (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+                          (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
+        color-theme-zenburn
+        (:name cucumber
+               :description "Emacs mode for editing Cucumber plain text stories"
+               :type git
+               :url "https://github.com/michaelklishin/cucumber.el.git")
         dired+
-        ecb
-        el-get
-        (:name erc-view-log :type git
-               :url "git@github.com:Niluge-KiWi/erc-view-log.git")
-        (:name expand-region :type elpa)
-        flx
+        (:name docker
+               :description "Manage docker images & containers from Emacs"
+               :type git
+               :url "https://github.com/Silex/docker.el"
+               :depends (magit s dash))
+        (:name dockerfile-mode
+               :description "An emacs mode for handling Dockerfiles."
+               :type git
+               :url "https://github.com/spotify/dockerfile-mode"
+               :prepare (progn
+                          (add-to-list 'auto-mode-alist
+                                       '("Dockerfile\\'" . dockerfile-mode))))
+        erc-view-log
+        (:name edit-server :type elpa)
+        (:name expand-region :type git
+               :url "https://github.com/magnars/expand-region.el.git")
+        (:name flx
+               :description "Fuzzy matching with good sorting in ido"
+               :type git
+               :url "https://github.com/lewang/flx.git"
+               :features flx-ido)
         (:name flymakemsg :type http
                :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
-        (:name fold-dwim :type http
-               :url "http://www.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el"
-               :features fold-dwim)
-        git-modes
+        fold-dwim
+        (:name git-link :type elpa)
         (:name gnuplot :type elpa)
+        (:name go-mode
+               :description "Major mode for the Go programming language"
+               :type git
+               :url "https://github.com/dominikh/go-mode.el")
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
+        (:name handlebars :type git
+               :url "https://github.com/danielevans/handlebars-mode.git"
+               :features handlebars-mode)
         (:name hide-lines :type emacswiki)
         (:name highlight-parentheses :type elpa)
+        (:name highlight-symbol :type elpa)
+        ido-completing-read+
+        (:name iedit :type git
+               :url "https://github.com/victorhge/iedit.git")
+        (:name ioccur :type git
+               :url "https://github.com/thierryvolpiatto/ioccur.git")
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
-        jinja
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name js2-highlight-vars :type http
                :url "http://mihai.bazon.net/projects/editing-javascript-with-emacs-js2-mode/js2-highlight-vars-mode/js2-highlight-vars.el")
-        (:name js-hint :type git
+        (:name jshint-mode :type git
                :url "https://github.com/daleharvey/jshint-mode.git")
-        (:name keyfreq :type http
-               :url "http://ergoemacs.googlecode.com/svn/trunk/packages/keyfreq.el")
+        keyfreq
+        lua-mode
         magit
+        (:name magit-svn
+               :type git
+               :url "https://github.com/magit/magit-svn.git"
+               :depends (magit))
         markdown-mode
+        mediawiki
         (:name miniedit :type git
                :url "https://github.com/emacsmirror/miniedit.git")
-        minimap
-        (:name mo-git-blame :type git
-               :url "https://github.com/mbunkus/mo-git-blame.git")
         (:name multi-eshell :type git
-               :url "git@github.com:Niluge-KiWi/multi-eshell.git"
+               :url "https://github.com/Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
-        nxhtml
+        (:name mustache :type git
+               :url "https://github.com/mustache/emacs.git"
+               :features mustache-mode)
         (:name org :type elpa)
+        (:name org-journal :type elpa)
+        ;; (:name powerline :type git
+        ;;        ;; :url "https://github.com/milkypostman/powerline.git"
+        ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
+        ;;        :features powerline)
         php-mode-improved
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
         pkgbuild-mode
         psvn
         rainbow-mode
+        ruby-block
+        ruby-end
+        (:name s
+               :description "The long lost Emacs string manipulation library."
+               :type git
+               :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
+        (:name sql-indent :type emacswiki)
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
@@ -123,13 +186,21 @@
         (:name wuxch-dired-copy-paste :type emacswiki
                :features wuxch-dired-copy-paste)
         yaml-mode
-        yasnippet
+        ;;yasnippet
         ))
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
-;; cedet-remove-builtin.el removes this load-path because it contains a "cedet.el" file, re-add it since it's our cedet file
-(add-to-list 'load-path (expand-file-name "~/.emacs.d") t)
+
+;; loaded asap to avoid double load of EIEIO
+;;(load-file "~/.emacs.d/el-get/cedet/common/cedet.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Base
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; start garbage collector less often
+(setq gc-cons-threshold (* 20 1024 1024))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Desktop and server
@@ -151,10 +222,22 @@
 	  desktop-dirname "~/.emacs.d/"
 	  desktop-base-file-name "desktop")
 ;;(desktop-save-mode 1)
-;; ;; save every 10mins
-;; (run-with-timer (* 10 60) (* 10 60) (lambda () (flet ((message (&rest args) nil))
-;;                                                  (desktop-save-in-desktop-dir))))
+;; save every 10mins
+;; (setq desktop-save-timer (run-with-timer 600 600 (lambda () (flet ((message (&rest args) nil))
+;;                                                               (desktop-save-in-desktop-dir)))))
 
+;; edit text with emacs from Chrome: https://github.com/stsquad/emacs_chrome
+(require 'edit-server)
+(edit-server-start)
+
+;; pipe to emacs
+(defun fake-stdin-slurp (current-dir filename)
+  "Emulate stdin slurp using emacsclient hack"
+  ;;; TODO tail mode on file: better for large pipes
+  (switch-to-buffer (generate-new-buffer "*stdin*"))
+  (cd current-dir)
+  (insert-file filename)
+  (end-of-buffer))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Graphical display
@@ -175,38 +258,94 @@
 ;; (when emacs-is-master
 ;;   (toggle-fullscreen))
 
+;; new frames are maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(frame-resize-pixelwise . t))
+
+;; (defadvice raise-frame (after make-it-work (&optional frame) activate)
+;;     "Work around some bug? in raise-frame/Emacs/GTK/Metacity/something.
+;;      Katsumi Yamaoka posted this in
+;;      http://article.gmane.org/gmane.emacs.devel:39702"
+;;     (call-process
+;;      "wmctrl" nil nil nil "-i" "-R"
+;;      (frame-parameter (or frame (selected-frame)) 'outer-window-id)))
+;;(add-hook 'server-switch-hook 'raise-frame)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Minimap
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 50ms is more than the repeat period for standard keyboards,
 ;; so no slow down when scrolling
-(setq minimap-update-delay 0.05)
+;; (setq minimap-update-delay 0.05)
 
-(defun minimap-toggle ()
-  "Show minimap if hidden, hide if present."
-  (interactive)
-  (if (and minimap-bufname
-	       (get-buffer minimap-bufname)
-	       (get-buffer-window (get-buffer minimap-bufname)))
-      (minimap-kill)
-    (minimap-create)))
+;; (defun minimap-toggle ()
+;;   "Show minimap if hidden, hide if present."
+;;   (interactive)
+;;   (if (and minimap-bufname
+;; 	       (get-buffer minimap-bufname)
+;; 	       (get-buffer-window (get-buffer minimap-bufname)))
+;;       (minimap-kill)
+;;     (minimap-create)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Colour theme and fonts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'zenburn)
-(zenburn)
+(load-theme 'zenburn t)
+;; add colors to zenburn
+(add-to-list 'zenburn-colors-alist '("zenburn-green-yellow-2" . "#89a610"))
+(add-to-list 'zenburn-colors-alist '("zenburn-green-yellow-1" . "#99b32f"))
+(add-to-list 'zenburn-colors-alist '("zenburn-green-yellow"   . "#afd21c"))
+(add-to-list 'zenburn-colors-alist '("zenburn-green-yellow+1" . "#d1ed5d"))
+(add-to-list 'zenburn-colors-alist '("zenburn-green-yellow+2" . "#daed8d"))
+
+(add-to-list 'zenburn-colors-alist '("zenburn-yellow-green-2" . "#a3ab10"))
+(add-to-list 'zenburn-colors-alist '("zenburn-yellow-green-1" . "#b1b831"))
+(add-to-list 'zenburn-colors-alist '("zenburn-yellow-green"   . "#cfd81d"))
+(add-to-list 'zenburn-colors-alist '("zenburn-yellow-green+1" . "#e8ef5e"))
+(add-to-list 'zenburn-colors-alist '("zenburn-yellow-green+2" . "#eaef8f"))
+
+(add-to-list 'zenburn-colors-alist '("zenburn-dark-blue-2"    . "#1f3076"))
+(add-to-list 'zenburn-colors-alist '("zenburn-dark-blue-1"    . "#293c87"))
+(add-to-list 'zenburn-colors-alist '("zenburn-dark-blue"      . "#354897"))
+(add-to-list 'zenburn-colors-alist '("zenburn-dark-blue+1"    . "#4457a4"))
+(add-to-list 'zenburn-colors-alist '("zenburn-dark-blue+2"    . "#5666ab"))
+
+(add-to-list 'zenburn-colors-alist '("zenburn-purple-2"       . "#612e7e"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple-1"       . "#6d368a"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple"         . "#784097"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple+1"       . "#814c9e"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple+2"       . "#8959a4"))
+
+(zenburn-with-color-variables
+  (custom-theme-set-faces
+   'zenburn
+;;;;; basic coloring
+   `(cursor ((t (:background ,zenburn-fg :foreground ,zenburn-bg))))
+;;;;; ioccur
+   `(ioccur-overlay-face ((t (:background ,zenburn-bg+1))))
+   `(ioccur-match-overlay-face ((t (:background ,zenburn-bg+1))))
+   `(ioccur-title-face ((t (:background ,zenburn-bg+1))))
+   `(ioccur-regexp-face ((t (:background "#506070" :underline t))))
+   `(ioccur-match-face ((t (:background "#506070"))))
+;;;;; show-paren (less aggressive highlight for show-paren-style 'expression)
+   `(show-paren-mismatch ((t (:foreground ,zenburn-red+1 :background ,zenburn-bg+3))))
+   `(show-paren-match ((t (:background ,zenburn-bg-1))))
+   ))
+
 (setq font-use-system-font t) ;; since emacs 23.2
 ;;old way:
 ;; do this in shell:
 ;;echo "Emacs.font: Monospace-12" >> ~/.Xresources
 ;;xrdb -merge ~/.Xresources
 
-(defun reload-zenburn ()
-  (interactive)
-  (load-file (expand-file-name "~/.emacs.d/lisp/zenburn.el"))
-  (color-theme-zenburn))
+;; powerline
+;; (require 'powerline)
+;; (powerline-default-theme)
+;; (setq powerline-arrow-shape 'arrow14)
+;; (custom-set-faces
+;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+;; (powerline-revert)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -214,7 +353,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq mouse-yank-at-point t)
 (setq mouse-highlight t)
-(mouse-avoidance-mode 'jump)
 ;; TODO better fix
 (defun mouse-avoidance-point-position ()
   "Return the position of point as (FRAME X . Y).
@@ -229,12 +367,27 @@ Analogous to `mouse-position'."
 		   (/ (cdr x-y) (frame-char-height)))))))
 ;; control mouse clipboard. In particular, select-active-regions, activated in 23.2, sucks.
 ;; selection by mouse is the window selection
-(setq select-active-regions 'only)
+;;(setq select-active-regions 'only) ;; dont work with emacs 23.1
 ;; window selection is put in the X primary selection
 (setq x-select-enable-primary t)
 ;; and not in X clipboard
 (setq x-select-enable-clipboard nil)
+(setq x-selection-timeout 10)
 (setq mouse-drag-copy-region t)
+(defun toggle-clipboard-selection ()
+  "Toggle clipboard/primary selection"
+  (interactive)
+  (if x-select-enable-clipboard
+      (progn
+        (setq x-select-enable-clipboard nil
+              x-select-enable-primary t)
+        (message "Primary selection"))
+    (setq x-select-enable-clipboard t
+          x-select-enable-primary nil)
+    (message "Clipboard")))
+
+;; disable moving mouse when changing frame focus (desktop shortcut for emacsclient)
+(setq focus-follows-mouse nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -322,7 +475,7 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 	(progn
 	  (re-search-backward "[^ \t\r\n]" nil t)
 	  (re-search-forward "[ \t\r\n]+" nil t)
-	  (replace-match " " nil nil))))))
+	  (replace-match "" nil nil))))))
 
 (defun truncate-list (list n)
   "Truncate LIST to at most N elements destructively."
@@ -345,6 +498,13 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
              (insert (current-kill 0)))))
 (global-set-key (kbd "C-c C-e") 'eval-and-replace)
 
+;; from http://www.emacswiki.org/emacs/AlignCommands#toc7
+(defun align-repeat (start end regexp)
+  "Repeat alignment (for all columns) with respect to the given regular expression."
+  (interactive "r\nsAlign regexp: ")
+  (align-regexp start end
+                (concat "\\(\\s-*\\)" regexp) 1 1 t))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc. settings
@@ -362,7 +522,8 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq browse-url-browser-function
       (lambda (url &rest args)
 	(interactive)
-	(launch-command "xdg-open" url)))
+        (let ((process-connection-type nil))
+          (start-process-shell-command "firefox" nil "firefox" "-new-window" url))))
 
 ;;just type y/n instead of yes/no RET. this should be default
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -379,19 +540,35 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq frame-title-format my-title)
 (setq icon-title-format my-title)
 
-;; ;;backups/autosaves : no autosaves, and backups in one centralised place
-;; (setq auto-save-default nil)
-;; (defvar backup-dir "~/.emacsbackups/")
-;; (setq backup-directory-alist (list (cons "." backup-dir)))
+;; from http://ergoemacs.org/emacs/emacs_set_backup_into_a_directory.html
+;; stop creating #autosave# files
+(setq auto-save-default nil)
+;; backup in one place
+(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
+;; make backup to a designated dir, mirroring the full path
+(defun my-backup-file-name (fpath)
+  "Return a new file path of a given file path.
+If the new path's directories does not exist, create them."
+  (let* (
+         (backupRootDir "~/.emacs.d/emacs-backup/")
+         (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, ⁖ “C:”
+         (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+         )
+    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
+    backupFilePath
+    )
+  )
+(setq make-backup-file-name-function 'my-backup-file-name)
+
 
 ;;please add a final newline each time I save a buffer
 (setq require-final-newline 't)
 
-;; TODO use own pastebin
-(require 'pastebin)
-
 ;; hl current line everywhere
 (global-hl-line-mode t)
+
+;; tramp
+(setq tramp-auto-save-directory "~/.emacs.d/tramp-autosave")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -403,6 +580,8 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
           #'(lambda ()
               (occur-rename-buffer t)))
 
+;;---- ioccur
+(require 'ioccur)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Hide lines
@@ -456,6 +635,8 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;; open the buffers and files in the selected-window, like switch-to-buffer
 (setq ido-default-file-method 'selected-window)
 (setq ido-default-buffer-method 'selected-window)
+;; ido-ubiquitous
+(ido-ubiquitous-mode t)
 
 ;;-------icomplete
 ;; completion for commands that don't use ido (like help)
@@ -465,13 +646,24 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;;-------smex
 ;; super M-x : ido + frequency
 (require 'smex)
-(setq smex-history-length 32
+(setq smex-history-length 7
       smex-save-file "~/.emacs.d/smex-items")
 (smex-initialize)
 (global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "<menu>") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; This is your old M-x.
 ;;(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
+;; save every hour
+(setq smex-save-to-file-timer (run-with-timer 3600 3600 'smex-save-to-file))
+
+;;-------flx
+;; does not work correctly on emacs23
+;; (require 'flx-ido)
+;; (flx-ido-mode t)
+;; ;; disable ido faces to see flx highlights.
+;; (setq ido-use-faces nil)
+;; (setq flx-ido-threshhold 1000)
 
 ;;-------flx
 (flx-ido-mode 1)
@@ -549,6 +741,23 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Highligh symbol
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'highlight-symbol)
+
+;; azerty
+(global-set-key (kbd "C-&") 'highlight-symbol-at-point)
+(global-set-key (kbd "C-é") 'highlight-symbol-next)
+(global-set-key (kbd "C-\"") 'highlight-symbol-prev)
+(global-set-key (kbd "C-à") 'highlight-symbol-remove-all)
+
+;; qwerty
+(global-set-key (kbd "C-1") 'highlight-symbol-at-point)
+(global-set-key (kbd "C-2") 'highlight-symbol-next)
+(global-set-key (kbd "C-3") 'highlight-symbol-prev)
+(global-set-key (kbd "C-0") 'highlight-symbol-remove-all)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Parenthesis editing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;visual paren matching
@@ -558,10 +767,11 @@ Optional depth is for internal use."
 
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
-(setq hl-paren-colors
-      (list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
-(setq hl-paren-background-colors
-	  (make-list (length hl-paren-colors) zenburn-bg-1))
+(zenburn-with-color-variables
+  (setq hl-paren-colors
+	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
+  (setq hl-paren-background-colors
+	(make-list (length hl-paren-colors) zenburn-bg-1)))
 
 ;;highlight-parentheses is a buffer-local minor mode : create a global
 ;;minor mode of our own
@@ -570,6 +780,30 @@ Optional depth is for internal use."
   (lambda ()
     (highlight-parentheses-mode t)))
 (global-highlight-parentheses-mode t)
+
+;; copy-filename
+(defun copy-filename()
+  "Copy filename to both kill ring and clipboard"
+  (interactive)
+  (let* ((filename (file-name-nondirectory (buffer-file-name)))
+         (line-number (line-number-at-pos))
+         (text (format "%s:%d" filename line-number)))
+    (x-select-text text)
+    (kill-new text)
+    (message "Copied %s" text)))
+
+; from http://emacswiki.org/emacs/ShowParenMode#toc1
+(defadvice show-paren-function
+    (after show-matching-paren-offscreen activate)
+  "If the matching paren is offscreen, show the matching line in the
+        echo area. Has no effect if the character before point is not of
+        the syntax class ')'."
+  (interactive)
+  (let* ((cb (char-before (point)))
+         (matching-text (and cb
+                             (char-equal (char-syntax cb) ?\) )
+                             (blink-matching-open))))
+    (when matching-text (message matching-text))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -592,11 +826,11 @@ Optional depth is for internal use."
 (ad-activate 'dired-omit-expunge)
 (add-hook 'dired-mode-hook 'dired-omit-mode)
 
-(require 'dired+)
+;; dired+
 ;; copy/pasting in dired
-(define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
-(define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
-(define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
+;; (define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
+;; (define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
+;; (define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
 ;;add gnome-open as C-ret
 (defun dired-xdg-open-file ()
   "Opens the current file from a Dired buffer."
@@ -630,88 +864,143 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Git
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; git-link
+(require 'git-link)
+(setq git-link-open-in-browser t)
+
+(defun git-link-gitlab-http (hostname dirname filename branch commit start end)
+  (format "http://%s/%s/blob/%s/%s#%s"
+	  hostname
+	  dirname
+	  (or branch commit)
+	  filename
+	  (if end
+	      (format "L%s-%s" start end)
+	    (format "L%s" start))))
+(defun git-link-commit-gitlab-http (hostname dirname commit)
+  (format "http://%s/%s/commit/%s"
+	  hostname
+	  dirname
+	  commit))
+(eval-after-load "git-link"
+  '(defun git-link--remote-url (name)
+     (car (git-link--exec "remote" "get-url" name))))
+
+(eval-after-load "git-link"
+  '(progn
+     (add-to-list 'git-link-remote-alist
+                  '("gitlab" git-link-gitlab-http))
+     (add-to-list 'git-link-remote-alist
+                  '("gitlab.systran.local" git-link-gitlab-http))
+     (add-to-list 'git-link-commit-remote-alist
+                  '("gitlab" git-link-commit-gitlab-http))
+     (add-to-list 'git-link-commit-remote-alist
+                  '("gitlab.systran.local" git-link-commit-gitlab-http))))
+(global-set-key (kbd "C-c g l") 'git-link)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
 (require 'magit-svn)
-(require 'magit-key-mode)
 
-(add-hook 'magit-mode-hook 'turn-on-magit-svn)
+;;; --- TODO features lost on upgrade
+;; * TODO ;;(add-hook 'magit-mode-hook 'turn-on-magit-svn) only for real svn repos
+;; alternatively: bug report on performance issue for non git-svn repos: wasn't there on magit 2012
+;; * diff with svn head (not really used)
+;; * hide untracked section by default
+(defun my-magit-section-untracked-hide (section)
+  (and (eq (magit-section-type section) 'untracked)
+       ;;TODO maybe only on home
+       ;;TODO unless already displayed and visible, if it's doable
+       'hide))
+(add-hook 'magit-section-set-visibility-hook 'my-magit-section-untracked-hide)
+;; * backport-edit & backport fix-edit (at least shortcuts disabled)
+;; * git log file range
+;; * colors
 
-;; no subdirectories for unstaged files
-;; TODO get them when open subsection on directory
-(setq magit-status-verbose-untracked nil)
 ;; no buffer saving when magit-status
-(setq magit-save-some-buffers nil)
+(setq magit-save-repository-buffers nil)
 ;; use ido in prompts
 (setq magit-completing-read-function 'magit-ido-completing-read)
 ;; show process buffer for long operations
 (setq magit-process-popup-time 5)
 ;; magit-status: switch to buffer instead of pop to buffer
 (setq magit-status-buffer-switch-function 'switch-to-buffer)
-;; M-arrows is for window-switching
-(define-key magit-mode-map (kbd "<M-left>") nil)
-;; "u" and "U" are already taken by unstage...
-(define-key magit-mode-map (kbd "o") 'magit-goto-parent-section)
+;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
+(define-key magit-mode-map (kbd "o") 'magit-section-up)
+
+(setq magit-push-always-verify nil)
 
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
-;; Diff with remote svn head
-(magit-define-command svn-remote-diff ()
-  (interactive)
-  (magit-diff "remotes/trunk..HEAD")) ;; TODO fix this: do not hardcode remote
-(magit-key-mode-insert-action 'svn "d" "Remote diff" 'magit-svn-remote-diff)
-
-;; hide untracked section when opening magit-status
-(defun my-magit-hide-untracked ()
-  "Hide untracked section."
-  (let ((untracked (magit-find-section '(untracked) magit-top-section)))
-	(if untracked
-		(magit-section-set-hidden untracked t))))
-(add-hook 'magit-refresh-status-hook 'my-magit-hide-untracked)
-
-;; display staged diff when committing
-(defun my-magit-display-staged-diff ()
-  "Expand staging section"
-  (with-local-quit
-    (magit-jump-to-staged)
-    (magit-expand-section)
-    (recenter 0)))
-(add-hook 'magit-key-mode-popup-committing-hook 'my-magit-display-staged-diff)
-
-(defun my-magit-log-rev (&rest extra-args)
-  "Like magit-log-ranged, but only specify end of rev-range"
-  (interactive)
-  (let* ((at (magit-read-rev "Log" "HEAD"))
-	 (topdir (magit-get-top-dir default-directory))
-	 (args (nconc (list (magit-rev-to-git at))
-                      magit-custom-options
-                      extra-args)))
-    (magit-buffer-switch magit-log-buffer-name)
-    (magit-mode-init topdir 'log #'magit-refresh-log-buffer (concat "" at)
-		     "--pretty=oneline" args)
-    (magit-log-mode t)))
-(magit-key-mode-insert-action 'logging "b" "Branch" 'my-magit-log-rev)
-
 ;; fyspell on log
-(add-hook 'magit-log-edit-mode-hook '(lambda () (flyspell-lang "american")))
+(add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
+
+;; ignore whitespace
+;; TODO fix ignore whitespace
+;; (defun magit-toggle-whitespace ()
+;;   (interactive)
+;;   (if (member "-w" (magit-diff-refresh-arguments))
+;;       (magit-dont-ignore-whitespace)
+;;     (magit-ignore-whitespace)))
+
+;; (defun magit-ignore-whitespace ()
+;;   (interactive)
+;;   (message "Ignore whitespace diffs")
+;;   (let ((args (magit-diff-refresh-arguments)))
+;;     (add-to-list args "-w")
+;;     (add-to-list args "--ignore-blank-lines")
+;;     (magit-diff-refresh args)))
+
+;; (defun magit-dont-ignore-whitespace ()
+;;   (interactive)
+;;   (message "Display whitespace diffs")
+;;   (magit-diff-refresh (remove "-w" (remove "--ignore-blank-lines" (magit-diff-refresh-arguments)))))
+
+;;;(define-key magit-mode-map (kbd "W") 'magit-toggle-whitespace)
+
+;; use git log -L on region & function
+;; currently not working, needs magit patch, see https://github.com/magit/magit/issues/909
+;; TODO fix log region
+;; (defun magit-log-region (pmin pmax)
+;;   (interactive "r")
+;;   (let ((line-start (line-number-at-pos pmin))
+;;         (line-stop (line-number-at-pos pmax))
+;;         (file "magit.el"))
+;;     (magit-log nil (list (format "-L%d,%d:%s" line-start line-stop file)))))
+
+;; (defun git-log-region (pmin pmax)
+;;   (interactive "r")
+;;   (let ((line-start (line-number-at-pos pmin))
+;;         (line-stop (line-number-at-pos pmax))
+;;         (default-directory (magit-get-top-dir (file-name-directory buffer-file-name)))
+;;         (file (magit-filename buffer-file-name))
+;;         (buffer (get-buffer-create "*git-log-region*")))
+;;     (with-current-buffer buffer
+;;       (erase-buffer)
+;;       (toggle-read-only t);; TODO fix this: it doesn't work
+;;       (goto-char (point-min))
+;;       (diff-mode))
+;;     (shell-command (format "echo $PWD; git log -L%d,%d:%s" line-start line-stop file) "*git-log-region*")))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; mo-git-blame
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(autoload 'mo-git-blame-file "mo-git-blame" nil t)
-(autoload 'mo-git-blame-current "mo-git-blame" nil t)
+;; magit-git-wip
+;; https://github.com/bartman/git-wip
+;; see magit-wip.el to enable on per repo basis:
+;;   git config --add magit.extension wip-save
+(require 'magit-wip)
+(magit-wip-after-save-mode 1)
+(magit-wip-after-apply-mode 1)
+(magit-wip-before-change-mode 1)
 
-;; display commits with magit
-;; TODO load this after mo-git-blame
-(defun mo-git-blame-show-revision (revision)
-  (let ((buffer (mo-git-blame-get-output-buffer)))
-    (with-current-buffer buffer
-      (let ((magit-commit-buffer-name (buffer-name)))
-        (magit-show-commit revision)))
-    (display-buffer buffer)))
+;; magit-blame
+(require 'magit-blame)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -787,7 +1076,7 @@ If window-number is invalid, an error is signaled."
 ;; (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
 
 (setq popwin:special-display-config
-      '((compilation-mode :stick t)
+      '((compilation-mode :noselect t :stick t)
         ;; TODO do not kill the grep popup window when following a match (RET)
         ;;(grep-mode        :stick t :width 0.3 :position right)
         (" *undo-tree*"   :stick t :width 0.3 :position right)
@@ -852,36 +1141,53 @@ or list all recent files if prefixed"
 ;;; Imenu: jump between indexes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'imenu)
-(defun ido-goto-symbol ()
-  "Update the imenu index and then use ido to select a symbol to navigate to."
-  (interactive)
-  (imenu--make-index-alist)
-  (let ((name-and-pos '())
-        (symbol-names '()))
-    (flet ((addsymbols (symbol-list)
-                       (when (listp symbol-list)
-                         (dolist (symbol symbol-list)
-                           (let ((name nil) (position nil))
-                             (cond
-                              ((and (listp symbol) (imenu--subalist-p symbol))
-                               (addsymbols symbol))
-
-                              ((listp symbol)
-                               (setq name (car symbol))
-                               (setq position (cdr symbol)))
-
-                              ((stringp symbol)
-                               (setq name symbol)
-                               (setq position (get-text-property 1 'org-imenu-marker symbol))))
-
-                             (unless (or (null position) (null name))
-                               (add-to-list 'symbol-names name)
-                               (add-to-list 'name-and-pos (cons name position))))))))
-      (addsymbols imenu--index-alist))
-    (let* ((selected-symbol (ido-completing-read "Symbol? " symbol-names))
-           (position (cdr (assoc selected-symbol name-and-pos))))
-      (push-mark)
-      (goto-char position))))
+    (defun ido-goto-symbol (&optional symbol-list)
+      "Refresh imenu and jump to a place in the buffer using Ido."
+      (interactive)
+      (unless (featurep 'imenu)
+        (require 'imenu nil t))
+      (cond
+       ((not symbol-list)
+        (let ((ido-mode ido-mode)
+              (ido-enable-flex-matching
+               (if (boundp 'ido-enable-flex-matching)
+                   ido-enable-flex-matching t))
+              name-and-pos symbol-names position)
+          (unless ido-mode
+            (ido-mode 1)
+            (setq ido-enable-flex-matching t))
+          (while (progn
+                   (imenu--cleanup)
+                   (setq imenu--index-alist nil)
+                   (ido-goto-symbol (imenu--make-index-alist))
+                   (setq selected-symbol
+                         (ido-completing-read "Symbol? " symbol-names))
+                   (string= (car imenu--rescan-item) selected-symbol)))
+          (unless (and (boundp 'mark-active) mark-active)
+            (push-mark nil t nil))
+          (setq position (cdr (assoc selected-symbol name-and-pos)))
+          (cond
+           ((overlayp position)
+            (goto-char (overlay-start position)))
+           (t
+            (goto-char position)))))
+       ((listp symbol-list)
+        (dolist (symbol symbol-list)
+          (let (name position)
+            (cond
+             ((and (listp symbol) (imenu--subalist-p symbol))
+              (ido-goto-symbol symbol))
+             ((listp symbol)
+              (setq name (car symbol))
+              (setq position (cdr symbol)))
+             ((stringp symbol)
+              (setq name symbol)
+              (setq position
+                    (get-text-property 1 'org-imenu-marker symbol))))
+            (unless (or (null position) (null name)
+                        (string= (car imenu--rescan-item) name))
+              (add-to-list 'symbol-names name)
+              (add-to-list 'name-and-pos (cons name position))))))))
 (global-set-key (kbd "C-x C-i") 'ido-goto-symbol)
 ;; TODO test this
 
@@ -895,6 +1201,12 @@ or list all recent files if prefixed"
 
 (setq ibuffer-always-show-last-buffer t)
 (setq ibuffer-view-ibuffer t)
+
+;; TODO make this work: it does not...
+;;(add-to-list 'ibuffer-never-show-regexps "^\\*Minibuf-1\\*$")
+;; for emacs <= 23
+(require 'ibuf-ext)
+(add-to-list 'ibuffer-never-show-predicates "^\\*Minibuf-1\\*$")
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 ;; TODO import al-ibuffer.el
@@ -912,53 +1224,45 @@ or list all recent files if prefixed"
 (load-library "yank-indent")
 (add-to-list 'yank-indent-modes 'python-mode)
 
-;; ;;highlight operators
-;; ;;(defvar font-lock-operator-face 'font-lock-operator-face)
-;; (defface font-lock-operator-face
-;;   '((t (:inherit 'font-lock-function-name-face)))
-;;   "Basic face for highlighting operators."
-;;   :group 'font-lock-faces)
 
-;; ;; c family
-;; (defun highlight-operators-c-family()
-;;   (font-lock-add-keywords
-;;    nil '(("[-|!.+=&/%*,<>:^~$]" . font-lock-operator-face))) t)
-;; (add-hook 'c-mode-common-hook 'highlight-operators-c-family)
-;; ;; lisp
-;; (font-lock-add-keywords 'emacs-lisp-mode
-;;                         '(("['#,`]" . font-lock-operator-face)) t)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; RTags
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; https://github.com/Andersbakken/rtags
+;; (add-to-list 'load-path (expand-file-name "~/tmp/rtags/rtags/src"))
+;; ;; (setenv "PATH"
+;; ;;         (concat
+;; ;;          (expand-file-name "~/tmp/rtags/bin") ";"
+;; ;;          (getenv "PATH")))
+;; (require 'rtags)
+;; (setq rtags-path (expand-file-name "~/tmp/rtags")) ;; rtags appends /bin to this path
+;; ;; prefix: C-x r
+;; (rtags-enable-standard-keybindings c-mode-base-map)
+;; ;;(setq rtags-rc-log-enabled nil)
+;; (define-key c-mode-base-map (kbd "C-j") (function rtags-find-symbol-at-point))
+;; (define-key c-mode-base-map (kbd "M-j") (function rtags-location-stack-back))
+;; (define-key c-mode-base-map (kbd "C-M-j") (function rtags-location-stack-forward))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Cedet
+;;; Ag, the silver surfer, faster ack
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-file "~/.emacs.d/cedet.el")
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ECB
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ecb)
-(setq ecb-compile-window-height 12
-      ecb-compile-window-width 'edit-window
-      ecb-layout-name "leftright2"
-      ecb-layout-window-sizes '(("leftright2"
-                                 (ecb-directories-buffer-name 0.20 . 0.65)
-                                 (ecb-sources-buffer-name 0.20 . 0.35)
-                                 (ecb-methods-buffer-name 0.20 . 0.65)
-                                 (ecb-history-buffer-name 0.20 . 0.35)))
-      ecb-primary-secondary-mouse-buttons 'mouse-1--C-mouse-1
-      ecb-tip-of-the-day nil)
-
-(defun toggle-ecb ()
-  "Toggle ecb-minor-mode."
-  (interactive)
-  (if (eq ecb-minor-mode
-          nil)
-      (ecb-activate)
-    (ecb-deactivate)))
-
-(global-set-key (kbd "C-<f1>") 'toggle-ecb)
+(require 'ag)
+;; (setq ag-highlight-search t) ;; doesn't work on emacs 23:
+;;;; error in process filter: run-hooks: Symbol's value as variable is void: compilation-filter-start
+;;;; error in process filter: Symbol's value as variable is void: compilation-filter-start
+(add-to-list 'ag-arguments "--word-regexp")
+(add-to-list 'ag-arguments "--ignore=*~")
+(add-to-list 'ag-arguments "--ignore=*/*~")
+(add-to-list 'ag-arguments "--ignore-dir=node_modules")
+(defun vc-svn-root (arg)
+  nil)
+(defun vc-hg-root (arg)
+  nil)
+;; enable follow minor mode by default
+(defun my-ag-config ()
+  (next-error-follow-minor-mode t))
+(add-hook 'ag-mode-hook 'my-ag-config)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -966,8 +1270,18 @@ or list all recent files if prefixed"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq auto-mode-alist
       (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-                ("\\.cmake\\'" . cmake-mode))
+                ("\\.cmake\\'" . cmake-mode)
+                ("CMakeLists-install.txt" . cmake-mode))
               auto-mode-alist))
+
+;; better font-lock
+(autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
+(add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
+
+;; add underscore to work split syntax table, like it's everywhere else
+(defun my-cmake-fix-underscore ()
+  (modify-syntax-entry ?_  "_" cmake-mode-syntax-table))
+(add-hook 'cmake-mode-hook 'my-cmake-fix-underscore)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -989,18 +1303,44 @@ or list all recent files if prefixed"
 (add-hook 'c-mode-common-hook
           (lambda () (c-subword-mode 1)))
 
+;; auto-newline mode
+;; (add-hook 'c-mode-common-hook
+;;           (lambda () (c-toggle-auto-newline 1)))
+
+;; hide-show
+(defun my-hide-show ()
+  (local-set-key (kbd "C-c C-h C-s") 'hs-show-block)
+  (local-set-key (kbd "C-c C-h C-h") 'hs-hide-block)
+  (local-set-key (kbd "C-c C-h C-a") 'hs-show-all)
+  (hs-minor-mode t))
+(add-hook 'c-mode-common-hook 'my-hide-show)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; C++
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;TODO ceded...
+(add-to-list 'auto-mode-alist '("\\.ipp$" . c++-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Ruby
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\Rakefile$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Guardfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Cheffile" . ruby-mode))
+(add-to-list 'auto-mode-alist '("Berksfile" . ruby-mode))
+
+(require 'ruby-block)
+(require 'ruby-end)
+
+(defun my-ruby-mode-config ()
+   (ruby-block-mode t))
+(add-hook 'ruby-mode-hook 'my-ruby-mode-config)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1021,7 +1361,10 @@ sys.path.insert(0, '')"))
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
 
-(setq js2-enter-indents-newline t)
+(add-hook 'js2-mode-hook
+          (lambda ()
+            (setq js2-enter-indents-newline t)
+            (modify-syntax-entry ?` "\"" js2-mode-syntax-table)))
 
 ;; patch for json
 (defadvice js2-parse-statement (around json)
@@ -1037,13 +1380,23 @@ sys.path.insert(0, '')"))
     ad-do-it))
 (ad-activate 'js2-parse-statement)
 
-(require 'js2-highlight-vars)
-(add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
+;; (require 'js2-highlight-vars)
+;; (add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
 
 ;; jshint flymake
 (require 'flymake-jshint)
+(setq jshint-mode-port 3993)
+(setq jshint-mode-node-program "/home/riccardi/.nvm/v0.10.18/bin/node")
 (add-hook 'js2-mode-hook
-          (lambda () (flymake-mode t)))
+          (lambda ()
+            (unless (tramp-tramp-file-p (buffer-file-name)) ;; disable flymake-jshint for remote files: often we cannot write the temporary file
+              (flymake-mode t))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; CSS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("\\.less$" . css-mode))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1052,12 +1405,29 @@ sys.path.insert(0, '')"))
 (require 'jade-mode)
 (add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
+(add-to-list 'auto-mode-alist '("\\.less\\'" . less-css-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; nXhtml
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq mumamo-background-colors nil)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; lua
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+(add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+(setq lua-indent-level 2)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; golang
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-hook 'go-mode-hook (lambda ()
+                          (local-set-key (kbd "M-.") #'godef-jump)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; flymake
@@ -1082,18 +1452,12 @@ sys.path.insert(0, '')"))
 ;;; SQL
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; enable backslash as escape character
-(
- add-hook 'sql-mode-hook
+(add-hook 'sql-mode-hook
           (lambda ()
 	    (modify-syntax-entry ?\\ "." sql-mode-syntax-table)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Prolog
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'prolog)
-(setq-default prolog-system 'gnu)
-(add-to-list 'auto-mode-alist '("\\.pl$" . prolog-mode))
+;; sql-indent
+(eval-after-load "sql"
+  '(load-library "sql-indent"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1176,6 +1540,13 @@ sys.path.insert(0, '')"))
 ;;; Outline
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq outline-minor-mode-prefix (kbd "s-o"))
+;; TODO test
+(defun my-outline-hook ()
+  (define-key outline-mode-prefix-map [(control ?<)] nil)
+  (define-key outline-mode-prefix-map [(control ?>)] nil)
+  (local-set-key "\C-c\C-c" outline-mode-prefix-map))
+(add-hook 'outline-minor-mode-hook 'my-outline-hook)
+
 (add-hook 'LaTeX-mode-hook 'outline-minor-mode)
 (add-hook 'emacs-lisp-mode-hook 'outline-minor-mode)
 (defun setup-outline-lisp ()
@@ -1282,11 +1653,30 @@ sys.path.insert(0, '')"))
 ;; (org-remember-insinuate)
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c r") 'remember)
+;;(global-set-key (kbd "C-c r") 'remember)
 (defun doc ()
   "Open doc.org"
   (interactive)
-  (find-file "~/.emacs.d/org/doc.org"))
+  (find-file "~/doc/doc.org"))
+(defun notes ()
+  "Open notes.org"
+  (interactive)
+  (find-file "~/doc/notes.org"))
+
+(defun org-toggle-todo-with-timestamp-and-fold ()
+  (interactive)
+  (save-excursion
+    (org-back-to-heading t) ;; Make sure command works even if point is
+    ;; below target heading
+    (let ((org-log-done (if org-log-done 'time nil)))
+      (cond ((looking-at "\*+ TODO")
+             (org-todo "DONE")
+             (hide-subtree))
+            ((looking-at "\*+ DONE")
+             (org-todo "TODO")
+             (hide-subtree))
+            (t (message "Can only toggle between TODO and DONE."))))))
+
 
 ;; bindings
 (add-hook 'org-load-hook
@@ -1302,6 +1692,7 @@ sys.path.insert(0, '')"))
 	    (define-key org-mode-map (kbd "<C-S-down>") 'org-metadown)
 	    ;add
 	    (define-key org-mode-map (kbd "C-c C-r") 'org-refile)
+      (define-key org-mode-map (kbd "C-c C-d") 'org-toggle-todo-with-timestamp-and-fold)
 	    ;just remove
 	    (define-key org-mode-map (kbd "<C-tab>") nil)
 	    )
@@ -1309,7 +1700,7 @@ sys.path.insert(0, '')"))
 
 ;; settings
 (setq
- org-agenda-files (list "~/.emacs.d/org/todo.org")
+ org-agenda-files (list "~/doc/agenda.org" "~/.emacs.d/org/todo.org")
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-agenda-ndays 7
  org-log-done 'note
@@ -1321,12 +1712,14 @@ sys.path.insert(0, '')"))
  org-agenda-start-on-weekday 1
  org-agenda-repeating-timestamp-show-all t
  ;; org-reverse-note-order t
+ org-startup-indented nil
  org-remember-store-without-prompt t
+ ;; org-hierarchical-todo-statistics
  org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")))
  org-remember-templates '(("Tasks" ?t "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
                           ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
                           ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
- org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "MAYBE(m)" "|" "DONE(d)" "WONTDO(w)"))
+ org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "MAYBE(m)" "|" "DONE(d)" "WONTDO(w)" "INREDMINE(r)"))
  org-todo-keyword-faces '(("IDEA" . "#d0bf8f") ("MAYBE" . "#d0bf8f") ;; zenburn-yellow-2
                           ("WONTDO" . "#8cd0d3")) ;; zenburn-blue
  )
@@ -1361,24 +1754,36 @@ sys.path.insert(0, '')"))
 ;; disable end-of-visual-line in org-mode
 (setq line-move-visual nil)
 
-;; To make windmove work
-(setq org-replace-disputed-keys t)
+;; flyspell on org-mode
+(add-hook 'org-mode-hook
+          (lambda ()
+            (flyspell-mode 1)))
+
+;; org-journal
+(require 'org-journal)
+(setq org-journal-dir "~/.emacs.d/journal/")
+(setq org-journal-file-format "%Y-%m-%d.org")
+(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) nmt(n) ses861(s) ses842 engine(e) filter(f) pte(p) pn9(P) trs(t) ldk(l) integration(i) concordancier(c) batch3(b) support(S)
+* ")
+(setq org-journal-date-format "%Y-%m-%d, %A")
+(setq org-journal-time-format "%R ")
+(setq org-journal-find-file 'find-file)
+;; link org-journal with org-agenda
+(add-to-list 'org-agenda-files org-journal-dir)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Compilation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'compile)
-;;make compile window disappear after successful compilation
-(setq compilation-finish-function
-      (lambda (buf str)
-	(if (string-match "*Compilation*" (buffer-name buf))
-	    (unless (string-match "abnormally" str)
-	      ;;no errors, make the compilation window go away
-	      (message "*Compilation* OK")
-	      (delete-windows-on buf)
-	      (bury-buffer buf)))))
-
+(defun my-compilation-finish (buf str)
+  "Make compilation window disappear after successful compilation"
+  (if (string-match "*Compilation*" (buffer-name buf))
+      (unless (string-match "abnormally" str)
+        (message "*Compilation* OK")
+        (delete-windows-on buf)
+        (bury-buffer buf))))
+(add-to-list 'compilation-finish-functions 'my-compilation-finish)
 
 ;;misc compilation settings
 (setq-default
@@ -1398,13 +1803,14 @@ sys.path.insert(0, '')"))
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
   (toggle-read-only)
-  (let* ((ansi-color-names-vector
-         (vector zenburn-bg+2
-                 "#e37170" zenburn-green
-                 zenburn-yellow zenburn-blue+1
-                 zenburn-magenta zenburn-cyan))
-         (ansi-color-map (ansi-color-make-color-map)))
-    (ansi-color-apply-on-region (point-min) (point-max)))
+  (zenburn-with-color-variables
+    (let* ((ansi-color-names-vector
+	    (vector zenburn-bg+2
+		    "#e37170" zenburn-green
+		    zenburn-yellow zenburn-blue+1
+		    zenburn-magenta zenburn-cyan))
+	   (ansi-color-map (ansi-color-make-color-map)))
+      (ansi-color-apply-on-region (point-min) (point-max))))
   (toggle-read-only))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
 (defun my-compile ()
@@ -1420,6 +1826,8 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ergo emacs
 (require 'keyfreq)
+(setq keyfreq-file "~/.emacs.d/keyfreq"
+      keyfreq-file-lock "~/.emacs.d/keyfreq.lock")
 (keyfreq-mode 1)
 (keyfreq-autosave-mode 1)
 
@@ -1542,13 +1950,6 @@ Ignores CHAR at point."
 ;; typematrix
 (global-set-key (kbd "C-M-<") 'end-of-buffer)
 
-;; key frequency
-(require 'keyfreq)
-(setq keyfreq-file "~/.emacs.d/keyfreq"
-      keyfreq-file-lock "~/.emacs.d/keyfreq.lock")
-(keyfreq-mode 1)
-(keyfreq-autosave-mode 1)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Super keybindings
@@ -1579,9 +1980,6 @@ Ignores CHAR at point."
   (interactive)
   (launch-command "gnome-terminal" ""))
 (global-set-key (kbd "s-h") 'open-shell-here)
-(defun note ()
-  (interactive)
-  (find-file "~/.emacs.d/org/notes.org"))
 (defun todos ()
   (interactive)
   (find-file "~/.emacs.d/org/todo.org"))
@@ -1832,6 +2230,17 @@ Ignores CHAR at point."
 ;;expand-region
 (require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
+;; cc modes
+(er/c-define-construct er/c-mark-template-usage er/c-mark-fully-qualified-name "<"
+                       "Mark the current template uage.")
+(defun my-er/add-cc-mode-expansions ()
+  (make-variable-buffer-local 'er/try-expand-list)
+  (setq er/try-expand-list (append
+                            er/try-expand-list
+                            '(er/c-mark-template-usage-1
+                              er/c-mark-template-usage-2))))
+
+(add-hook 'c++-mode-hook 'my-er/add-cc-mode-expansions)
 
 ;;delete active region when inserting text in it
 (delete-selection-mode t)
@@ -1908,55 +2317,103 @@ Ignores CHAR at point."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; YASnippet
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'yasnippet)
-(yas/global-mode 1)
-(setq yas/trigger-key nil)
+;; (require 'yasnippet)
+;; (add-to-list 'yas/snippet-dirs "~/.emacs.d/yas")
+;; (yas/global-mode 1)
+;; (setq yas/trigger-key nil)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; xiki
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Beginning of the el4r block:
+;; RCtool generated this block automatically. DO NOT MODIFY this block!
+;; (add-to-list 'load-path "/home/riccardi/.rvm/rubies/ruby-1.9.3-p327/share/emacs/site-lisp")
+;; (require 'el4r)
+;;(el4r-boot)
+;; End of the el4r block.
+;; User-setting area is below this line.
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Auto Completion
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; auto-complete mode : dropdown menu
-;; see http://cx4a.org/software/auto-complete/manual.html
-(setq ac-delay 0.1)
-;; correct popup display, but more expensive
-(setq popup-use-optimized-column-computation nil)
+;; ;; auto-complete mode : dropdown menu
+;; ;; see http://cx4a.org/software/auto-complete/manual.html
+;; (setq ac-delay 0.1)
+;; ;; correct popup display, but more expensive
+;; (setq popup-use-optimized-column-computation nil)
+
+;; ;; TODO TEST
+;; ;; (define-key ac-completing-map "C-n" 'ac-next)
+;; ;; (define-key ac-completing-map "C-p" 'ac-previous)
+;; ;; (setq ac-auto-start 2)
+;; ;; (setq ac-dwim t)
+;; ;; (global-set-key "M-/" 'ac-start)
+;; ;; (define-key ac-completing-map "M-/" 'ac-stop)
+;; ;; (ac-set-trigger-key "TAB")
+;; ;; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+
+;; ;; clang for auto-complete
+;; (require 'auto-complete-clang)
+
+;; (setq ac-auto-start nil)
+;; (setq ac-quick-help-delay 0.5)
+
+;; (ac-set-trigger-key "TAB")
+;; ;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
 
 
-;; clang for auto-complete
-(require 'auto-complete-clang)
+;; (defun my-ac-cc-mode-setup ()
+;;   ;; ac-source-semantic
+;;   (setq ac-sources (append '(ac-source-clang ac-source-yasnippet) ac-sources)))
+;; (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
+;; (add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
+;; (add-to-list 'ac-modes 'shell-mode)
 
-(setq ac-auto-start nil)
-(setq ac-quick-help-delay 0.5)
+;; TODO fix this: eshell-mode-hook doesnt exist
+;; (add-hook 'eshell-mode-hook (lambda () (setq ac-sources '(ac-source-files-in-current-dir ac-source-filename)))
+;; (add-to-list 'ac-modes 'eshell-mode)
 
-(ac-set-trigger-key "TAB")
-;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
-
-
-(defun my-ac-cc-mode-setup ()
-  ;; ac-source-semantic
-  (setq ac-sources (append '(ac-source-clang ac-source-yasnippet) ac-sources)))
-(add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
-(add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
-(add-to-list 'ac-modes 'shell-mode)
+;; (add-hook 'c-mode-hook (lambda () (setq ac-sources 'ac-source-semantic-raw)))
+;; (add-hook 'c++-mode-hook (lambda () (setq ac-sources 'ac-source-semantic-raw)))
 
 ;;etags for auto-complete
-(require 'auto-complete-etags)
-(add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
-(add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
+;; (require 'auto-complete-etags)
+;; (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
+;; (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
 
-(defun my-ac-emacs-lisp-mode ()
-  (setq ac-sources '(ac-source-abbrev ac-source-symbols ac-source-words-in-same-mode-buffers)))
-(add-hook 'emacs-lisp-mode-hook 'my-ac-emacs-lisp-mode)
+;; auto-complete for python
+;; Initialize Rope (for auto-complete)
+;; if this doesn't work, here is how to install this:
+;;  sudo aptitude install mercurial
+;;  mkdir /tmp/rope && cd /tmp/rope
+;;  hg clone http://bitbucket.org/agr/rope
+;;  hg clone http://bitbucket.org/agr/ropemacs
+;;  hg clone http://bitbucket.org/agr/ropemode
+;;  sudo easy_install rope
+;;  ln -s ../ropemode/ropemode ropemacs/
+;;  sudo easy_install ropemacs
+;; (ac-ropemacs-initialize)
+;; (add-hook 'python-mode-hook
+;;           (lambda ()
+;;                  (add-to-list 'ac-sources 'ac-source-ropemacs)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; XML
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'xml)
+
 (defun xml-unescape-string (s)
   "Unescape protected entities in S."
-  (let ((re (concat "&\\("
+  (let* ((xml-entity-alist '(("lt"   . "<")
+                             ("gt"   . ">")
+                             ("apos" . "'")
+                             ("quot" . "\"")
+                             ("amp"  . "&")))
+         (re (concat "&\\("
                     (mapconcat (lambda (e)
                                  (car e)) xml-entity-alist "\\|")
                     "\\);")))
@@ -2049,8 +2506,6 @@ If html is not nil, then disable interpretation of html code."
 ;;; ERC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load "~/.emacs.d/erc.el")
-;;read personal info (mainly ERC stuff)
-(load "~/.emacs.d/perso.el" t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2058,6 +2513,24 @@ If html is not nil, then disable interpretation of html code."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Personal config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq personal-config-file "~/.emacs.d/perso.el")
+(if (file-exists-p personal-config-file)
+    (load personal-config-file)
+  (message "No personal config file found."))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Work config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq work-config-file "~/.emacs.d/work.el")
+(if (file-exists-p work-config-file)
+    (load work-config-file)
+  (message "No work config file found."))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2160,4 +2633,3 @@ If html is not nil, then disable interpretation of html code."
 (setq ace-jump-mode-scope 'frame)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-c C-SPC") 'ace-jump-mode)
-
