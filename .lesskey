@@ -1,0 +1,3 @@
+
+#env
+LESS = -i -R --quit-if-one-screen --no-init
