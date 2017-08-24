@@ -2,5 +2,5 @@
        :description "A completing-read-function using ido"
        :website "https://github.com/DarwinAwardWinner/ido-completing-read-plus"
        :type github
-       :depends (cl-lib s)
+       :depends (cl-lib s memoize)
        :pkgname "DarwinAwardWinner/ido-completing-read-plus")
