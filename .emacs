@@ -930,7 +930,7 @@ Optional depth is for internal use."
 ;; show process buffer for long operations
 (setq magit-process-popup-time 5)
 ;; magit-status: switch to buffer instead of pop to buffer
-(setq magit-status-buffer-switch-function 'switch-to-buffer)
+(setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
 ;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
 (define-key magit-mode-map (kbd "o") 'magit-section-up)
 
