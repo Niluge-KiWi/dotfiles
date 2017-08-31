@@ -169,6 +169,7 @@
         pkgbuild-mode
         psvn
         rainbow-mode
+        realgud
         ruby-block
         ruby-end
         (:name s
