@@ -35,9 +35,10 @@
 ;; several archives for elpa
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("elpy" . "https://jorgenschaefer.github.io/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 ;;-------el-get
@@ -98,6 +99,7 @@
                :prepare (progn
                           (add-to-list 'auto-mode-alist
                                        '("Dockerfile\\'" . dockerfile-mode))))
+        (:name elpy :type elpa)
         erc-view-log
         (:name edit-server :type elpa)
         (:name expand-region :type git
@@ -1352,6 +1354,9 @@ or list all recent files if prefixed"
   (python-send-string "import sys
 sys.path.insert(0, '')"))
 (ad-activate 'run-python)
+
+;; elpy
+(elpy-enable)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
