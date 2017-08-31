@@ -1,0 +1,4 @@
+(:name memoize
+       :description "Memoization functions"
+       :website "https://github.com/skeeto/emacs-memoize"
+       :type elpa)
