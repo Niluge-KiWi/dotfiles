@@ -52,6 +52,7 @@
     (eval-print-last-sexp)))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(setq el-get-user-package-directory "~/.emacs.d/el-get-init-files/")
 
 (setq el-get-sources
       '(
@@ -125,6 +126,7 @@
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
         (:name hide-lines :type emacswiki)
+        (:name highlight-indentation :type elpa)
         (:name highlight-parentheses :type elpa)
         (:name highlight-symbol :type elpa)
         ido-completing-read+
