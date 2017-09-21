@@ -233,6 +233,7 @@ alias s='n sift'
 alias scmake='s --files CMakeLists.txt --files "*.cmake"'
 alias sdoc='s --files doc.org'
 alias spackage='s --files package.json'
+alias sdmake='s --files dmake.yml'
 
 
 alias sc='screen -OURd'
@@ -354,7 +355,7 @@ function mkwork {
 
   if [ ! -f doc.org ]; then
     cat > doc.org <<EOF
-* refs #${bug}: ${name}
+* refs ${bug}: ${name}
 ** commands
 ** TODO
 EOF
