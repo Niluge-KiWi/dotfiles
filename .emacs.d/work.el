@@ -72,7 +72,7 @@
     (shell-command-on-region pmin pmax
                              "python -m json.tool"
                              (current-buffer) 'replace
-                             (get-buffer-create "*python errors*")
+                             (get-buffer-create "*jsonlint errors*")
                              'display-error-buffer)))
 
 
