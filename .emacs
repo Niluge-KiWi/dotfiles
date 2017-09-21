@@ -2281,6 +2281,10 @@ Ignores CHAR at point."
 	  (unless flyspell-mode
 		(flyspell-mode t)))))
 
+;; flyspell-prog-mode *not* on strings
+(setq flyspell-prog-text-faces
+      (delq 'font-lock-string-face
+            flyspell-prog-text-faces))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
