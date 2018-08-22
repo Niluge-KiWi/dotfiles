@@ -74,23 +74,29 @@ fi
 export ALTERNATE_EDITOR="" # to tell emacsclient to start emacs --daemon and then connect to it if it is not already started; currently redundant wi all the -a "" that should be removed (after testing)
 function emacs-client
 {
+    FRAME_OPTIONS="--no-wait -c"
+    echo -- $1 --
+    if [[ "$1" == "--tty" || "$1" == "-t" || "$1" == "-nw" ]]; then
+	FRAME_OPTIONS="$1"
+	shift
+    fi
     # if only one argument, and is a grep result, open file on the right line
     if [ $# -eq 1 ]; then
         local fileline="$1"
         if echo "$fileline" | grep -q '[^:]*:[0-9]\+\(:.*\)\?$'; then
             local file="$(echo "$fileline" | awk -F: '{print $1}')"
             local line="$(echo "$fileline" | awk -F: '{print $2}')"
-            emacsclient -a "" --no-wait -c +$line "$file"
+            emacsclient -a "" +$line ${FRAME_OPTIONS} "$file"
             return
         fi
     fi
-    emacsclient -a "" --no-wait -c "$@"
+    emacsclient -a "" ${FRAME_OPTIONS} "$@"
 }
 function ec
 {
     if [ -z "$DISPLAY" ]; then
         # no x term
-        emacs-client "$@"
+        emacs-client --tty "$@"
     else
         # x term: get focus, and don't wait
         if [ -z "$*" ]; then
