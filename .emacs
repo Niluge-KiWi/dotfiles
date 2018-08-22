@@ -114,8 +114,17 @@
         fold-dwim
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
-        (:name go-company)
-        (:name go-mode)
+        (:name go-company
+               :pgkname "github.com/mdempsky/gocode")
+        go-def
+        go-eldoc
+        go-errcheck
+        go-flymake
+        go-imports
+        go-lint
+        go-mode
+        go-rename
+        go-test
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -1426,10 +1435,9 @@ sys.path.insert(0, '')"))
 ;;; golang
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "M-.") #'godef-jump)))
-(add-hook 'go-mode-hook (lambda ()
                           (set (make-local-variable 'company-backends) '(company-go))
                           (company-mode)))
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Helm charts
