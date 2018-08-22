@@ -83,6 +83,8 @@
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
         color-theme-zenburn
+        (:name company-quickhelp :type elpa)
+        (:name company-statistics :type elpa)
         (:name cucumber
                :description "Emacs mode for editing Cucumber plain text stories"
                :type git
