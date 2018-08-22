@@ -375,9 +375,11 @@ EOF
 
 
 # docker
+alias dk='docker'
 alias dc='docker-compose'
 alias dcu='dc up --build -d'
 alias de='docker exec -it'
+alias drr='docker run -it --rm'
 alias dce='de $(dc ps -q | head -1)'
 alias dcb='dce bash'
 alias di='d-info'
@@ -408,3 +410,14 @@ function d-ip () {
 function d-info() {
   d-info-cid $(d-get-cid "$@")
 }
+
+
+# kubernetes
+alias k=kubectl
+
+
+# python
+alias dmake_pdb='ipdb $(which dmake)'
+
+# http server
+alias serve-http='docker run --name serve-http -v $PWD/:/usr/share/nginx/html:ro -p 8080:80 -d nginx'
