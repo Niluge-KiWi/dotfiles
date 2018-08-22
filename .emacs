@@ -181,6 +181,7 @@
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
         (:name sql-indent :type emacswiki)
+        (:name typescript-mode :type elpa)
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
