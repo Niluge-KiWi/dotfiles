@@ -115,10 +115,8 @@
         fold-dwim
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
-        (:name go-mode
-               :description "Major mode for the Go programming language"
-               :type git
-               :url "https://github.com/dominikh/go-mode.el")
+        (:name go-company)
+        (:name go-mode)
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -1439,6 +1437,9 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key (kbd "M-.") #'godef-jump)))
+(add-hook 'go-mode-hook (lambda ()
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Helm charts
