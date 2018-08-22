@@ -161,8 +161,10 @@
         (:name mustache :type git
                :url "https://github.com/mustache/emacs.git"
                :features mustache-mode)
+        (:name nginx-mode :type elpa)
         (:name org :type elpa)
         (:name org-journal :type elpa)
+        (:name org-tree-slide :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
         ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
@@ -186,6 +188,7 @@
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
+        web-mode
         (:name widen-window :type emacswiki
                :features widen-window)
         (:name window-numbering :type http
@@ -1436,6 +1439,15 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'go-mode-hook (lambda ()
                           (local-set-key (kbd "M-.") #'godef-jump)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Helm charts
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("_helpers\\.tpl" . web-mode))
+(add-to-list 'auto-mode-alist '("NOTES\\.txt" . web-mode))
+(setq web-mode-engines-alist
+      '(("go"    . "_helpers\\.tpl")
+        ("go"    . "NOTES\\.txt")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; flymake
