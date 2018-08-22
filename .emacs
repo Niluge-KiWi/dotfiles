@@ -110,8 +110,7 @@
                :type git
                :url "https://github.com/lewang/flx.git"
                :features flx-ido)
-        (:name flymakemsg :type http
-               :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
+        (:name flycheck :type elpa)
         fold-dwim
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
@@ -1392,15 +1391,6 @@ sys.path.insert(0, '')"))
 ;; (require 'js2-highlight-vars)
 ;; (add-hook 'js2-mode-hook 'js2-highlight-vars-mode)
 
-;; jshint flymake
-(require 'flymake-jshint)
-(setq jshint-mode-port 3993)
-(setq jshint-mode-node-program "/home/riccardi/.nvm/v0.10.18/bin/node")
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (unless (tramp-tramp-file-p (buffer-file-name)) ;; disable flymake-jshint for remote files: often we cannot write the temporary file
-              (flymake-mode t))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; CSS
@@ -1449,12 +1439,6 @@ sys.path.insert(0, '')"))
 (setq web-mode-engines-alist
       '(("go"    . "_helpers\\.tpl")
         ("go"    . "NOTES\\.txt")))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; flymake
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; flymakemsg
-(require 'flymakemsg)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
