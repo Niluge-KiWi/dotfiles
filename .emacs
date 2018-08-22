@@ -154,6 +154,7 @@
         mediawiki
         (:name miniedit :type git
                :url "https://github.com/emacsmirror/miniedit.git")
+        (:name modern-cpp-font-lock :type elpa)
         (:name multi-eshell :type git
                :url "https://github.com/Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
