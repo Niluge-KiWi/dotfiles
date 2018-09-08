@@ -61,10 +61,8 @@
         auto-complete-yasnippet
         browse-kill-ring
         buffer-move
-        cedet
         cmake-mode
         dired+
-        ecb
         el-get
         (:name erc-view-log :type git
                :url "git@github.com:Niluge-KiWi/erc-view-log.git")
@@ -912,38 +910,6 @@ or list all recent files if prefixed"
 ;; ;; lisp
 ;; (font-lock-add-keywords 'emacs-lisp-mode
 ;;                         '(("['#,`]" . font-lock-operator-face)) t)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Cedet
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-file "~/.emacs.d/cedet.el")
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; ECB
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ecb)
-(setq ecb-compile-window-height 12
-      ecb-compile-window-width 'edit-window
-      ecb-layout-name "leftright2"
-      ecb-layout-window-sizes '(("leftright2"
-                                 (ecb-directories-buffer-name 0.20 . 0.65)
-                                 (ecb-sources-buffer-name 0.20 . 0.35)
-                                 (ecb-methods-buffer-name 0.20 . 0.65)
-                                 (ecb-history-buffer-name 0.20 . 0.35)))
-      ecb-primary-secondary-mouse-buttons 'mouse-1--C-mouse-1
-      ecb-tip-of-the-day nil)
-
-(defun toggle-ecb ()
-  "Toggle ecb-minor-mode."
-  (interactive)
-  (if (eq ecb-minor-mode
-          nil)
-      (ecb-activate)
-    (ecb-deactivate)))
-
-(global-set-key (kbd "C-<f1>") 'toggle-ecb)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
