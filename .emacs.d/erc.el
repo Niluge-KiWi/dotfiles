@@ -10,7 +10,7 @@
                              irccontrols list
                              log match menu move-to-prompt
                              netsplit networks noncommands
-                             readonly ring scrolltobottom
+                             readonly ring
                              services stamp spelling track
                              autoaway truncate))
 (require 'erc)
@@ -78,7 +78,8 @@ Activity means that there was no user input in the last 10 seconds."
 ;;305 306 : away messages
 (setq ;;erc-hide-list '("301" "305" "306" "324" "329" "333")
       erc-input-line-position -1
-      erc-server-reconnect-attempts t
+      erc-server-auto-reconnect nil
+      erc-server-reconnect-attempts 2
       erc-server-reconnect-timeout 10
       erc-server-send-ping-timeout 30
       erc-prompt ">"
@@ -340,7 +341,7 @@ Used for `irc' and `irc-reco'."
   (interactive "p")
   (require 'erc-track)
   (if (erc-channel-list nil)
-      (my-track-switch-buffer arg)
+      (erc-track-switch-buffer arg)
     (irc)))
 (global-set-key [f9] 'irc-dwim)
 
@@ -542,8 +543,11 @@ Blinking, if in erc-tray-blink-channels."
   "Toggles away status in ERC."
   (interactive)
   (if (erc-away-time)
-      (erc-autoaway-set-back)
-    (erc-autoaway-set-away erc-autoaway-idle-seconds)))
+      (progn
+        (erc-autoaway-set-back)
+        (message "ERC: back from away"))
+    (erc-autoaway-set-away erc-autoaway-idle-seconds)
+    (message "ERC: set away")))
 
 ;;;--------------------
 ;;; Toggle tracking
@@ -567,13 +571,19 @@ Blinking, if in erc-tray-blink-channels."
 ;;; Browse url before point with just a keystroke
 ;;;--------------------
 (require 'thingatpt)
+;; was defined before, now removed in new implementation
+(defvar thing-at-point-url-regexp
+  (concat
+   "\\(https?://\\|ftp://\\|gopher://\\|telnet://\\|wais://\\|file:/\\|s?news:\\|mailto:\\)"
+   thing-at-point-url-path-regexp)
+  "A regular expression probably matching a complete URL.")
 (defun browse-url-before-end-of-line ()
   "Ask a WWW browser to load the first URL found before the end of
 current line."
   (interactive)
   (save-excursion
     (save-match-data
-      (end-of-line)
+      ;;(end-of-line)
       (if (re-search-backward thing-at-point-url-regexp 0 t)
           (browse-url (match-string 0))
         (warn "No URL found before end of current line.")))))
