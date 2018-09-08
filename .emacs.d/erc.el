@@ -130,7 +130,7 @@ Activity means that there was no user input in the last 10 seconds."
 ;;; SSL/TLS
 ;;;--------------------
 (require 'tls)
-(setq tls-program '("gnutls-cli --strict-tofu -p %p %h"))
+(setq tls-program '("gnutls-cli -p %p %h"))
 
 
 ;;;--------------------
