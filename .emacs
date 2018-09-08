@@ -82,7 +82,6 @@
         (:name highlight-parentheses :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
-        jinja
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name js-hint :type git
@@ -101,9 +100,9 @@
                :features multi-eshell)
         (:name org :type elpa)
         (:name php-mode :type elpa)
+        pkgbuild-mode
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
-        pkgbuild-mode
         psvn
         rainbow-mode
         (:name smex :type elpa)
@@ -112,6 +111,7 @@
                :features undo-tree)
         (:name widen-window :type emacswiki
                :features widen-window)
+        win-switch
         (:name window-numbering :type http
                :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el"
                :features window-numbering)
@@ -209,7 +209,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq mouse-yank-at-point t)
 (setq mouse-highlight t)
-(mouse-avoidance-mode 'jump)
 ;; TODO better fix
 (defun mouse-avoidance-point-position ()
   "Return the position of point as (FRAME X . Y).
@@ -356,8 +355,7 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;; bypass emacs broken mechanism to detect browser
 (setq browse-url-browser-function
       (lambda (url &rest args)
-	(interactive)
-	(launch-command "xdg-open" url)))
+        (launch-command "firefox" url)))
 
 ;;blinking cursor is distracting and useless
 (blink-cursor-mode -1)
@@ -407,7 +405,7 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;;; Scrolling
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;scroll one line at a time
-(setq scroll-conservatively 200)
+(setq scroll-conservatively 10000)
 ;;keep cursor at current position when scrolling
 (setq scroll-preserve-screen-position t)
 
@@ -649,12 +647,6 @@ Optional depth is for internal use."
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
-;; Diff with remote svn head
-(magit-define-command svn-remote-diff ()
-  (interactive)
-  (magit-diff "remotes/trunk..HEAD")) ;; TODO fix this: do not hardcode remote
-(magit-key-mode-insert-action 'svn "d" "Remote diff" 'magit-svn-remote-diff)
-
 ;; hide untracked section when opening magit-status
 (defun my-magit-hide-untracked ()
   "Hide untracked section."
@@ -776,6 +768,11 @@ If window-number is invalid, an error is signaled."
         (" *undo-tree*"   :stick t :width 0.3 :position right)
         ("*Help*"         :stick t)
         ("*Completions*" :noselect t)))
+
+;; win-switch
+(require 'win-switch)
+(win-switch-setup-keys-ijkl "\C-xo")
+(setq win-switch-provide-visual-feedback nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1262,8 +1259,10 @@ sys.path.insert(0, '')"))
 
 ;; settings
 (setq
+ org-directory "~/.emacs.d/org"
  org-agenda-files (list "~/.emacs.d/org/todo.org")
  org-default-notes-file "~/.emacs.d/org/notes.org"
+ org-mobile-directory "~/android/org-mode"
  org-agenda-ndays 7
  org-log-done 'note
  ;; org-startup-folded 'content
