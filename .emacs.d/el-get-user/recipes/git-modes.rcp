@@ -1,4 +1,0 @@
-(:name git-modes
-       :description "Git modes from Magit"
-       :type github
-       :pkgname "magit/git-modes")

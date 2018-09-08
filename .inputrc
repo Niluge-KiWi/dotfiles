@@ -46,3 +46,9 @@ set skip-completed-text on
 # C-s and C-r like in emacs
 "\C-r":reverse-search-history
 "\C-s":forward-search-history
+
+# insert last file or directory
+"\e;": '\\\'$(last)\\\' \e\C-e'
+
+# insert "| less" at the end
+"\el": "\C-e | less"
