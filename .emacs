@@ -361,9 +361,6 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 	(interactive)
 	(launch-command "xdg-open" url)))
 
-;;just type y/n instead of yes/no RET. this should be default
-(fset 'yes-or-no-p 'y-or-n-p)
-
 ;;blinking cursor is distracting and useless
 (blink-cursor-mode -1)
 
@@ -1436,7 +1433,7 @@ brake whatever split of windows we might have in the frame."
   (interactive)
   (when (or (not (and (fboundp 'erc-server-buffer-live-p)
                       (erc-server-buffer-live-p)))
-            (yes-or-no-p "Really kill erc buffer?"))
+            (y-or-n-p "Really kill erc buffer?"))
     (kill-buffer)))
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 ;;like C-x k, but nicer :-)
