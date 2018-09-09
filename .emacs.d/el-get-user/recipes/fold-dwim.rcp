@@ -1,0 +1,5 @@
+(:name fold-dwim
+       :website "http://community.dur.ac.uk/p.j.heslin/Software/Emacs/"
+       :description "Unified user interface for Emacs folding mode"
+       :type http
+       :url "http://community.dur.ac.uk/p.j.heslin/Software/Emacs/Download/fold-dwim.el.txt")

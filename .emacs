@@ -102,11 +102,7 @@
         erc-view-log
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
-        (:name flx
-               :description "Fuzzy matching with good sorting in ido"
-               :type git
-               :url "https://github.com/lewang/flx.git"
-               :features flx-ido)
+        flx
         (:name flymakemsg :type http
                :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
         fold-dwim
@@ -124,7 +120,7 @@
         (:name hide-lines :type emacswiki)
         (:name highlight-parentheses)
         (:name highlight-symbol)
-        ido-completing-read+
+        ido-completing-read-plus
         (:name iedit :type git
                :url "https://github.com/victorhge/iedit.git")
         (:name ioccur :type git
@@ -602,15 +598,8 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq smex-save-to-file-timer (run-with-timer 3600 3600 'smex-save-to-file))
 
 ;;-------flx
-;; does not work correctly on emacs23
-;; (require 'flx-ido)
-;; (flx-ido-mode t)
-;; ;; disable ido faces to see flx highlights.
-;; (setq ido-use-faces nil)
-;; (setq flx-ido-threshhold 1000)
-
-;;-------flx
-(flx-ido-mode 1)
+(require 'flx-ido)
+(flx-ido-mode t)
 ;; disable ido faces to see flx highlights.
 (setq ido-use-faces nil)
 (setq flx-ido-threshhold 1000)
