@@ -171,7 +171,6 @@
                :features undo-tree)
         (:name widen-window :type emacswiki
                :features widen-window)
-        win-switch
         (:name window-numbering :type http
                :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el"
                :features window-numbering)
@@ -424,6 +423,17 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
 			 (tramp-make-tramp-file-name "sudo" "root" "localhost" filename))))
 	  (goto-char old-pnt))))
 (global-set-key (kbd "C-c C-r") 'toggle-alternate-file-as-root)
+
+;; copy-filename
+(defun copy-filename()
+  "Copy filename to both kill ring and clipboard"
+  (interactive)
+  (let* ((filename (file-name-nondirectory (buffer-file-name)))
+         (line-number (line-number-at-pos))
+         (text (format "%s:%d" filename line-number)))
+    (x-select-text text)
+    (kill-new text)
+    (message "Copied %s" text)))
 
 (defun reload-emacs () (interactive) (load-file "~/.emacs"))
 (defun edit-emacs () (interactive) (find-file "~/.emacs"))
@@ -714,17 +724,6 @@ Optional depth is for internal use."
     (highlight-parentheses-mode t)))
 (global-highlight-parentheses-mode t)
 
-;; copy-filename
-(defun copy-filename()
-  "Copy filename to both kill ring and clipboard"
-  (interactive)
-  (let* ((filename (file-name-nondirectory (buffer-file-name)))
-         (line-number (line-number-at-pos))
-         (text (format "%s:%d" filename line-number)))
-    (x-select-text text)
-    (kill-new text)
-    (message "Copied %s" text)))
-
 ; from http://emacswiki.org/emacs/ShowParenMode#toc1
 (defadvice show-paren-function
     (after show-matching-paren-offscreen activate)
@@ -955,11 +954,6 @@ If window-number is invalid, an error is signaled."
         (" *undo-tree*"   :stick t :width 0.3 :position right)
         ("*Help*"         :stick t)
         ("*Completions*" :noselect t)))
-
-;; win-switch
-(require 'win-switch)
-(win-switch-setup-keys-ijkl "\C-xo")
-(setq win-switch-provide-visual-feedback nil)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
