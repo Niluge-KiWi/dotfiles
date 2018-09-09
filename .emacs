@@ -55,20 +55,11 @@
 (setq el-get-sources
       '(
         ace-jump-mode
-        (:name ace-window
-               :description "Quickly switch windows using `ace-jump-mode'"
-               :type git
-               :url "https://github.com/abo-abo/ace-window.git"
-               :depends (ace-jump-mode))
+        ace-window
         ag
         (:name cmake-font-lock :type git
                :url "https://github.com/Lindydancer/cmake-font-lock.git")
         apache-mode
-        ;; auto-complete
-        ;; auto-complete-clang
-        ;; auto-complete-etags
-        ;; auto-complete-extension
-        ;; auto-complete-yasnippet
         browse-kill-ring
         buffer-move
 
@@ -2202,72 +2193,6 @@ Ignores CHAR at point."
 ;;(el4r-boot)
 ;; End of the el4r block.
 ;; User-setting area is below this line.
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Auto Completion
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; ;; auto-complete mode : dropdown menu
-;; ;; see http://cx4a.org/software/auto-complete/manual.html
-;; (setq ac-delay 0.1)
-;; ;; correct popup display, but more expensive
-;; (setq popup-use-optimized-column-computation nil)
-
-;; ;; TODO TEST
-;; ;; (define-key ac-completing-map "C-n" 'ac-next)
-;; ;; (define-key ac-completing-map "C-p" 'ac-previous)
-;; ;; (setq ac-auto-start 2)
-;; ;; (setq ac-dwim t)
-;; ;; (global-set-key "M-/" 'ac-start)
-;; ;; (define-key ac-completing-map "M-/" 'ac-stop)
-;; ;; (ac-set-trigger-key "TAB")
-;; ;; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-
-;; ;; clang for auto-complete
-;; (require 'auto-complete-clang)
-
-;; (setq ac-auto-start nil)
-;; (setq ac-quick-help-delay 0.5)
-
-;; (ac-set-trigger-key "TAB")
-;; ;;(define-key ac-mode-map  [(control tab)] 'auto-complete)
-
-
-;; (defun my-ac-cc-mode-setup ()
-;;   ;; ac-source-semantic
-;;   (setq ac-sources (append '(ac-source-clang ac-source-yasnippet) ac-sources)))
-;; (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
-;; (add-hook 'shell-mode-hook (lambda () (setq ac-sources 'ac-source-files-in-current-dir)))
-;; (add-to-list 'ac-modes 'shell-mode)
-
-;; TODO fix this: eshell-mode-hook doesnt exist
-;; (add-hook 'eshell-mode-hook (lambda () (setq ac-sources '(ac-source-files-in-current-dir ac-source-filename)))
-;; (add-to-list 'ac-modes 'eshell-mode)
-
-;; (add-hook 'c-mode-hook (lambda () (setq ac-sources 'ac-source-semantic-raw)))
-;; (add-hook 'c++-mode-hook (lambda () (setq ac-sources 'ac-source-semantic-raw)))
-
-;;etags for auto-complete
-;; (require 'auto-complete-etags)
-;; (add-hook 'c++-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
-;; (add-hook 'c-mode (lambda () (add-to-list 'ac-sources 'ac-source-etags)))
-
-;; auto-complete for python
-;; Initialize Rope (for auto-complete)
-;; if this doesn't work, here is how to install this:
-;;  sudo aptitude install mercurial
-;;  mkdir /tmp/rope && cd /tmp/rope
-;;  hg clone http://bitbucket.org/agr/rope
-;;  hg clone http://bitbucket.org/agr/ropemacs
-;;  hg clone http://bitbucket.org/agr/ropemode
-;;  sudo easy_install rope
-;;  ln -s ../ropemode/ropemode ropemacs/
-;;  sudo easy_install ropemacs
-;; (ac-ropemacs-initialize)
-;; (add-hook 'python-mode-hook
-;;           (lambda ()
-;;                  (add-to-list 'ac-sources 'ac-source-ropemacs)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
