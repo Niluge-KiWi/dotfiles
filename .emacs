@@ -144,10 +144,6 @@
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
         ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
         ;;        :features powerline)
-
-        (:name popwin :type git
-               :url "https://github.com/m2ym/popwin-el.git")
-
         rainbow-mode
         ruby-block
         ruby-end
@@ -162,9 +158,6 @@
                :features undo-tree)
         (:name widen-window :type emacswiki
                :features widen-window)
-        (:name window-numbering :type http
-               :url "http://nschum.de/src/emacs/window-numbering-mode/window-numbering.el"
-               :features window-numbering)
         (:name wuxch-dired-copy-paste :type emacswiki
                :features wuxch-dired-copy-paste)
         yaml-mode
@@ -896,18 +889,6 @@ Optional depth is for internal use."
 (setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
 (winner-mode t) ;; turn on the global minor mode
 
-
-;; window numbering
-;;
-;; window-numbering-mode assigns a number to each window in a Emacs frame,
-;; so you can reach any window with just one command (M-1 ... M-0)
-;;
-;; If you want to affect the numbers, use window-numbering-before-hook or window-numbering-assign-func.
-;; For instance, to always assign the calculator window the number 9, add the following to your .emacs file:
-;; (setq window-numbering-assign-func
-;;       (lambda () (when (equal (buffer-name) "*Calculator*") 9)))
-(window-numbering-mode t)
-
 ;; buffer move
 (require 'buffer-move)
 (global-set-key (kbd "S-M-<left>")  'buf-move-left)
@@ -915,36 +896,14 @@ Optional depth is for internal use."
 (global-set-key (kbd "S-M-<up>")    'buf-move-up)
 (global-set-key (kbd "S-M-<down>")  'buf-move-down)
 
-(defun buf-move-number (&optional window-number)
-    "Swap the current buffer and the buffer on the given number window.
-If window-number is invalid, an error is signaled."
-    (interactive "NSwap with window number: ")
-    (let* ((other-win (save-window-excursion
-                        (select-window-by-number window-number)
-                        (selected-window)))
-           (buf-this-buf (window-buffer (selected-window))))
-      (if (null other-win)
-          (error "Invalid window number")
-        ;; swap other window with this one
-        (set-window-buffer (selected-window) (window-buffer other-win))
-        ;; move this window to other one
-        (set-window-buffer other-win buf-this-buf)
-        (select-window other-win))))
-(global-set-key (kbd "S-M-SPC") 'buf-move-number)
+;; ace-window
+(global-set-key (kbd "M-o") 'ace-window)
 
-;; popwin
-(require 'popwin)
-(setq display-buffer-function 'popwin:display-buffer)
-;; (push '(compilation-mode :noselect t) popwin:special-display-config)
-;; (push '(" *undo-tree*" :width 0.3 :position right) popwin:special-display-config)
-
-(setq popwin:special-display-config
-      '((compilation-mode :noselect t :stick t)
-        ;; TODO do not kill the grep popup window when following a match (RET)
-        ;;(grep-mode        :stick t :width 0.3 :position right)
-        (" *undo-tree*"   :stick t :width 0.3 :position right)
-        ("*Help*"         :stick t)
-        ("*Completions*" :noselect t)))
+;; ace-jump
+(require 'ace-jump-mode)
+(setq ace-jump-mode-scope 'frame)
+(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+(global-set-key (kbd "C-c C-SPC") 'ace-jump-mode)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2421,10 +2380,3 @@ If html is not nil, then disable interpretation of html code."
 	    (set-window-point window gud-overlay-arrow-position)
 	    (if (memq gud-minor-mode '(gdbmi gdba))
 		(setq gdb-source-window window)))))))
-
-
-;; ace-jump
-(require 'ace-jump-mode)
-(setq ace-jump-mode-scope 'frame)
-(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
-(global-set-key (kbd "C-c C-SPC") 'ace-jump-mode)
