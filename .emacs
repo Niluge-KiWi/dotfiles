@@ -35,10 +35,9 @@
 ;;     (package-initialize)))
 ;; several archives for elpa
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "https://melpa.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+			 ("melpa-stable" . "https://stable.melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")))
 (package-initialize)
 
 ;;-------el-get
@@ -101,7 +100,6 @@
                           (add-to-list 'auto-mode-alist
                                        '("Dockerfile\\'" . dockerfile-mode))))
         erc-view-log
-        (:name edit-server :type elpa)
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
         (:name flx
@@ -112,9 +110,7 @@
         (:name flymakemsg :type http
                :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
         fold-dwim
-        (:name git-link :type elpa)
-
-        (:name gnuplot :type elpa)
+        (:name gnuplot-mode)
         (:name go-mode
                :description "Major mode for the Go programming language"
                :type git
@@ -126,8 +122,8 @@
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
         (:name hide-lines :type emacswiki)
-        (:name highlight-parentheses :type elpa)
-        (:name highlight-symbol :type elpa)
+        (:name highlight-parentheses)
+        (:name highlight-symbol)
         ido-completing-read+
         (:name iedit :type git
                :url "https://github.com/victorhge/iedit.git")
@@ -135,19 +131,14 @@
                :url "https://github.com/thierryvolpiatto/ioccur.git")
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
-
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
-
         (:name jshint-mode :type git
                :url "https://github.com/daleharvey/jshint-mode.git")
+        json-mode
         keyfreq
         lua-mode
         magit
-        (:name magit-svn
-               :type git
-               :url "https://github.com/magit/magit-svn.git"
-               :depends (magit))
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -170,7 +161,6 @@
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
 
-        psvn
         rainbow-mode
         ruby-block
         ruby-end
@@ -227,12 +217,8 @@
 	  desktop-base-file-name "desktop")
 ;;(desktop-save-mode 1)
 ;; save every 10mins
-;; (setq desktop-save-timer (run-with-timer 600 600 (lambda () (flet ((message (&rest args) nil))
+;; (setq desktop-save-timer (run-with-timer 600 600 (lambda () (cl-flet ((message (&rest args) nil))
 ;;                                                               (desktop-save-in-desktop-dir)))))
-
-;; edit text with emacs from Chrome: https://github.com/stsquad/emacs_chrome
-(require 'edit-server)
-(edit-server-start)
 
 ;; pipe to emacs
 (defun fake-stdin-slurp (current-dir filename)
@@ -324,10 +310,6 @@
    ))
 
 (setq font-use-system-font t) ;; since emacs 23.2
-;;old way:
-;; do this in shell:
-;;echo "Emacs.font: Monospace-12" >> ~/.Xresources
-;;xrdb -merge ~/.Xresources
 
 ;; powerline
 ;; (require 'powerline)
@@ -508,14 +490,6 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 ;;no transient mark
 (transient-mark-mode -1)
 
-;; bypass emacs broken mechanism to detect browser
-(setq browse-url-browser-function
-      (lambda (url &rest args)
-	(interactive)
-        (let ((process-connection-type nil))
-          (start-process-shell-command "firefox" nil "firefox" "-new-window" url))))
-
-
 ;;blinking cursor is distracting and useless
 (blink-cursor-mode -1)
 
@@ -528,30 +502,11 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq frame-title-format my-title)
 (setq icon-title-format my-title)
 
-;; from http://ergoemacs.org/emacs/emacs_set_backup_into_a_directory.html
 ;; stop creating #autosave# files
 (setq auto-save-default nil)
-;; backup in one place
-(setq backup-directory-alist '(("" . "~/.emacs.d/emacs-backup")))
-;; make backup to a designated dir, mirroring the full path
-(defun my-backup-file-name (fpath)
-  "Return a new file path of a given file path.
-If the new path's directories does not exist, create them."
-  (let* (
-         (backupRootDir "~/.emacs.d/emacs-backup/")
-         (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath )) ; remove Windows driver letter in path, ⁖ “C:”
-         (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
-         )
-    (make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
-    backupFilePath
-    )
-  )
-(setq make-backup-file-name-function 'my-backup-file-name)
-
 
 ;;please add a final newline each time I save a buffer
 (setq require-final-newline 't)
-
 
 ;; hl current line everywhere
 (global-hl-line-mode t)
@@ -800,20 +755,15 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; misc. dired add-ons
 (require 'dired-x)
+
 ;; omit hidden files + default
-(setq dired-omit-files
-      (concat dired-omit-files "\\|" "^\\..+$"))
+(setq-default dired-omit-files-p t) ; Buffer-local variable
+(setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+
 ;;clean dired default view : don't display groups, use human-readable sizes
 (setq dired-listing-switches "-alhG"
       dired-free-space-args "-Pkm" ;; TODO k and m for what?
       dired-auto-revert-buffer t)
-;; Omit, be quiet
-(defadvice dired-omit-expunge (around dired-omit-be-quiet)
-  "Be quiet."
-  (flet ((message (&rest args) ))
-    ad-do-it))
-(ad-activate 'dired-omit-expunge)
-(add-hook 'dired-mode-hook 'dired-omit-mode)
 
 ;; dired+
 ;; copy/pasting in dired
@@ -837,82 +787,18 @@ Optional depth is for internal use."
 ;; deactivate
 (setq vc-handled-backends nil)
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Psvn
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;C-x v s as main svn entry point
-;;note : dired customisations have to be done BEFORE this
-;;(global-set-key (kbd "C-x v s") 'svn-examine)
-;; TODO merge with magit C-c s: check if .svn is in current dir
-;;default to a clean view.
-(setq svn-status-hide-unknown t)
-(setq svn-status-hide-unmodified t)
-;; svn status in big repositories is too slow with verbose
-(setq svn-status-verbose nil)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Git
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; git-link
-(require 'git-link)
-(setq git-link-open-in-browser t)
-
-(defun git-link-gitlab-http (hostname dirname filename branch commit start end)
-  (format "http://%s/%s/blob/%s/%s#%s"
-	  hostname
-	  dirname
-	  (or branch commit)
-	  filename
-	  (if end
-	      (format "L%s-%s" start end)
-	    (format "L%s" start))))
-(defun git-link-commit-gitlab-http (hostname dirname commit)
-  (format "http://%s/%s/commit/%s"
-	  hostname
-	  dirname
-	  commit))
-(eval-after-load "git-link"
-  '(defun git-link--remote-url (name)
-     (car (git-link--exec "remote" "get-url" name))))
-
-(eval-after-load "git-link"
-  '(progn
-     (add-to-list 'git-link-remote-alist
-                  '("gitlab" git-link-gitlab-http))
-     (add-to-list 'git-link-remote-alist
-                  '("gitlab.systran.local" git-link-gitlab-http))
-     (add-to-list 'git-link-commit-remote-alist
-                  '("gitlab" git-link-commit-gitlab-http))
-     (add-to-list 'git-link-commit-remote-alist
-                  '("gitlab.systran.local" git-link-commit-gitlab-http))))
-(global-set-key (kbd "C-c g l") 'git-link)
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
-(require 'magit-svn)
 
-
-;;; --- TODO features lost on upgrade
-;; * TODO ;;(add-hook 'magit-mode-hook 'turn-on-magit-svn) only for real svn repos
-;; alternatively: bug report on performance issue for non git-svn repos: wasn't there on magit 2012
-;; * diff with svn head (not really used)
-;; * hide untracked section by default
+;; hide untracked section by default
 (defun my-magit-section-untracked-hide (section)
-  (and (eq (magit-section-type section) 'untracked)
+  (and (eq (oref section type) 'untracked)
        ;;TODO maybe only on home
        ;;TODO unless already displayed and visible, if it's doable
        'hide))
 (add-hook 'magit-section-set-visibility-hook 'my-magit-section-untracked-hide)
-;; * backport-edit & backport fix-edit (at least shortcuts disabled)
-;; * git log file range
-;; * colors
-
 
 ;; no buffer saving when magit-status
 (setq magit-save-repository-buffers nil)
@@ -1263,7 +1149,6 @@ or list all recent files if prefixed"
 (add-to-list 'ag-arguments "--ignore=*/*~")
 (add-to-list 'ag-arguments "--ignore-dir=node_modules")
 (defun vc-svn-root (arg)
-
   nil)
 (defun vc-hg-root (arg)
   nil)
@@ -1357,7 +1242,7 @@ or list all recent files if prefixed"
 (require 'python)
 (defadvice run-python (after run-python-revert-patch)
   "revert patch which removes '' from sys.path"
-  (python-send-string "import sys
+  (python-shell-internal-send-string "import sys
 sys.path.insert(0, '')"))
 (ad-activate 'run-python)
 
@@ -1367,28 +1252,12 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
 (add-hook 'js2-mode-hook
           (lambda ()
             (setq js2-enter-indents-newline t)
             (modify-syntax-entry ?` "\"" js2-mode-syntax-table)))
-
-;; patch for json
-(defadvice js2-parse-statement (around json)
-  (if (and (= tt js2-LC)
-           (eq (+ (save-excursion
-                    (goto-char (point-min))
-                    (back-to-indentation)
-                    (while (eolp)
-                      (next-line)
-                      (back-to-indentation))
-                    (point)) 1) js2-ts-cursor))
-      (setq ad-return-value (js2-parse-assign-expr))
-    ad-do-it))
-(ad-activate 'js2-parse-statement)
-
-
 
 ;; jshint flymake
 (require 'flymake-jshint)
@@ -1419,6 +1288,7 @@ sys.path.insert(0, '')"))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 (add-to-list 'auto-mode-alist '("\\.inc$" . php-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; lua
@@ -1730,9 +1600,11 @@ sys.path.insert(0, '')"))
                           ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
                           ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
  org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "MAYBE(m)" "|" "DONE(d)" "WONTDO(w)" "INREDMINE(r)"))
- org-todo-keyword-faces '(("IDEA" . "#d0bf8f") ("MAYBE" . "#d0bf8f") ;; zenburn-yellow-2
-                          ("WONTDO" . "#8cd0d3")) ;; zenburn-blue
  )
+(zenburn-with-color-variables
+  (setq org-todo-keyword-faces `(("IDEA" . ,zenburn-yellow-2) ("MAYBE" . ,zenburn-yellow-2)
+                                 ("WONTDO" . ,zenburn-blue))))
+
 
 (add-hook 'org-load-hook
 	  (lambda ()
@@ -1742,7 +1614,7 @@ sys.path.insert(0, '')"))
 ;; babel src blocks
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((sh . t)
+ '((shell . t)
    (perl . t)
    (python . t)
    (emacs-lisp . t)
@@ -2648,4 +2520,3 @@ If html is not nil, then disable interpretation of html code."
 (setq ace-jump-mode-scope 'frame)
 (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 (global-set-key (kbd "C-c C-SPC") 'ace-jump-mode)
-

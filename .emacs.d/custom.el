@@ -22,8 +22,6 @@
  '(diredp-read-priv ((t nil)))
  '(diredp-symlink ((t (:foreground "#5c888b"))))
  '(diredp-write-priv ((t nil)))
- '(ecb-default-highlight-face ((((class color) (background dark)) (:background "#75507b"))))
- '(ecb-tag-header-face ((((class color) (background dark)) (:background "#5f7f5f"))))
  '(erc-my-nick-face ((t (:foreground "#8c5353"))))
  '(js2-highlight-vars-face ((((class color) (background light)) (:background "#8cd0d3")) (((class color) (background dark)) (:background "#366060"))))
  '(js2-highlight-vars-second-face ((((class color) (background light)) (:background "#dc8cc3")) (((class color) (background dark)) (:background "#814c9e")))))
@@ -34,8 +32,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(ecb-layout-always-operate-in-edit-window (quote (switch-to-buffer)))
- '(ecb-options-version "2.40")
  '(global-font-lock-mode t)
  '(inhibit-startup-echo-area-message (user-login-name))
  '(inhibit-startup-screen t)
