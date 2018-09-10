@@ -347,6 +347,9 @@
 ;;;;; show-paren (less aggressive highlight for show-paren-style 'expression)
    `(show-paren-mismatch ((t (:foreground ,zenburn-red+1 :background ,zenburn-bg+3))))
    `(show-paren-match ((t (:background ,zenburn-bg-1))))
+;;;;; org-mode levels
+   `(org-level-7 ((t (:foreground ,zenburn-red-2))))
+   `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
    ))
 
 (setq font-use-system-font t) ;; since emacs 23.2
