@@ -420,4 +420,5 @@ alias k=kubectl
 alias dmake_pdb='ipdb $(which dmake)'
 
 # http server
-alias serve-http='docker run --name serve-http -v $PWD/:/usr/share/nginx/html:ro -p 8080:80 -d nginx'
+alias serve-http='docker run --rm --name serve-http -v $PWD/:/usr/share/nginx/html:ro -p 8080:80 -d nginx'
+alias serve-http-stop='docker stop -t0 serve-http'
