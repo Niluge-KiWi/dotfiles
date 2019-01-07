@@ -178,6 +178,10 @@
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
         pkgbuild-mode
+        (:name py-isort
+               :type github
+               :pkgname "dakra/py-isort.el"
+               :branch "isort-add-remove")
         rainbow-mode
         realgud
         ruby-block
