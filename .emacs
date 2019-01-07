@@ -155,10 +155,6 @@
         keyfreq
         lua-mode
         magit
-        (:name magit-svn
-               :type git
-               :url "https://github.com/magit/magit-svn.git"
-               :depends (magit))
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -182,7 +178,6 @@
         (:name popwin :type git
                :url "https://github.com/m2ym/popwin-el.git")
         pkgbuild-mode
-        psvn
         rainbow-mode
         realgud
         ruby-block
@@ -870,20 +865,6 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Psvn
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;C-x v s as main svn entry point
-;;note : dired customisations have to be done BEFORE this
-;;(global-set-key (kbd "C-x v s") 'svn-examine)
-;; TODO merge with magit C-c s: check if .svn is in current dir
-;;default to a clean view.
-(setq svn-status-hide-unknown t)
-(setq svn-status-hide-unmodified t)
-;; svn status in big repositories is too slow with verbose
-(setq svn-status-verbose nil)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Git
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -926,12 +907,8 @@ Optional depth is for internal use."
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
-(require 'magit-svn)
 
 ;;; --- TODO features lost on upgrade
-;; * TODO ;;(add-hook 'magit-mode-hook 'turn-on-magit-svn) only for real svn repos
-;; alternatively: bug report on performance issue for non git-svn repos: wasn't there on magit 2012
-;; * diff with svn head (not really used)
 ;; * hide untracked section by default
 (defun my-magit-section-untracked-hide (section)
   (and (eq (magit-section-type section) 'untracked)
