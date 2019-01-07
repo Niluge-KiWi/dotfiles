@@ -154,7 +154,7 @@
                :url "https://github.com/daleharvey/jshint-mode.git")
         keyfreq
         lua-mode
-        magit
+        (:name magit :type elpa)
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -913,17 +913,12 @@ Optional depth is for internal use."
 (require 'magit)
 
 ;;; --- TODO features lost on upgrade
-;; * hide untracked section by default
-(defun my-magit-section-untracked-hide (section)
-  (and (eq (magit-section-type section) 'untracked)
-       ;;TODO maybe only on home
-       ;;TODO unless already displayed and visible, if it's doable
-       'hide))
-(add-hook 'magit-section-set-visibility-hook 'my-magit-section-untracked-hide)
 ;; * backport-edit & backport fix-edit (at least shortcuts disabled)
 ;; * git log file range
 ;; * colors
 
+;; hide untracked section by default
+(push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
 ;; no buffer saving when magit-status
 (setq magit-save-repository-buffers nil)
 ;; use ido in prompts
@@ -935,12 +930,10 @@ Optional depth is for internal use."
 ;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
 (define-key magit-mode-map (kbd "o") 'magit-section-up)
 
-(setq magit-push-always-verify nil)
-
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
-;; fyspell on log
+;; flyspell on log
 (add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
 
 ;; ignore whitespace
@@ -965,31 +958,6 @@ Optional depth is for internal use."
 ;;   (magit-diff-refresh (remove "-w" (remove "--ignore-blank-lines" (magit-diff-refresh-arguments)))))
 
 ;;;(define-key magit-mode-map (kbd "W") 'magit-toggle-whitespace)
-
-;; use git log -L on region & function
-;; currently not working, needs magit patch, see https://github.com/magit/magit/issues/909
-;; TODO fix log region
-;; (defun magit-log-region (pmin pmax)
-;;   (interactive "r")
-;;   (let ((line-start (line-number-at-pos pmin))
-;;         (line-stop (line-number-at-pos pmax))
-;;         (file "magit.el"))
-;;     (magit-log nil (list (format "-L%d,%d:%s" line-start line-stop file)))))
-
-;; (defun git-log-region (pmin pmax)
-;;   (interactive "r")
-;;   (let ((line-start (line-number-at-pos pmin))
-;;         (line-stop (line-number-at-pos pmax))
-;;         (default-directory (magit-get-top-dir (file-name-directory buffer-file-name)))
-;;         (file (magit-filename buffer-file-name))
-;;         (buffer (get-buffer-create "*git-log-region*")))
-;;     (with-current-buffer buffer
-;;       (erase-buffer)
-;;       (toggle-read-only t);; TODO fix this: it doesn't work
-;;       (goto-char (point-min))
-;;       (diff-mode))
-;;     (shell-command (format "echo $PWD; git log -L%d,%d:%s" line-start line-stop file) "*git-log-region*")))
-
 
 ;; magit-git-wip
 ;; https://github.com/bartman/git-wip
