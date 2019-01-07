@@ -45,9 +45,26 @@
  '(magit-git-global-arguments (quote ("--no-pager" "--literal-pathspecs")))
  '(magit-merge-arguments (quote ("--no-ff")))
  '(magit-popup-use-prefix-argument (quote default))
- '(magit-revert-buffers t)
+ '(magit-revert-buffers t t)
  '(magit-tag-arguments (quote ("--annotate")))
  '(menu-bar-mode nil)
- '(org-agenda-files (quote ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
+ '(org-agenda-files
+   (quote
+    ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
+ '(safe-local-variable-values
+   (quote
+    ((eval ignore-errors "Write-contents-functions is a buffer-local alternative to before-save-hook"
+           (add-hook
+            (quote write-contents-functions)
+            (lambda nil
+              (delete-trailing-whitespace)
+              nil))
+           (require
+            (quote whitespace))
+           "Sometimes the mode needs to be toggled off and on."
+           (whitespace-mode 0)
+           (whitespace-mode 1))
+     (whitespace-line-column . 80)
+     (whitespace-style face tabs trailing lines-tail))))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
