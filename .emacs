@@ -331,6 +331,8 @@
 (add-to-list 'zenburn-colors-alist '("zenburn-purple"         . "#784097"))
 (add-to-list 'zenburn-colors-alist '("zenburn-purple+1"       . "#814c9e"))
 (add-to-list 'zenburn-colors-alist '("zenburn-purple+2"       . "#8959a4"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple+3"       . "#8f64a8"))
+(add-to-list 'zenburn-colors-alist '("zenburn-purple+4"       . "#9772ad"))
 
 (zenburn-with-color-variables
   (custom-theme-set-faces
@@ -763,6 +765,18 @@ Optional depth is for internal use."
 ;;; Highligh symbol
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
+
+(zenburn-with-color-variables
+  (setq highlight-symbol-colors
+        `(,zenburn-cyan
+          ,zenburn-green+4
+          ,zenburn-magenta
+          ,zenburn-yellow
+          ,zenburn-red-2
+          ,zenburn-blue-3
+          ,zenburn-orange
+          ,zenburn-purple+4
+          ,zenburn-yellow-green+2)))
 
 ;; azerty
 (global-set-key (kbd "C-&") 'highlight-symbol-at-point)
