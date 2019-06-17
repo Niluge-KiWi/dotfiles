@@ -131,7 +131,6 @@
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
         groovy-emacs-mode
-        (:name guide-key :type elpa)
         (:name handlebars :type git
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
