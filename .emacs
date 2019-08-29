@@ -1751,6 +1751,24 @@ sys.path.insert(0, '')"))
 (add-to-list 'org-agenda-files org-journal-dir)
 
 
+;; clocking work
+;;  many from https://writequit.org/denver-emacs/presentations/2017-04-11-time-clocking-with-org.html
+;; Show lot of clocking history so it's easy to pick items off the `C-c I` list
+(setq org-clock-history-length 20)
+
+(defun eos/org-clock-in ()
+  (interactive)
+  (org-clock-in '(4)))
+
+(global-set-key (kbd "C-c I") #'eos/org-clock-in)
+(global-set-key (kbd "C-c O") #'org-clock-out)
+
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+;; Clock out when moving task to a done state
+(setq org-clock-out-when-done t)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Compilation
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
