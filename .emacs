@@ -91,6 +91,8 @@
                :description "Emacs mode for editing Cucumber plain text stories"
                :type git
                :url "https://github.com/michaelklishin/cucumber.el.git")
+        (:name dash :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         dired+
         (:name docker :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
@@ -113,6 +115,8 @@
                :features flx-ido)
         (:name flycheck :type elpa)
         fold-dwim
+        (:name forge :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
         (:name go-company
@@ -152,7 +156,8 @@
                :url "https://github.com/daleharvey/jshint-mode.git")
         keyfreq
         lua-mode
-        (:name magit :type elpa)
+        (:name magit :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -923,6 +928,10 @@ Optional depth is for internal use."
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
+(require 'forge)
+
+(setq forge-pull-notifications nil)
+
 
 ;;; --- TODO features lost on upgrade
 ;; * backport-edit & backport fix-edit (at least shortcuts disabled)
