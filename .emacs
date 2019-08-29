@@ -92,18 +92,15 @@
                :type git
                :url "https://github.com/michaelklishin/cucumber.el.git")
         dired+
-        (:name docker
-               :description "Manage docker images & containers from Emacs"
-               :type git
-               :url "https://github.com/Silex/docker.el"
-               :depends (magit s dash))
+        (:name docker :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name dockerfile-mode
                :description "An emacs mode for handling Dockerfiles."
                :type git
                :url "https://github.com/spotify/dockerfile-mode"
                :prepare (progn
                           (add-to-list 'auto-mode-alist
-                                       '("Dockerfile\\'" . dockerfile-mode))))
+                                       '("Dockerfile" . dockerfile-mode))))
         (:name elpy :type elpa)
         erc-view-log
         (:name edit-server :type elpa)
