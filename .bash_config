@@ -116,7 +116,7 @@ alias ect='emacsclient -a "" --tty'
 export EDITOR='emacsclient -a "" -c'
 alias vi='ec'
 alias vim='ec'
-alias eg='ec -e "(magit-status \"`pwd`/\")"'
+alias eg='ec -e "(magit-status)"'
 alias mg='eg'
 alias d='ec doc.org'
 
