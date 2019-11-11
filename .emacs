@@ -73,6 +73,8 @@
         ;; auto-complete-etags
         ;; auto-complete-extension
         ;; auto-complete-yasnippet
+        (:name bpftrace-mode :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         browse-kill-ring
         buffer-move
         cmake-mode
@@ -186,7 +188,6 @@
                :pkgname "dakra/py-isort.el"
                :branch "isort-add-remove")
         rainbow-mode
-        realgud
         ruby-block
         ruby-end
         (:name s
@@ -195,6 +196,7 @@
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
         (:name sql-indent :type emacswiki)
+        (:name terraform-mode :type elpa)
         (:name typescript-mode :type elpa)
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
@@ -1345,6 +1347,10 @@ sys.path.insert(0, '')"))
 
 ;; elpy
 (elpy-enable)
+(setq elpy-rpc-python-command "python3")
+(setq python-shell-interpreter "python3")
+(setq elpy-use-ipython "python3")
+;;(add-hook 'elpy-mode-hook (lambda () (elpy-shell-set-local-shell (elpy-project-root))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1722,7 +1728,6 @@ sys.path.insert(0, '')"))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((sh . t)
-   (perl . t)
    (python . t)
    (emacs-lisp . t)
    (gnuplot . t)
@@ -1752,7 +1757,8 @@ sys.path.insert(0, '')"))
 (require 'org-journal)
 (setq org-journal-dir "~/.emacs.d/journal/")
 (setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-date-prefix "* ")
+(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) ops(o) meeting(m) veille(v)
+* ")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-time-format "%R ")
 (setq org-journal-find-file 'find-file)
