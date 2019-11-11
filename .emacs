@@ -298,9 +298,9 @@
         ("zenburn-purple+2"       . "#8959a4")
         ("zenburn-purple+3"       . "#8f64a8")
         ("zenburn-purple+4"       . "#9772ad")))
-(load-theme 'zenburn t)
-
-
+;; load-only
+(load-theme 'zenburn t nil)
+;; customize
 (zenburn-with-color-variables
   (custom-theme-set-faces
    'zenburn
@@ -319,6 +319,8 @@
    `(org-level-7 ((t (:foreground ,zenburn-red-2))))
    `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
    ))
+;; finally, enable zenburn theme
+(enable-theme 'zenburn)
 
 (setq font-use-system-font t) ;; since emacs 23.2
 
