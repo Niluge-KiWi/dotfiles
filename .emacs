@@ -36,8 +36,11 @@
 ;; several archives for elpa
 (require 'package)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-			 ("melpa-stable" . "https://stable.melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")))
+                         ("melpa" . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("elpy" . "https://jorgenschaefer.github.io/packages/")
+                         ("org" . "http://orgmode.org/elpa/"))
+      package-archive-priorities '(("melpa" . -10)))
 (package-initialize)
 
 ;;-------el-get
@@ -51,6 +54,7 @@
     (eval-print-last-sexp)))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(setq el-get-user-package-directory "~/.emacs.d/el-get-init-files/")
 
 (setq el-get-sources
       '(
@@ -60,6 +64,8 @@
         (:name cmake-font-lock :type git
                :url "https://github.com/Lindydancer/cmake-font-lock.git")
         apache-mode
+        (:name bpftrace-mode :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         browse-kill-ring
         buffer-move
 
@@ -73,42 +79,55 @@
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
         color-theme-zenburn
+	(:name company :type elpa)
+        (:name company-quickhelp :type elpa)
+        (:name company-statistics :type elpa)
         (:name cucumber
                :description "Emacs mode for editing Cucumber plain text stories"
                :type git
                :url "https://github.com/michaelklishin/cucumber.el.git")
+        (:name dash :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         dired+
-        (:name docker
-               :description "Manage docker images & containers from Emacs"
-               :type git
-               :url "https://github.com/Silex/docker.el"
-               :depends (magit s dash))
+        (:name docker :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name dockerfile-mode
                :description "An emacs mode for handling Dockerfiles."
                :type git
                :url "https://github.com/spotify/dockerfile-mode"
                :prepare (progn
                           (add-to-list 'auto-mode-alist
-                                       '("Dockerfile\\'" . dockerfile-mode))))
+                                       '("Dockerfile" . dockerfile-mode))))
+        (:name elpy :type elpa)
         erc-view-log
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
         flx
-        (:name flymakemsg :type http
-               :url "https://raw.github.com/emacsmirror/nxhtml/master/related/flymakemsg.el")
+        (:name flycheck :type elpa)
         fold-dwim
-        (:name gnuplot-mode)
-        (:name go-mode
-               :description "Major mode for the Go programming language"
-               :type git
-               :url "https://github.com/dominikh/go-mode.el")
+        (:name forge :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name git-link :type elpa)
+        (:name gnuplot :type elpa)
+        (:name go-company)
+        go-def
+        go-eldoc
+        go-errcheck
+        go-flymake
+        go-imports
+        go-lint
+        go-mode
+        go-rename
+        go-test
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
+        groovy-emacs-mode
         (:name handlebars :type git
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
         (:name hide-lines :type emacswiki)
+        (:name highlight-indentation)
         (:name highlight-parentheses)
         (:name highlight-symbol)
         ido-completing-read-plus
@@ -125,25 +144,31 @@
         json-mode
         keyfreq
         lua-mode
-        magit
+        (:name magit :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         markdown-mode
         mediawiki
         (:name miniedit :type git
                :url "https://github.com/emacsmirror/miniedit.git")
-
+        (:name modern-cpp-font-lock :type elpa)
         (:name multi-eshell :type git
                :url "https://github.com/Niluge-KiWi/multi-eshell.git"
                :features multi-eshell)
         (:name mustache :type git
                :url "https://github.com/mustache/emacs.git"
                :features mustache-mode)
+        (:name nginx-mode :type elpa)
         (:name org :type elpa)
         (:name org-journal :type elpa)
-        pkgbuild-mode
+        (:name org-tree-slide :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
         ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
         ;;        :features powerline)
+        (:name py-isort
+               :type github
+               :pkgname "dakra/py-isort.el"
+               :branch "isort-add-remove")
         rainbow-mode
         ruby-block
         ruby-end
@@ -153,9 +178,12 @@
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
         (:name sql-indent :type emacswiki)
+        (:name terraform-mode :type elpa)
+        (:name typescript-mode :type elpa)
         (:name undo-tree  :type git
                :url "http://www.dr-qubit.org/git/undo-tree.git"
                :features undo-tree)
+        web-mode
         (:name widen-window :type emacswiki
                :features widen-window)
         (:name wuxch-dired-copy-paste :type emacswiki
@@ -166,7 +194,6 @@
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Base
@@ -268,7 +295,9 @@
         ("zenburn-purple-1"       . "#6d368a")
         ("zenburn-purple"         . "#784097")
         ("zenburn-purple+1"       . "#814c9e")
-        ("zenburn-purple+2"       . "#8959a4")))
+        ("zenburn-purple+2"       . "#8959a4")
+        ("zenburn-purple+3"       . "#8f64a8")
+        ("zenburn-purple+4"       . "#9772ad")))
 (load-theme 'zenburn t)
 
 
@@ -286,6 +315,9 @@
 ;;;;; show-paren (less aggressive highlight for show-paren-style 'expression)
    `(show-paren-mismatch ((t (:foreground ,zenburn-red+1 :background ,zenburn-bg+3))))
    `(show-paren-match ((t (:background ,zenburn-bg-1))))
+;;;;; org-mode levels
+   `(org-level-7 ((t (:foreground ,zenburn-red-2))))
+   `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
    ))
 
 (setq font-use-system-font t) ;; since emacs 23.2
@@ -672,6 +704,18 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
 
+(zenburn-with-color-variables
+  (setq highlight-symbol-colors
+        `(,zenburn-cyan
+          ,zenburn-green+4
+          ,zenburn-magenta
+          ,zenburn-yellow
+          ,zenburn-red-2
+          ,zenburn-blue-3
+          ,zenburn-orange
+          ,zenburn-purple+4
+          ,zenburn-yellow-green+2)))
+
 ;; azerty
 (global-set-key (kbd "C-&") 'highlight-symbol-at-point)
 (global-set-key (kbd "C-é") 'highlight-symbol-next)
@@ -763,15 +807,15 @@ Optional depth is for internal use."
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
+(require 'forge)
+
+(setq forge-pull-notifications nil)
+
+
+;;TODO REMOVE this line
 
 ;; hide untracked section by default
-(defun my-magit-section-untracked-hide (section)
-  (and (eq (oref section type) 'untracked)
-       ;;TODO maybe only on home
-       ;;TODO unless already displayed and visible, if it's doable
-       'hide))
-(add-hook 'magit-section-set-visibility-hook 'my-magit-section-untracked-hide)
-
+(push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
 ;; no buffer saving when magit-status
 (setq magit-save-repository-buffers nil)
 ;; use ido in prompts
@@ -783,15 +827,10 @@ Optional depth is for internal use."
 ;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
 (define-key magit-mode-map (kbd "o") 'magit-section-up)
 
-(setq magit-push-always-verify nil)
-;; display full staged diff when committing
-(setq magit-expand-staged-on-commit 'full)
-
-
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
-;; fyspell on log
+;; flyspell on log
 (add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
 
 
@@ -819,31 +858,6 @@ Optional depth is for internal use."
 
 
 ;;;(define-key magit-mode-map (kbd "W") 'magit-toggle-whitespace)
-
-
-;; use git log -L on region & function
-;; currently not working, needs magit patch, see https://github.com/magit/magit/issues/909
-;; TODO fix log region
-;; (defun magit-log-region (pmin pmax)
-;;   (interactive "r")
-;;   (let ((line-start (line-number-at-pos pmin))
-;;         (line-stop (line-number-at-pos pmax))
-;;         (file "magit.el"))
-;;     (magit-log nil (list (format "-L%d,%d:%s" line-start line-stop file)))))
-
-;; (defun git-log-region (pmin pmax)
-;;   (interactive "r")
-;;   (let ((line-start (line-number-at-pos pmin))
-;;         (line-stop (line-number-at-pos pmax))
-;;         (default-directory (magit-get-top-dir (file-name-directory buffer-file-name)))
-;;         (file (magit-filename buffer-file-name))
-;;         (buffer (get-buffer-create "*git-log-region*")))
-;;     (with-current-buffer buffer
-;;       (erase-buffer)
-;;       (toggle-read-only t);; TODO fix this: it doesn't work
-;;       (goto-char (point-min))
-;;       (diff-mode))
-;;     (shell-command (format "echo $PWD; git log -L%d,%d:%s" line-start line-stop file) "*git-log-region*")))
 
 
 ;; magit-git-wip
@@ -1179,6 +1193,13 @@ or list all recent files if prefixed"
 sys.path.insert(0, '')"))
 (ad-activate 'run-python)
 
+;; elpy
+(elpy-enable)
+(setq elpy-rpc-python-command "python3")
+(setq python-shell-interpreter "python3")
+(setq elpy-use-ipython "python3")
+;;(add-hook 'elpy-mode-hook (lambda () (elpy-shell-set-local-shell (elpy-project-root))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Javascript
@@ -1191,14 +1212,6 @@ sys.path.insert(0, '')"))
           (lambda ()
             (setq js2-enter-indents-newline t)
             (modify-syntax-entry ?` "\"" js2-mode-syntax-table)))
-
-;; jshint flymake
-(require 'flymake-jshint)
-
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (unless (tramp-tramp-file-p (buffer-file-name)) ;; disable flymake-jshint for remote files: often we cannot write the temporary file
-              (flymake-mode t))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1236,13 +1249,18 @@ sys.path.insert(0, '')"))
 ;;; golang
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "M-.") #'godef-jump)))
+                          (set (make-local-variable 'company-backends) '(company-go))
+                          (company-mode)))
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; flymake
+;;; Helm charts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; flymakemsg
-(require 'flymakemsg)
+(add-to-list 'auto-mode-alist '("_helpers\\.tpl" . web-mode))
+(add-to-list 'auto-mode-alist '("NOTES\\.txt" . web-mode))
+(setq web-mode-engines-alist
+      '(("go"    . "_helpers\\.tpl")
+        ("go"    . "NOTES\\.txt")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1532,10 +1550,10 @@ sys.path.insert(0, '')"))
  org-remember-templates '(("Tasks" ?t "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
                           ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
                           ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
- org-todo-keywords '((sequence "TODO(t)" "IDEA(i)" "MAYBE(m)" "|" "DONE(d)" "WONTDO(w)" "INREDMINE(r)"))
+ org-todo-keywords '((sequence "TODO(t)" "MAYBE(m)" "|" "PR(p)" "DONE(d)" "WONTDO(w)" "INISSUE(i)" "LATER(l)"))
  )
 (zenburn-with-color-variables
-  (setq org-todo-keyword-faces `(("IDEA" . ,zenburn-yellow-2) ("MAYBE" . ,zenburn-yellow-2)
+  (setq org-todo-keyword-faces `(("MAYBE" . ,zenburn-yellow-2)
                                  ("WONTDO" . ,zenburn-blue))))
 
 
@@ -1548,7 +1566,6 @@ sys.path.insert(0, '')"))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((shell . t)
-   (perl . t)
    (python . t)
    (emacs-lisp . t)
    (gnuplot . t)
@@ -1578,13 +1595,31 @@ sys.path.insert(0, '')"))
 (require 'org-journal)
 (setq org-journal-dir "~/.emacs.d/journal/")
 (setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) nmt(n) ses861(s) ses842 engine(e) filter(f) pte(p) pn9(P) trs(t) ldk(l) integration(i) concordancier(c) batch3(b) support(S)
+(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) ops(o) meeting(m) veille(v)
 * ")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-time-format "%R ")
 (setq org-journal-find-file 'find-file)
 ;; link org-journal with org-agenda
 (add-to-list 'org-agenda-files org-journal-dir)
+
+
+;; clocking work
+;;  many from https://writequit.org/denver-emacs/presentations/2017-04-11-time-clocking-with-org.html
+;; Show lot of clocking history so it's easy to pick items off the `C-c I` list
+(setq org-clock-history-length 20)
+
+(defun eos/org-clock-in ()
+  (interactive)
+  (org-clock-in '(4)))
+
+(global-set-key (kbd "C-c I") #'eos/org-clock-in)
+(global-set-key (kbd "C-c O") #'org-clock-out)
+
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
+;; Clock out when moving task to a done state
+(setq org-clock-out-when-done t)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2094,6 +2129,10 @@ Ignores CHAR at point."
 	  (unless flyspell-mode
 		(flyspell-mode t)))))
 
+;; flyspell-prog-mode *not* on strings
+(setq flyspell-prog-text-faces
+      (delq 'font-lock-string-face
+            flyspell-prog-text-faces))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

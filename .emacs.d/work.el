@@ -23,6 +23,7 @@
 (setq-default c-basic-offset 2)
 (setq-default tab-width 8)
 (setq-default espresso-indent-level 3)
+(setq-default groovy-indent-offset 4)
 (setq-default js2-basic-offset 2)
 (setq-default sh-basic-offset 2)
 (setq-default sh-indentation 2)
@@ -72,7 +73,28 @@
     (shell-command-on-region pmin pmax
                              "python -m json.tool"
                              (current-buffer) 'replace
-                             (get-buffer-create "*python errors*")
+                             (get-buffer-create "*jsonlint errors*")
+                             'display-error-buffer)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; sqllint
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun sqllint ()
+  "Prettify sql buffer"
+  (interactive)
+  (sqllint-region (point-min) (point-max))
+  (message "Buffer has been sqllint-ed."))
+
+
+(defun sqllint-region (pmin pmax)
+  "Prettify sql region"
+  (interactive "r")
+  (save-excursion
+    (shell-command-on-region pmin pmax
+                             "sqlformat --reindent_aligned -"
+                             (current-buffer) 'replace
+                             (get-buffer-create "*sqllint errors*")
                              'display-error-buffer)))
 
 

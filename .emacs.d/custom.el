@@ -32,18 +32,21 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(elpy-rpc-python-command "python3")
  '(global-font-lock-mode t)
  '(inhibit-startup-echo-area-message (user-login-name))
  '(inhibit-startup-screen t)
  '(initial-buffer-choice t)
  '(initial-scratch-message nil)
- '(magit-cherry-pick-arguments (quote ("-x")))
+ '(magit-cherry-pick-arguments nil)
  '(magit-git-global-arguments (quote ("--no-pager" "--literal-pathspecs")))
  '(magit-merge-arguments (quote ("--no-ff")))
  '(magit-popup-use-prefix-argument (quote default))
- '(magit-revert-buffers t)
+ '(magit-revert-buffers t t)
  '(magit-tag-arguments (quote ("--annotate")))
  '(menu-bar-mode nil)
- '(org-agenda-files (quote ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
+ '(org-agenda-files
+   (quote
+    ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
