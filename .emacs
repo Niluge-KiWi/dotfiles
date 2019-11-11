@@ -35,12 +35,16 @@
 ;;     (package-initialize)))
 ;; several archives for elpa
 (require 'package)
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-                         ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("elpy" . "https://jorgenschaefer.github.io/packages/")
-                         ("org" . "http://orgmode.org/elpa/"))
-      package-archive-priorities '(("melpa" . -10)))
+(setq package-archives
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("melpa-stable" . "https://stable.melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/"))
+      package-archive-priorities
+      '(("gnu" . 5)
+	("melpa" . 0)
+	("melpa-stable" . 10)
+	("org" . 20)))
 (package-initialize)
 
 ;;-------el-get
@@ -79,7 +83,6 @@
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
         color-theme-zenburn
-	(:name company :type elpa)
         (:name company-quickhelp :type elpa)
         (:name company-statistics :type elpa)
         (:name cucumber
