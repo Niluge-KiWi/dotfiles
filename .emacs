@@ -186,6 +186,7 @@
         web-mode
         (:name widen-window :type emacswiki
                :features widen-window)
+        (:name writeroom-mode :type elpa)
         (:name wuxch-dired-copy-paste :type emacswiki
                :features wuxch-dired-copy-paste)
         yaml-mode
