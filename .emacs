@@ -101,6 +101,8 @@
                :prepare (progn
                           (add-to-list 'auto-mode-alist
                                        '("Dockerfile" . dockerfile-mode))))
+        (:name docker-tramp :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name elpy :type elpa)
         erc-view-log
         (:name expand-region :type git
