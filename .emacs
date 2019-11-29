@@ -109,6 +109,7 @@
                :url "https://github.com/magnars/expand-region.el.git")
         flx
         (:name flycheck :type elpa)
+        (:name flycheck-plantuml :type elpa)
         fold-dwim
         (:name forge :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
@@ -166,6 +167,7 @@
         (:name org :type elpa)
         (:name org-journal :type elpa)
         (:name org-tree-slide :type elpa)
+        (:name plantuml-mode :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
         ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
