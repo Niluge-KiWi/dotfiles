@@ -85,6 +85,7 @@
         color-theme-zenburn
         (:name company-quickhelp :type elpa)
         (:name company-statistics :type elpa)
+        (:name company-terraform :type elpa)
         (:name cucumber
                :description "Emacs mode for editing Cucumber plain text stories"
                :type git
@@ -125,6 +126,7 @@
         go-mode
         go-rename
         go-test
+        (:name graphviz-dot-mode :type: elpa)
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -185,6 +187,7 @@
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
         (:name sql-indent :type emacswiki)
+        (:name terraform-doc :type elpa)
         (:name terraform-mode :type elpa)
         (:name typescript-mode :type elpa)
         (:name undo-tree  :type git
