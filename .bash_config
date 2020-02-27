@@ -422,12 +422,25 @@ alias dmake_pdb='ipdb3 $(which dmake)'
 
 # http server
 function serve-http () {
-  docker run --rm --name serve-http -v $PWD/:/usr/share/nginx/html:ro -p 8080:80 -d nginx
-  url=http://$(hostname -I | cut -d" " -f1):8080
+  local port=${1:-8080}
+  if ! docker run --rm --name serve-http-${port} -v $PWD/:/usr/share/nginx/html:ro -p ${port}:80 -d nginx; then
+    echo "Use another port: e.g. serve-http 8081"
+    return 1
+  fi
+  url=http://$(hostname -I | cut -d" " -f1):${port}
   ls -1tr | while read -r f; do
     echo $url/$f;
   done
 }
-alias serve-http-stop='docker stop -t0 serve-http'
+function serve-http-stop () {
+  local port=${1:-8080}
+  if ! docker stop -t0 serve-http-${port}; then
+    echo "Check running servers: serve-http-list"
+    return 1
+  fi
+}
+function serve-http-list () {
+  docker ps -f name=serve-http-
+}
 
 alias pw='pwgen -s 12 1'
