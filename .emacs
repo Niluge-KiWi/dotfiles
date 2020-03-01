@@ -1571,6 +1571,8 @@ sys.path.insert(0, '')"))
   (setq org-todo-keyword-faces `(("MAYBE" . ,zenburn-yellow-2)
                                  ("WONTDO" . ,zenburn-blue))))
 
+;; enable <sTAB to create source code block
+(require 'org-tempo)
 
 (add-hook 'org-load-hook
 	  (lambda ()
@@ -1609,14 +1611,72 @@ sys.path.insert(0, '')"))
 ;; org-journal
 (require 'org-journal)
 (setq org-journal-dir "~/.emacs.d/journal/")
-(setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) ops(o) meeting(m) veille(v)
-* ")
+(setq org-journal-file-format "%Y-%m/%Y-%m-%d.org")
+(setq org-journal-tag-alist '(("manger" . ?1) ("home" . ?2) ("codereview" . ?r) ("ops" . ?o) ("meeting" . ?m) ("veille" . ?v)))
+(setq org-journal-date-prefix "* ")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-time-format "%R ")
 (setq org-journal-find-file 'find-file)
+(setq org-journal-carryover-items "")
 ;; link org-journal with org-agenda
 (add-to-list 'org-agenda-files org-journal-dir)
+
+(defun journal-daily-summary:get-date ()
+  "Read org-journal date at entry"
+  (buffer-substring-no-properties (+ (point) 2) (+ (point) 12)))
+(defun journal-daily-summary:get-timestamp (&optional pos)
+  "Read org-journal timestamp at entry"
+  (let ((pos (or pos (point))))
+    (buffer-substring-no-properties (+ pos 3) (+ pos 8))))
+;; TODO
+;; - plists for all: string times, times, durations times, formatted times
+;; - properties for all values, instead of dynamic block for daily summary
+;; - dynamic block for weekly/monthly summary
+(defun org-dblock-write:journal-daily-summary (params)
+  "Write journal daily summary"
+  (let* (
+         (date (car (org-map-entries 'journal-daily-summary:get-date "LEVEL=1")))
+         (string-times
+          (list
+           ;; arrival
+           (car (org-map-entries 'journal-daily-summary:get-timestamp "LEVEL=2"))
+           ;; eating
+           (or (car (org-map-entries 'journal-daily-summary:get-timestamp "manger+LEVEL=2"))
+               "12:15")
+           ;; finished eating
+           (or (car (org-map-entries (lambda ()
+                                       (journal-daily-summary:get-timestamp (org-get-next-sibling))) "manger+LEVEL=2"))
+               "13:20")
+           ;; departure
+           (or (car (org-map-entries 'journal-daily-summary:get-timestamp "home+LEVEL=2"))
+               "19:00")
+           ))
+         (times (mapcar (lambda (x) (date-to-time (concat date " " x))) string-times))
+         (morning (/ (time-to-seconds (time-subtract (nth 1 times) (nth 0 times))) 60))
+         (eating (/ (time-to-seconds (time-subtract (nth 2 times) (nth 1 times))) 60))
+         (afternoon (/ (time-to-seconds (time-subtract (nth 3 times) (nth 2 times))) 60))
+         (work (+ morning afternoon))
+         (work-human (format-time-string "%H:%M" (seconds-to-time (* 60 work)) t))
+         )
+    (insert (format "%s" date))
+    (insert (format "\n%s" (mapconcat 'identity string-times ",")))
+    (insert (format "\n%d,%d,%d,%d" morning eating afternoon work))
+    (insert (format "\n%s" work-human))
+    (org-map-entries (lambda ()
+                       (org-entry-put (point) "work" work-human))
+                     "LEVEL=1")
+    ))
+(defun org-insert-dblock:journal-daily-summary ()
+  "Wizard to interactively insert a journal-daily-summary dynamic block."
+  (interactive)
+  (let* ((params (list :name "journal-daily-summary")))
+    (org-create-dblock params)
+    (org-update-dblock)))
+(if (fboundp 'org-dynamic-block-define)
+    (org-dynamic-block-define "journal-daily-summary" 'org-insert-dblock:journal-daily-summary))
+
+
+
 
 
 ;; clocking work
