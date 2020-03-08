@@ -1636,34 +1636,63 @@ sys.path.insert(0, '')"))
   "Write journal daily summary"
   (let* (
          (date (car (org-map-entries 'journal-daily-summary:get-date "LEVEL=1")))
-         (string-times
+         (times-human
           (list
-           ;; arrival
+           :arrival
            (car (org-map-entries 'journal-daily-summary:get-timestamp "LEVEL=2"))
-           ;; eating
-           (or (car (org-map-entries 'journal-daily-summary:get-timestamp "manger+LEVEL=2"))
-               "12:15")
-           ;; finished eating
-           (or (car (org-map-entries (lambda ()
-                                       (journal-daily-summary:get-timestamp (org-get-next-sibling))) "manger+LEVEL=2"))
-               "13:20")
-           ;; departure
-           (or (car (org-map-entries 'journal-daily-summary:get-timestamp "home+LEVEL=2"))
-               "19:00")
+           :lunch-start
+           ;;(or
+            (car (org-map-entries 'journal-daily-summary:get-timestamp "manger+LEVEL=2"))
+            ;;"12:15")
+           :lunch-end
+           ;;(or
+            (car (org-map-entries (lambda ()
+                                    (journal-daily-summary:get-timestamp (org-get-next-sibling))) "manger+LEVEL=2"))
+            ;;"13:20")
+           :departure
+           ;;(or
+            (car (org-map-entries 'journal-daily-summary:get-timestamp "home+LEVEL=2"))
+            ;;"19:00")
            ))
-         (times (mapcar (lambda (x) (date-to-time (concat date " " x))) string-times))
-         (morning (/ (time-to-seconds (time-subtract (nth 1 times) (nth 0 times))) 60))
-         (eating (/ (time-to-seconds (time-subtract (nth 2 times) (nth 1 times))) 60))
-         (afternoon (/ (time-to-seconds (time-subtract (nth 3 times) (nth 2 times))) 60))
-         (work (+ morning afternoon))
-         (work-human (format-time-string "%H:%M" (seconds-to-time (* 60 work)) t))
+         (times
+          (cl-loop for (key value) on times-human by 'cddr
+                   append (list key (date-to-time (concat date " " value)))))
+         (durations-seconds
+          (list
+           :morning
+           (/ (time-to-seconds (time-subtract (plist-get times :lunch-start) (plist-get times :arrival))) 60)
+           :lunch
+           (/ (time-to-seconds (time-subtract (plist-get times :lunch-end) (plist-get times :lunch-start))) 60)
+           :afternoon
+           (/ (time-to-seconds (time-subtract (plist-get times :departure) (plist-get times :lunch-end))) 60)
+           ))
+         (durations-seconds
+          (plist-put
+           durations-seconds
+           :work
+           (+ (plist-get durations-seconds :morning) (plist-get durations-seconds :afternoon))))
+         (durations-human
+          (cl-loop for (key value) on durations-seconds by 'cddr
+                   append (list key
+                                (format-time-string "%H:%M" (seconds-to-time (* 60 value)) t))))
          )
-    (insert (format "%s" date))
-    (insert (format "\n%s" (mapconcat 'identity string-times ",")))
-    (insert (format "\n%d,%d,%d,%d" morning eating afternoon work))
-    (insert (format "\n%s" work-human))
+    (insert (format "date: %s" date))
+    (insert (format "\ntimes: %s"
+                    (string-join
+                     (cl-loop for (key value) on times-human by 'cddr collect value)
+                     ",")))
+    (insert (format "\ndurations-seconds: %s"
+                    (string-join
+                     (cl-loop for (key value) on durations-seconds by 'cddr collect (format "%s" value))
+                     ",")))
+    (insert (format "\ndurations: %s"
+                    (string-join
+                     (cl-loop for (key value) on durations-human by 'cddr collect value)
+                     ",")))
+
+    (insert (format "\n%s" (plist-get durations-human :work)))
     (org-map-entries (lambda ()
-                       (org-entry-put (point) "work" work-human))
+                       (org-entry-put (point) "work" (plist-get durations-human :work)))
                      "LEVEL=1")
     ))
 (defun org-insert-dblock:journal-daily-summary ()
