@@ -48,5 +48,8 @@
  '(org-agenda-files
    (quote
     ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
+ '(package-selected-packages
+   (quote
+    (jinja2-mode company epl terraform-doc company-terraform terraform-mode flycheck-plantuml plantuml-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize highlight-symbol highlight-parentheses graphql gnuplot git-link forge elpy docker company-statistics company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
