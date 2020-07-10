@@ -361,9 +361,10 @@ function mkwork {
 
   if [ ! -f doc.org ]; then
     cat > doc.org <<EOF
-* refs ${bug}: ${name}
-** commands
-** TODO
+#+TITLE: refs ${bug}: ${name}
+#+SETUPFILE: ~/Documents/theme-readtheorg.setup
+* commands
+* TODO
 EOF
   fi
 
