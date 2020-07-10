@@ -109,7 +109,8 @@
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
         flx
-        (:name flycheck :type elpa)
+        (:name flycheck :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name flycheck-plantuml :type elpa)
         fold-dwim
         (:name forge :type elpa
@@ -145,6 +146,7 @@
                :url "https://github.com/thierryvolpiatto/ioccur.git")
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
+        (:name jinja2-mode :type elpa)
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name jshint-mode :type git
@@ -652,6 +654,11 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq uniquify-buffer-name-style 'post-forward)
 
 ;; plus some useful functions
+;; TODO: support `/foo`, currently it fails with:
+;; Debugger entered--Lisp error: (wrong-type-argument stringp nil)
+;; find-file-name-handler(nil file-remote-p)
+;; file-remote-p(nil)
+;; uniquify-get-proposed-name("Dockerfile" "" 1)
 (defun uniquify-get-filename (filename depth)
   "Get 'uniquified' filename, given a filename and a prefix depth."
   (let ((dir (file-name-directory filename))
@@ -846,6 +853,10 @@ Optional depth is for internal use."
 ;; flyspell on log
 (add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
 
+;; https://github.com/magit/magit/issues/2012#issuecomment-619366605
+(with-eval-after-load 'magit
+  (transient-append-suffix 'magit-log "-A"
+    '("-1" "First parent" "--first-parent")))
 
 ;; ignore whitespace
 ;; TODO fix ignore whitespace
