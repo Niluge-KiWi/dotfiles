@@ -120,6 +120,9 @@ alias eg='ec -e "(magit-status)"'
 alias mg='eg'
 alias d='ec doc.org'
 
+# diff: force color=auto
+alias diff='diff --color=auto'
+
 # gdb
 alias gdb='gdb --args'
 
@@ -416,6 +419,7 @@ function d-info() {
 # kubernetes
 alias k=kubectl
 alias kx=kubectx
+alias kn=kubens
 
 
 # python
