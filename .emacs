@@ -1520,6 +1520,25 @@ sys.path.insert(0, '')"))
              (hide-subtree))
             (t (message "Can only toggle between TODO and DONE."))))))
 
+;; copied function to change format: we want 1 digit after dot, not 0.
+(require 'org-colview) ;; require first, then overwrite
+(defun org-columns--summary-estimate (estimates _)
+  "Combine a list of estimates, using mean and variance.
+The mean and variance of the result will be the sum of the means
+and variances (respectively) of the individual estimates."
+  (let ((mean 0)
+        (var 0))
+    (dolist (e estimates)
+      (pcase (mapcar #'string-to-number (split-string e "-"))
+	(`(,low ,high)
+	 (let ((m (/ (+ low high) 2.0)))
+	   (cl-incf mean m)
+	   (cl-incf var (- (/ (+ (* low low) (* high high)) 2.0) (* m m)))))
+	(`(,value) (cl-incf mean value))))
+    (let ((sd (sqrt var)))
+      (format "%s-%s"
+	      (format "%.1f" (- mean sd))
+	      (format "%.1f" (+ mean sd))))))
 
 ;; bindings
 (add-hook 'org-load-hook
@@ -1645,6 +1664,8 @@ sys.path.insert(0, '')"))
     (buffer-substring-no-properties (+ pos 3) (+ pos 8))))
 ;; TODO
 ;; - dynamic block for weekly/monthly summary
+;; - support :pause: tags for long pause during the day
+;; - better error when missing tag or other entry, for now get "date-to-time: Invalid date: 2020-02-02 "
 (defun jds:get-summary ()
   (let* (
          (date (car (org-map-entries 'jds:get-date "LEVEL=1")))
@@ -1716,11 +1737,12 @@ sys.path.insert(0, '')"))
 ;; TODO dump csv
 ;; TODO dblock with weekly and monthly summary?
 ;; TODO update all old journal files
-(defun jds:summary-multi-day (date-prefix)
+(defun jds:summary-multi-day (date-regex-prefix)
+  "Usage: 2020-03-2[34567]"
   (interactive "sDate prefix? ")
   (let* ((files
           (directory-files (expand-file-name org-journal-dir) t
-                           (concat "^" (regexp-quote date-prefix) "-.*\.org$")))
+                           (concat "^" date-regex-prefix ".*\.org$")))
          (works-human
           (org-map-entries
            (lambda ()
