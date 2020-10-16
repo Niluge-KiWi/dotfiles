@@ -83,6 +83,7 @@
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
         color-theme-zenburn
+        (:name company :type elpa)
         (:name company-quickhelp :type elpa)
         (:name company-statistics :type elpa)
         (:name company-terraform :type elpa)
@@ -111,13 +112,12 @@
         flx
         (:name flycheck :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name flycheck-plantuml :type elpa)
         fold-dwim
         (:name forge :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
-        (:name go-company)
+        (:name go-company :type elpa)
         go-def
         go-eldoc
         go-errcheck
@@ -153,6 +153,9 @@
                :url "https://github.com/daleharvey/jshint-mode.git")
         json-mode
         keyfreq
+        (:name lsp-mode :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name lsp-docker :type elpa)
         lua-mode
         (:name magit :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
