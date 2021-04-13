@@ -107,6 +107,8 @@
                :url "https://github.com/magnars/expand-region.el.git")
         flx
         (:name flycheck :type elpa)
+        (:name flycheck-aspell :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         fold-dwim
         (:name forge :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
