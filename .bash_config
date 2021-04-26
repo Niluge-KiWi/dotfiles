@@ -429,7 +429,9 @@ function d-info() {
 alias k=kubectl
 alias kx=kubectx
 alias kn=kubens
-
+export KUBECTX_IGNORE_FZF=1
+alias kubectl=kubecolor
+complete -o default -F __start_kubectl kubecolor
 
 # python
 alias dmake_pdb='ipdb3 $(which dmake)'
