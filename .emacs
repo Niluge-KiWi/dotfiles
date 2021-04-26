@@ -1576,6 +1576,7 @@ and variances (respectively) of the individual estimates."
 
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-mobile-directory "~/android/org-mode"
+ org-export-preserve-breaks t
  org-agenda-ndays 7
  org-log-done 'note
  ;; org-startup-folded 'content
