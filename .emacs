@@ -1836,57 +1836,6 @@ and variances (respectively) of the individual estimates."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Compilation
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'compile)
-(defun my-compilation-finish (buf str)
-  "Make compilation window disappear after successful compilation"
-
-  (if (string-match "*Compilation*" (buffer-name buf))
-      (unless (string-match "abnormally" str)
-
-        (message "*Compilation* OK")
-        (delete-windows-on buf)
-        (bury-buffer buf))))
-(add-to-list 'compilation-finish-functions 'my-compilation-finish)
-
-;;misc compilation settings
-(setq-default
- compile-command "make"
- compilation-read-command nil
- compilation-scroll-output 'first-error
- compilation-ask-about-save nil
- compilation-window-height nil
- compilation-auto-jump-to-first-error t
- compilation-disable-input t)
-
-;;compilation by C-c C-c in modes that don't shadow it
-(global-set-key (kbd "C-c C-c") 'compile)
-;;(global-set-key (kbd "C-M-c C-M-c") 'compile)
-
-;; term color in *Compilation*
-(require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (zenburn-with-color-variables
-    (let* ((ansi-color-names-vector
-	    (vector zenburn-bg+2
-		    "#e37170" zenburn-green
-		    zenburn-yellow zenburn-blue+1
-		    zenburn-magenta zenburn-cyan))
-	   (ansi-color-map (ansi-color-make-color-map)))
-      (ansi-color-apply-on-region (point-min) (point-max))))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-(defun my-compile ()
-  (interactive)
-  ;; force non EMACS to bypass CMake check
-  (server-with-environment '("EMACS=nil") '("EMACS")
-    (call-interactively 'compile)))
-(global-set-key (kbd "C-c C-c") 'my-compile)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ergo emacs
