@@ -125,6 +125,7 @@
         go-lint
         go-mode
         go-rename
+        go-template-mode
         go-test
         (:name graphviz-dot-mode :type: elpa)
         (:name grep-a-lot :type git
