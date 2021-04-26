@@ -237,13 +237,22 @@ alias gpackage='gf package.json'
 alias ggpackage='ggf package.json'
 
 # sift
-alias s='n sift'
+alias s='n sift --color'
 
 alias scmake='s --files CMakeLists.txt --files "*.cmake"'
 alias sdoc='s --files doc.org'
 alias spackage='s --files package.json'
 alias sdmake='s --files dmake.yml'
+alias spy='s --files "*.py"'
 
+# ripgrep
+export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
+alias r='rg'
+alias rcmake='r --glob CMakeLists.txt --glob "*.cmake"'
+alias rdoc='r --glob doc.org'
+alias rpackage='r --glob package.json'
+alias rdmake='r --glob dmake.yml'
+alias rpy='r --glob "*.py"'
 
 alias sc='screen -OURd'
 alias sls='screen -ls'

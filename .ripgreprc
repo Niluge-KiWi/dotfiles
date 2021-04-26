@@ -1,0 +1,4 @@
+--no-heading
+--color=always
+--colors=path:style:bold
+--sort=path
