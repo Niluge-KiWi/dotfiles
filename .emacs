@@ -93,7 +93,6 @@
                :url "https://github.com/michaelklishin/cucumber.el.git")
         (:name dash :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        dired+
         (:name docker :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
         (:name dockerfile-mode
@@ -804,18 +803,12 @@ Optional depth is for internal use."
       dired-free-space-args "-Pkm" ;; TODO k and m for what?
       dired-auto-revert-buffer t)
 
-;; dired+
-;; copy/pasting in dired
-;; (define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
-;; (define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
-;; (define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
-;;add gnome-open as C-ret
+;;add xdg-open as C-ret
 (defun dired-xdg-open-file ()
   "Opens the current file from a Dired buffer."
   (interactive)
   (launch-command "xdg-open" (dired-get-file-for-visit)))
 (define-key dired-mode-map (kbd "<C-return>") 'dired-xdg-open-file)
-
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
 (add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
 
