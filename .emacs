@@ -191,6 +191,7 @@
                :type git
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
+        (:name solarized-theme :type elpa)
         (:name sql-indent :type emacswiki)
         (:name terraform-doc :type elpa)
         (:name terraform-mode :type elpa)
@@ -336,7 +337,21 @@
    `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
    ))
 ;; finally, enable zenburn theme
-(enable-theme 'zenburn)
+;;(enable-theme 'zenburn)
+
+;; solarized
+;; make the fringe stand out from the background
+(setq solarized-distinct-fringe-background t)
+;; Don't change the font for some headings and titles
+;;(setq solarized-use-variable-pitch nil)
+;; Don't change size of org-mode headlines (but keep other size-changes)
+;;(setq solarized-scale-org-headlines nil)
+;; make the modeline high contrast
+(setq solarized-high-contrast-mode-line t)
+;; finally, load and enable the theme
+(load-theme 'solarized-light-high-contrast t)
+
+
 
 (setq font-use-system-font t) ;; since emacs 23.2
 
