@@ -667,19 +667,16 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (setq uniquify-buffer-name-style 'post-forward)
 
 ;; plus some useful functions
-;; TODO: support `/foo`, currently it fails with:
-;; Debugger entered--Lisp error: (wrong-type-argument stringp nil)
-;; find-file-name-handler(nil file-remote-p)
-;; file-remote-p(nil)
-;; uniquify-get-proposed-name("Dockerfile" "" 1)
 (defun uniquify-get-filename (filename depth)
   "Get 'uniquified' filename, given a filename and a prefix depth."
   (let ((dir (file-name-directory filename))
-		(file (file-name-nondirectory filename)))
-	;; remove trailing slash
-	(if (string-match "/$" dir)
-		(setq dir (substring dir 0 -1)))
-	(uniquify-get-proposed-name file dir depth)))
+        (file (file-name-nondirectory filename)))
+    ;; remove trailing slash
+    (if (string-match "/$" dir)
+        (setq dir (substring dir 0 -1)))
+    (if (string= "" dir) ;; hack to avoid "Debugger entered--Lisp error: (wrong-type-argument stringp nil)" on "/foo"
+        (setq dir "/"))
+    (uniquify-get-proposed-name file dir depth)))
 
 (defun uniquify-filename-list (file-list &optional depth)
   "Uniquify a list of filenames by returning an alist of filename and uniquified filenames.
