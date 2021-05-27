@@ -430,7 +430,7 @@ alias k=kubectl
 alias kx=kubectx
 alias kn=kubens
 export KUBECTX_IGNORE_FZF=1
-alias kubectl=kubecolor
+alias kubectl='kubecolor --light-background'
 complete -o default -F __start_kubectl kubecolor
 
 # python
