@@ -93,18 +93,9 @@
                :url "https://github.com/michaelklishin/cucumber.el.git")
         (:name dash :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name docker :type elpa
+        (:name dockerfile-mode :type elpa)
+        (:name elpy :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name dockerfile-mode
-               :description "An emacs mode for handling Dockerfiles."
-               :type git
-               :url "https://github.com/spotify/dockerfile-mode"
-               :prepare (progn
-                          (add-to-list 'auto-mode-alist
-                                       '("Dockerfile" . dockerfile-mode))))
-        (:name docker-tramp :type elpa
-               :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name elpy :type elpa)
         erc-view-log
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
@@ -112,11 +103,9 @@
         (:name flycheck :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
         fold-dwim
-        (:name forge :type elpa
-               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name forge :type elpa)
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
-        (:name go-company :type elpa)
         go-def
         go-eldoc
         go-errcheck
@@ -127,7 +116,7 @@
         go-rename
         go-template-mode
         go-test
-        (:name graphviz-dot-mode :type: elpa)
+        (:name graphviz-dot-mode :type elpa)
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -135,15 +124,19 @@
         (:name handlebars :type git
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
-        (:name hide-lines :type emacswiki)
-        (:name highlight-indentation)
-        (:name highlight-parentheses)
-        (:name highlight-symbol)
+        (:name hide-lines :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name highlight-indentation :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name highlight-parentheses :type elpa)
+        (:name highlight-symbol :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         ido-completing-read-plus
         (:name iedit :type git
                :url "https://github.com/victorhge/iedit.git")
         (:name ioccur :type git
                :url "https://github.com/thierryvolpiatto/ioccur.git")
+        (:name ivy :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
         (:name jinja2-mode :type elpa)
@@ -157,8 +150,7 @@
                :repo ("melpa" . "https://melpa.org/packages/"))
         (:name lsp-docker :type elpa)
         lua-mode
-        (:name magit :type elpa
-               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name magit :type elpa)
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -191,7 +183,8 @@
                :type git
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
-        (:name solarized-theme :type elpa)
+        (:name solarized-theme :type elpa
+	       :repo ("melpa" . "https://melpa.org/packages/"))
         (:name sql-indent :type emacswiki)
         (:name terraform-doc :type elpa)
         (:name terraform-mode :type elpa)
@@ -208,6 +201,8 @@
         yaml-mode
         ;;yasnippet
         ))
+;; DOC: warning: :type: elpa with trailing `:` is ignored, merged with el-get upstream receipe
+;; DOC: warning: no idea why but the elpa repo override seems ignored by el-get-install: always takes the package repo top priority: melpa stable
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
@@ -742,25 +737,19 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
 
-(zenburn-with-color-variables
-  (setq highlight-symbol-colors
-        `(,zenburn-cyan
-          ,zenburn-green+4
-          ,zenburn-magenta
-          ,zenburn-yellow
-          ,zenburn-red-2
-          ,zenburn-blue-3
-          ,zenburn-orange
-          ,zenburn-purple+4
-          ,zenburn-yellow-green+2)))
+;; (zenburn-with-color-variables
+;;   (setq highlight-symbol-colors
+;;         `(,zenburn-cyan
+;;           ,zenburn-green+4
+;;           ,zenburn-magenta
+;;           ,zenburn-yellow
+;;           ,zenburn-red-2
+;;           ,zenburn-blue-3
+;;           ,zenburn-orange
+;;           ,zenburn-purple+4
+;;           ,zenburn-yellow-green+2)))
 
-;; azerty
-(global-set-key (kbd "C-&") 'highlight-symbol-at-point)
-(global-set-key (kbd "C-é") 'highlight-symbol-next)
-(global-set-key (kbd "C-\"") 'highlight-symbol-prev)
-(global-set-key (kbd "C-à") 'highlight-symbol-remove-all)
 
-;; qwerty
 (global-set-key (kbd "C-1") 'highlight-symbol-at-point)
 (global-set-key (kbd "C-2") 'highlight-symbol-next)
 (global-set-key (kbd "C-3") 'highlight-symbol-prev)
@@ -776,11 +765,11 @@ Optional depth is for internal use."
 
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
-(zenburn-with-color-variables
-  (setq hl-paren-colors
-	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
-  (setq hl-paren-background-colors
-	(make-list (length hl-paren-colors) zenburn-bg-1)))
+;; (zenburn-with-color-variables
+;;   (setq hl-paren-colors
+;; 	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
+;;   (setq hl-paren-background-colors
+;; 	(make-list (length hl-paren-colors) zenburn-bg-1)))
 
 ;;highlight-parentheses is a buffer-local minor mode : create a global
 ;;minor mode of our own
@@ -844,8 +833,6 @@ Optional depth is for internal use."
 (setq forge-pull-notifications nil)
 
 
-;;TODO REMOVE this line
-
 ;; hide untracked section by default
 (push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
 ;; no buffer saving when magit-status
@@ -864,6 +851,7 @@ Optional depth is for internal use."
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
+(require 'git-commit)
 ;; flyspell on log
 (add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
 

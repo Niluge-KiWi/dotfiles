@@ -32,6 +32,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
+ '(custom-safe-themes
+   (quote
+    ("00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c" default)))
  '(elpy-rpc-python-command "python3")
  '(global-font-lock-mode t)
  '(inhibit-startup-echo-area-message (user-login-name))
@@ -50,6 +53,6 @@
     ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
  '(package-selected-packages
    (quote
-    (lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl terraform-doc company-terraform terraform-mode plantuml-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize highlight-symbol highlight-parentheses graphql gnuplot git-link forge elpy docker company-statistics company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
+    (solarized-theme company-statistics highlight-parentheses highlight-symbol ivy forge company dockerfile-mode lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl terraform-doc company-terraform terraform-mode plantuml-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize graphql gnuplot git-link elpy docker company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
