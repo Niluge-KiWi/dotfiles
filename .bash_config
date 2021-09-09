@@ -46,7 +46,12 @@ dumb)
     LIGHT_BLUE="\[\033[0;34m\]"
     RED="\[\033[1;31m\]"
     LIGHT_RED="\[\033[0;31m\]"
-    PS1="[\${debian_chroot:+(\$debian_chroot)}$BLUE\u$DEFAULT@$UNDERLINE\h$DEFAULT \w][\t](\$(rc=\$?; [ \$rc -eq 0 ] && echo \$rc || echo \"$RED\$rc$DEFAULT\"))\$ "
+    if [ -f ~/git/kube-ps1/kube-ps1.sh ]; then
+      source ~/git/kube-ps1/kube-ps1.sh
+      export KUBE_PS1_BINARY=$(which kubectl) # to bypass alias kubecolor
+      EXTRA_PS1='$(kube_ps1)'
+    fi
+    PS1="[\${debian_chroot:+(\$debian_chroot)}$BLUE\u$DEFAULT@$UNDERLINE\h$DEFAULT \w][\t](\$(rc=\$?; [ \$rc -eq 0 ] && echo \$rc || echo \"$RED\$rc$DEFAULT\"))$EXTRA_PS1\$ "
     ;;
 esac
 export PS1
@@ -54,7 +59,7 @@ export PS1
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'
+    PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME}: ${PWD/$HOME/~}\007"'";${PROMPT_COMMAND:-:}"
     ;;
 *)
     ;;
