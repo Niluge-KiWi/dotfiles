@@ -166,6 +166,8 @@
         (:name org :type elpa)
         (:name org-journal :type elpa)
         (:name org-tree-slide :type elpa)
+        (:name ox-pandoc :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name plantuml-mode :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
@@ -1577,7 +1579,10 @@ and variances (respectively) of the individual estimates."
 
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-mobile-directory "~/android/org-mode"
+
  org-export-preserve-breaks t
+ org-export-with-sub-superscripts '{}
+
  org-agenda-ndays 7
  org-log-done 'note
  ;; org-startup-folded 'content
@@ -1600,6 +1605,15 @@ and variances (respectively) of the individual estimates."
 (zenburn-with-color-variables
   (setq org-todo-keyword-faces `(("MAYBE" . ,zenburn-yellow-2)
                                  ("WONTDO" . ,zenburn-blue))))
+
+(setq
+ org-pandoc-options
+ '(
+   (standalone . t)
+   (atx-headers . t)
+   (wrap . "none")
+   (tab-stop . 2)
+   ))
 
 ;; enable <sTAB to create source code block
 (require 'org-tempo)
