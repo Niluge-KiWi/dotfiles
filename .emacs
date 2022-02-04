@@ -178,6 +178,7 @@
                :pkgname "dakra/py-isort.el"
                :branch "isort-add-remove")
         rainbow-mode
+        (:name rg :type elpa)
         ruby-block
         ruby-end
         (:name s
