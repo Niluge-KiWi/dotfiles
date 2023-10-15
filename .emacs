@@ -131,6 +131,7 @@
         (:name highlight-parentheses :type elpa)
         (:name highlight-symbol :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name htmlize :type elpa)
         ido-completing-read-plus
         (:name iedit :type git
                :url "https://github.com/victorhge/iedit.git")
@@ -145,6 +146,7 @@
         (:name jshint-mode :type git
                :url "https://github.com/daleharvey/jshint-mode.git")
         json-mode
+        (:name keychain-environment :type elpa)
         keyfreq
         (:name lsp-mode :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
@@ -344,6 +346,8 @@
 ;;(setq solarized-use-variable-pitch nil)
 ;; Don't change size of org-mode headlines (but keep other size-changes)
 ;;(setq solarized-scale-org-headlines nil)
+;; Change the size of markdown-mode headlines (off by default)
+(setq solarized-scale-markdown-headlines t)
 ;; make the modeline high contrast
 (setq solarized-high-contrast-mode-line t)
 ;; finally, load and enable the theme
@@ -838,7 +842,11 @@ Optional depth is for internal use."
 ;; no buffer saving when magit-status
 (setq magit-save-repository-buffers nil)
 ;; use ido in prompts
-(setq magit-completing-read-function 'magit-ido-completing-read)
+;; (setq magit-completing-read-function 'magit-ido-completing-read)
+;; let's try ivy there
+(ivy-mode)
+(setq magit-completing-read-function 'magit-builtin-completing-read)
+
 ;; show process buffer for long operations
 (setq magit-process-popup-time 5)
 ;; magit-status: switch to buffer instead of pop to buffer
@@ -1583,6 +1591,8 @@ and variances (respectively) of the individual estimates."
 
  org-export-preserve-breaks t
  org-export-with-sub-superscripts '{}
+
+ org-use-sub-superscripts '{}
 
  org-agenda-ndays 7
  org-log-done 'note
