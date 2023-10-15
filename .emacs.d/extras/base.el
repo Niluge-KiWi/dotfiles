@@ -149,8 +149,8 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Modify search results en masse
-(use-package wgrep
+;; Modify search results en masse, using ripgrep/rg instead of grep with wgrep
+(use-package rg
   :ensure t
   :config
   (setq wgrep-auto-save-buffer t))
