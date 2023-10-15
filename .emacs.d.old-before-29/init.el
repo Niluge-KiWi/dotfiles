@@ -82,7 +82,6 @@
                :prepare (progn
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
-        color-theme-zenburn
         (:name company :type elpa)
         (:name company-quickhelp :type elpa)
         (:name company-statistics :type elpa)
@@ -288,57 +287,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Colour theme and fonts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; add colors to zenburn
-(setq zenburn-override-colors-alist
-      '(("zenburn-green-yellow-2" . "#89a610")
-        ("zenburn-green-yellow-1" . "#99b32f")
-        ("zenburn-green-yellow"   . "#afd21c")
-        ("zenburn-green-yellow+1" . "#d1ed5d")
-        ("zenburn-green-yellow+2" . "#daed8d")
-
-        ("zenburn-yellow-green-2" . "#a3ab10")
-        ("zenburn-yellow-green-1" . "#b1b831")
-        ("zenburn-yellow-green"   . "#cfd81d")
-        ("zenburn-yellow-green+1" . "#e8ef5e")
-        ("zenburn-yellow-green+2" . "#eaef8f")
-
-        ("zenburn-dark-blue-2"    . "#1f3076")
-        ("zenburn-dark-blue-1"    . "#293c87")
-        ("zenburn-dark-blue"      . "#354897")
-        ("zenburn-dark-blue+1"    . "#4457a4")
-        ("zenburn-dark-blue+2"    . "#5666ab")
-
-        ("zenburn-purple-2"       . "#612e7e")
-        ("zenburn-purple-1"       . "#6d368a")
-        ("zenburn-purple"         . "#784097")
-        ("zenburn-purple+1"       . "#814c9e")
-        ("zenburn-purple+2"       . "#8959a4")
-        ("zenburn-purple+3"       . "#8f64a8")
-        ("zenburn-purple+4"       . "#9772ad")))
-;; load-only
-(load-theme 'zenburn t nil)
-;; customize
-(zenburn-with-color-variables
-  (custom-theme-set-faces
-   'zenburn
-;;;;; basic coloring
-   `(cursor ((t (:background ,zenburn-fg :foreground ,zenburn-bg))))
-;;;;; ioccur
-   `(ioccur-overlay-face ((t (:background ,zenburn-bg+1))))
-   `(ioccur-match-overlay-face ((t (:background ,zenburn-bg+1))))
-   `(ioccur-title-face ((t (:background ,zenburn-bg+1))))
-   `(ioccur-regexp-face ((t (:background "#506070" :underline t))))
-   `(ioccur-match-face ((t (:background "#506070"))))
-;;;;; show-paren (less aggressive highlight for show-paren-style 'expression)
-   `(show-paren-mismatch ((t (:foreground ,zenburn-red+1 :background ,zenburn-bg+3))))
-   `(show-paren-match ((t (:background ,zenburn-bg-1))))
-;;;;; org-mode levels
-   `(org-level-7 ((t (:foreground ,zenburn-red-2))))
-   `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
-   ))
-;; finally, enable zenburn theme
-;;(enable-theme 'zenburn)
-
 
 
 (setq font-use-system-font t) ;; since emacs 23.2
@@ -727,17 +675,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
 
-;; (zenburn-with-color-variables
-;;   (setq highlight-symbol-colors
-;;         `(,zenburn-cyan
-;;           ,zenburn-green+4
-;;           ,zenburn-magenta
-;;           ,zenburn-yellow
-;;           ,zenburn-red-2
-;;           ,zenburn-blue-3
-;;           ,zenburn-orange
-;;           ,zenburn-purple+4
-;;           ,zenburn-yellow-green+2)))
 
 
 (global-set-key (kbd "C-1") 'highlight-symbol-at-point)
@@ -755,11 +692,6 @@ Optional depth is for internal use."
 
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
-;; (zenburn-with-color-variables
-;;   (setq hl-paren-colors
-;; 	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
-;;   (setq hl-paren-background-colors
-;; 	(make-list (length hl-paren-colors) zenburn-bg-1)))
 
 ;;highlight-parentheses is a buffer-local minor mode : create a global
 ;;minor mode of our own
