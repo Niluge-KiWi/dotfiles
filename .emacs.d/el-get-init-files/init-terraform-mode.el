@@ -1,0 +1,5 @@
+(add-hook 'terraform-mode-hook #'company-mode)
+(add-hook 'terraform-mode-hook #'terraform-format-on-save-mode)
+;; (add-hook 'terraform-mode-hook (lambda ()
+;;                                  (set (make-local-variable 'company-backends) '(company-terraform))
+;;                                  (company-mode)))

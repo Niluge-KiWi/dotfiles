@@ -83,38 +83,31 @@
                           (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
                           (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))))
         color-theme-zenburn
+        (:name company :type elpa)
         (:name company-quickhelp :type elpa)
         (:name company-statistics :type elpa)
+        (:name company-terraform :type elpa)
         (:name cucumber
                :description "Emacs mode for editing Cucumber plain text stories"
                :type git
                :url "https://github.com/michaelklishin/cucumber.el.git")
         (:name dash :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        dired+
-        (:name docker :type elpa
+        (:name dockerfile-mode :type elpa)
+        (:name elpy :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name dockerfile-mode
-               :description "An emacs mode for handling Dockerfiles."
-               :type git
-               :url "https://github.com/spotify/dockerfile-mode"
-               :prepare (progn
-                          (add-to-list 'auto-mode-alist
-                                       '("Dockerfile" . dockerfile-mode))))
-        (:name elpy :type elpa)
         erc-view-log
         (:name expand-region :type git
                :url "https://github.com/magnars/expand-region.el.git")
         flx
-        (:name flycheck :type elpa)
+        (:name flycheck :type elpa
         (:name flycheck-aspell :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        fold-dwim
-        (:name forge :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
+        fold-dwim
+        (:name forge :type elpa)
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
-        (:name go-company)
         go-def
         go-eldoc
         go-errcheck
@@ -123,7 +116,9 @@
         go-lint
         go-mode
         go-rename
+        go-template-mode
         go-test
+        (:name graphviz-dot-mode :type elpa)
         (:name grep-a-lot :type git
                :url "https://github.com/emacsmirror/grep-a-lot.git"
                :features grep-a-lot)
@@ -131,26 +126,35 @@
         (:name handlebars :type git
                :url "https://github.com/danielevans/handlebars-mode.git"
                :features handlebars-mode)
-        (:name hide-lines :type emacswiki)
-        (:name highlight-indentation)
-        (:name highlight-parentheses)
-        (:name highlight-symbol)
+        (:name hide-lines :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name highlight-indentation :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name highlight-parentheses :type elpa)
+        (:name highlight-symbol :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name htmlize :type elpa)
         ido-completing-read-plus
         (:name iedit :type git
                :url "https://github.com/victorhge/iedit.git")
         (:name ioccur :type git
                :url "https://github.com/thierryvolpiatto/ioccur.git")
+        (:name ivy :type elpa)
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
+        (:name jinja2-mode :type elpa)
         (:name js2 :type git
                :url "https://github.com/mooz/js2-mode.git")
         (:name jshint-mode :type git
                :url "https://github.com/daleharvey/jshint-mode.git")
         json-mode
+        (:name keychain-environment :type elpa)
         keyfreq
-        lua-mode
-        (:name magit :type elpa
+        (:name lsp-mode :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name lsp-docker :type elpa)
+        lua-mode
+        (:name magit :type elpa)
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -166,6 +170,9 @@
         (:name org :type elpa)
         (:name org-journal :type elpa)
         (:name org-tree-slide :type elpa)
+        (:name ox-pandoc :type elpa
+               :repo ("melpa" . "https://melpa.org/packages/"))
+        (:name plantuml-mode :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
         ;;        :url "https://github.com/jonathanchu/emacs-powerline.git"
@@ -175,6 +182,7 @@
                :pkgname "dakra/py-isort.el"
                :branch "isort-add-remove")
         rainbow-mode
+        (:name rg :type elpa)
         ruby-block
         ruby-end
         (:name s
@@ -182,7 +190,10 @@
                :type git
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
+        (:name solarized-theme :type elpa
+	       :repo ("melpa" . "https://melpa.org/packages/"))
         (:name sql-indent :type emacswiki)
+        (:name terraform-doc :type elpa)
         (:name terraform-mode :type elpa)
         (:name typescript-mode :type elpa)
         (:name undo-tree  :type git
@@ -197,6 +208,8 @@
         yaml-mode
         ;;yasnippet
         ))
+;; DOC: warning: :type: elpa with trailing `:` is ignored, merged with el-get upstream receipe
+;; DOC: warning: no idea why but the elpa repo override seems ignored by el-get-install: always takes the package repo top priority: melpa stable
 
 (setq my-packages (mapcar 'el-get-as-symbol (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
@@ -326,7 +339,23 @@
    `(org-level-8 ((t (:foreground ,zenburn-blue-3))))
    ))
 ;; finally, enable zenburn theme
-(enable-theme 'zenburn)
+;;(enable-theme 'zenburn)
+
+;; solarized
+;; make the fringe stand out from the background
+(setq solarized-distinct-fringe-background t)
+;; Don't change the font for some headings and titles
+;;(setq solarized-use-variable-pitch nil)
+;; Don't change size of org-mode headlines (but keep other size-changes)
+;;(setq solarized-scale-org-headlines nil)
+;; Change the size of markdown-mode headlines (off by default)
+(setq solarized-scale-markdown-headlines t)
+;; make the modeline high contrast
+(setq solarized-high-contrast-mode-line t)
+;; finally, load and enable the theme
+(load-theme 'solarized-light-high-contrast t)
+
+
 
 (setq font-use-system-font t) ;; since emacs 23.2
 
@@ -650,11 +679,13 @@ Taken from http://nflath.com/2009/08/easier-emacs/ by N Flath."
 (defun uniquify-get-filename (filename depth)
   "Get 'uniquified' filename, given a filename and a prefix depth."
   (let ((dir (file-name-directory filename))
-		(file (file-name-nondirectory filename)))
-	;; remove trailing slash
-	(if (string-match "/$" dir)
-		(setq dir (substring dir 0 -1)))
-	(uniquify-get-proposed-name file dir depth)))
+        (file (file-name-nondirectory filename)))
+    ;; remove trailing slash
+    (if (string-match "/$" dir)
+        (setq dir (substring dir 0 -1)))
+    (if (string= "" dir) ;; hack to avoid "Debugger entered--Lisp error: (wrong-type-argument stringp nil)" on "/foo"
+        (setq dir "/"))
+    (uniquify-get-proposed-name file dir depth)))
 
 (defun uniquify-filename-list (file-list &optional depth)
   "Uniquify a list of filenames by returning an alist of filename and uniquified filenames.
@@ -712,25 +743,19 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-symbol)
 
-(zenburn-with-color-variables
-  (setq highlight-symbol-colors
-        `(,zenburn-cyan
-          ,zenburn-green+4
-          ,zenburn-magenta
-          ,zenburn-yellow
-          ,zenburn-red-2
-          ,zenburn-blue-3
-          ,zenburn-orange
-          ,zenburn-purple+4
-          ,zenburn-yellow-green+2)))
+;; (zenburn-with-color-variables
+;;   (setq highlight-symbol-colors
+;;         `(,zenburn-cyan
+;;           ,zenburn-green+4
+;;           ,zenburn-magenta
+;;           ,zenburn-yellow
+;;           ,zenburn-red-2
+;;           ,zenburn-blue-3
+;;           ,zenburn-orange
+;;           ,zenburn-purple+4
+;;           ,zenburn-yellow-green+2)))
 
-;; azerty
-(global-set-key (kbd "C-&") 'highlight-symbol-at-point)
-(global-set-key (kbd "C-é") 'highlight-symbol-next)
-(global-set-key (kbd "C-\"") 'highlight-symbol-prev)
-(global-set-key (kbd "C-à") 'highlight-symbol-remove-all)
 
-;; qwerty
 (global-set-key (kbd "C-1") 'highlight-symbol-at-point)
 (global-set-key (kbd "C-2") 'highlight-symbol-next)
 (global-set-key (kbd "C-3") 'highlight-symbol-prev)
@@ -746,11 +771,11 @@ Optional depth is for internal use."
 
 ;;rainbow parentheses highlighting ! \o/
 (require 'highlight-parentheses)
-(zenburn-with-color-variables
-  (setq hl-paren-colors
-	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
-  (setq hl-paren-background-colors
-	(make-list (length hl-paren-colors) zenburn-bg-1)))
+;; (zenburn-with-color-variables
+;;   (setq hl-paren-colors
+;; 	(list zenburn-red-4 zenburn-orange zenburn-yellow-green+1 zenburn-green zenburn-blue zenburn-dark-blue+2 zenburn-purple+2 nil)) ;; a final fake color, because the last one seems to be ignored
+;;   (setq hl-paren-background-colors
+;; 	(make-list (length hl-paren-colors) zenburn-bg-1)))
 
 ;;highlight-parentheses is a buffer-local minor mode : create a global
 ;;minor mode of our own
@@ -789,18 +814,12 @@ Optional depth is for internal use."
       dired-free-space-args "-Pkm" ;; TODO k and m for what?
       dired-auto-revert-buffer t)
 
-;; dired+
-;; copy/pasting in dired
-;; (define-key dired-mode-map (kbd "M-w") 'wuxch-dired-copy)
-;; (define-key dired-mode-map (kbd "C-w") 'wuxch-dired-cut)
-;; (define-key dired-mode-map (kbd "C-y") 'wuxch-dired-paste)
-;;add gnome-open as C-ret
+;;add xdg-open as C-ret
 (defun dired-xdg-open-file ()
   "Opens the current file from a Dired buffer."
   (interactive)
   (launch-command "xdg-open" (dired-get-file-for-visit)))
 (define-key dired-mode-map (kbd "<C-return>") 'dired-xdg-open-file)
-
 ;; LANG=Fr breaks the regexp that matches file sizes (, instead of . separator)
 (add-hook 'dired-mode-hook '(lambda () (setenv "LC_NUMERIC" "C")))
 
@@ -820,27 +839,36 @@ Optional depth is for internal use."
 (setq forge-pull-notifications nil)
 
 
-;;TODO REMOVE this line
-
 ;; hide untracked section by default
 (push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
 ;; no buffer saving when magit-status
 (setq magit-save-repository-buffers nil)
 ;; use ido in prompts
-(setq magit-completing-read-function 'magit-ido-completing-read)
+;; (setq magit-completing-read-function 'magit-ido-completing-read)
+;; let's try ivy there
+(ivy-mode)
+(setq magit-completing-read-function 'magit-builtin-completing-read)
+
 ;; show process buffer for long operations
 (setq magit-process-popup-time 5)
 ;; magit-status: switch to buffer instead of pop to buffer
 (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+;; intra line diff highlight
+(setq magit-diff-refine-hunk t)
 ;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
 (define-key magit-mode-map (kbd "o") 'magit-section-up)
 
 (global-set-key (kbd "C-c s") 'magit-status)
 (global-set-key (kbd "C-c C-s") 'magit-status)
 
+(require 'git-commit)
 ;; flyspell on log
 (add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
 
+;; https://github.com/magit/magit/issues/2012#issuecomment-619366605
+(with-eval-after-load 'magit
+  (transient-append-suffix 'magit-log "-A"
+    '("-1" "First parent" "--first-parent")))
 
 ;; ignore whitespace
 ;; TODO fix ignore whitespace
@@ -1515,6 +1543,25 @@ sys.path.insert(0, '')"))
              (hide-subtree))
             (t (message "Can only toggle between TODO and DONE."))))))
 
+;; copied function to change format: we want 1 digit after dot, not 0.
+(require 'org-colview) ;; require first, then overwrite
+(defun org-columns--summary-estimate (estimates _)
+  "Combine a list of estimates, using mean and variance.
+The mean and variance of the result will be the sum of the means
+and variances (respectively) of the individual estimates."
+  (let ((mean 0)
+        (var 0))
+    (dolist (e estimates)
+      (pcase (mapcar #'string-to-number (split-string e "-"))
+	(`(,low ,high)
+	 (let ((m (/ (+ low high) 2.0)))
+	   (cl-incf mean m)
+	   (cl-incf var (- (/ (+ (* low low) (* high high)) 2.0) (* m m)))))
+	(`(,value) (cl-incf mean value))))
+    (let ((sd (sqrt var)))
+      (format "%s-%s"
+	      (format "%.1f" (- mean sd))
+	      (format "%.1f" (+ mean sd))))))
 
 ;; bindings
 (add-hook 'org-load-hook
@@ -1543,6 +1590,12 @@ sys.path.insert(0, '')"))
 
  org-default-notes-file "~/.emacs.d/org/notes.org"
  org-mobile-directory "~/android/org-mode"
+
+ org-export-preserve-breaks t
+ org-export-with-sub-superscripts '{}
+
+ org-use-sub-superscripts '{}
+
  org-agenda-ndays 7
  org-log-done 'note
  ;; org-startup-folded 'content
@@ -1566,6 +1619,17 @@ sys.path.insert(0, '')"))
   (setq org-todo-keyword-faces `(("MAYBE" . ,zenburn-yellow-2)
                                  ("WONTDO" . ,zenburn-blue))))
 
+(setq
+ org-pandoc-options
+ '(
+   (standalone . t)
+   (atx-headers . t)
+   (wrap . "none")
+   (tab-stop . 2)
+   ))
+
+;; enable <sTAB to create source code block
+(require 'org-tempo)
 
 (add-hook 'org-load-hook
 	  (lambda ()
@@ -1605,13 +1669,180 @@ sys.path.insert(0, '')"))
 (require 'org-journal)
 (setq org-journal-dir "~/.emacs.d/journal/")
 (setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-date-prefix "#+TAGS: manger(1) home(2) codereview(r) ops(o) meeting(m) veille(v)
-* ")
+(setq org-journal-tag-alist '(("manger" . ?1) ("home" . ?2) ("codereview" . ?r) ("ops" . ?o) ("meeting" . ?m) ("veille" . ?v)))
+(setq org-journal-date-prefix "* ")
 (setq org-journal-date-format "%Y-%m-%d, %A")
 (setq org-journal-time-format "%R ")
 (setq org-journal-find-file 'find-file)
+(setq org-journal-carryover-items "")
 ;; link org-journal with org-agenda
 (add-to-list 'org-agenda-files org-journal-dir)
+
+
+
+
+(defun jds:human-time-to-seconds (human-time)
+  "input: '03:14', output: 11640"
+  (let* ((time (parse-time-string human-time))
+         (seconds
+          (+
+           (nth 0 time)
+           (* 60 (nth 1 time))
+           (* 60 60 (nth 2 time)))))
+    seconds))
+(defun jds:seconds-to-human-time (seconds)
+  "input: 11640, output: '03:14'"
+  (format-seconds "%.2h:%.2m" seconds))
+(defun jds:get-date ()
+  "Read org-journal date at entry"
+  (buffer-substring-no-properties (+ (point) 2) (+ (point) 12)))
+(defun jds:get-timestamp (&optional pos)
+  "Read org-journal timestamp at entry"
+  (let ((pos (or pos (point))))
+    (buffer-substring-no-properties (+ pos 3) (+ pos 8))))
+;; TODO
+;; - dynamic block for weekly/monthly summary
+;; - support :pause: tags for long pause during the day
+;; - better error when missing tag or other entry, for now get "date-to-time: Invalid date: 2020-02-02 "
+(defun jds:get-summary ()
+  (let* (
+         (date (car (org-map-entries 'jds:get-date "LEVEL=1")))
+         (times-human
+          (list
+           :arrival
+           (car (org-map-entries 'jds:get-timestamp "LEVEL=2"))
+           :lunch-start
+           ;;(or
+            (car (org-map-entries 'jds:get-timestamp "manger+LEVEL=2"))
+            ;;"12:15")
+           :lunch-end
+           ;;(or
+            (car (org-map-entries (lambda ()
+                                    (jds:get-timestamp (org-get-next-sibling))) "manger+LEVEL=2"))
+            ;;"13:20")
+           :departure
+           ;;(or
+            (car (org-map-entries 'jds:get-timestamp "home+LEVEL=2"))
+            ;;"19:00")
+           ))
+         (times
+          (cl-loop for (key value) on times-human by 'cddr
+                   append (list key (date-to-time (concat "2020-02-02 " value)))))
+         (durations-minutes
+          (list
+           :morning
+           (/ (time-to-seconds (time-subtract (plist-get times :lunch-start) (plist-get times :arrival))) 60)
+           :lunch
+           (/ (time-to-seconds (time-subtract (plist-get times :lunch-end) (plist-get times :lunch-start))) 60)
+           :afternoon
+           (/ (time-to-seconds (time-subtract (plist-get times :departure) (plist-get times :lunch-end))) 60)
+           ))
+         (durations-minutes
+          (plist-put
+           durations-minutes
+           :work
+           (+ (plist-get durations-minutes :morning) (plist-get durations-minutes :afternoon))))
+         (durations-human
+          (cl-loop for (key value) on durations-minutes by 'cddr
+                   append (list key (jds:seconds-to-human-time (* 60 value)))))
+         )
+    ;; debug messages
+    (message "jds: date: %s" date)
+    (message "jds: times: %s"
+                    (string-join
+                     (cl-loop for (key value) on times-human by 'cddr collect value)
+                     " "))
+    (message "jds: durations-minutes: %s"
+                    (string-join
+                     (cl-loop for (key value) on durations-minutes by 'cddr collect (format "%s" value))
+                     " "))
+    (message "jds: durations: %s"
+                    (string-join
+                     (cl-loop for (key value) on durations-human by 'cddr collect value)
+                     " "))
+    ;; return nested plist
+    (list
+     :date date
+     :times-human times-human
+     :times times
+     :durations-minutes durations-minutes
+     :durations-human durations-human
+     )))
+
+
+;; TODO support (=ignore?) nil days in avg
+;; TODO split interactive function and files list as input and maybe computation?
+;; TODO dump csv
+;; TODO dblock with weekly and monthly summary?
+;; TODO update all old journal files
+(defun jds:summary-multi-day (date-regex-prefix)
+  "Usage: 2020-03-2[34567]"
+  (interactive "sDate prefix? ")
+  (let* ((files
+          (directory-files (expand-file-name org-journal-dir) t
+                           (concat "^" date-regex-prefix ".*\.org$")))
+         (works-human
+          (org-map-entries
+           (lambda ()
+             (let* ((org-trust-scanner-tags t))
+               (org-entry-get nil "work")))
+           "LEVEL=1" files))
+         (works-minutes
+          (org-map-entries
+           (lambda ()
+             (let* ((org-trust-scanner-tags t))
+               (string-to-number (org-entry-get nil "work-minutes"))))
+           "LEVEL=1" files))
+         (sum
+          (apply '+ works-minutes))
+         (len
+          (length works-minutes))
+         (daily-avg
+          (/ (float sum) len))
+         (weekly-avg
+          (* 5 daily-avg))
+         (weekly-avg-human
+          (jds:seconds-to-human-time (* 60 weekly-avg)))
+         )
+    (message "jds: %s: %s %s %s %s %s" works-minutes sum len daily-avg weekly-avg weekly-avg-human)
+    (message "jds: weekly-avg: %s" weekly-avg-human)
+    ))
+
+
+(defun jds:update-properties ()
+  "Update journal daily summary as top-level org entry properties"
+  (interactive)
+  (let* ((summary (jds:get-summary))
+         (times-human (plist-get summary :times-human))
+         (durations-minutes (plist-get summary :durations-minutes))
+         (durations-human (plist-get summary :durations-human)))
+    (org-map-entries
+     (lambda ()
+       (org-entry-put (point) "work" (plist-get durations-human :work))
+       (org-entry-put (point) "work-minutes" (format "%d" (plist-get durations-minutes :work))))
+     "LEVEL=1")))
+(defun jds:update-properties-multi-day (date-prefix)
+  (interactive "sDate prefix? ")
+  (let* ((files
+          (directory-files (expand-file-name org-journal-dir) t
+                           (concat "^" (regexp-quote date-prefix) "-.*\.org$"))))
+    (org-map-entries 'jds:update-properties "LEVEL=1" files)))
+
+;; deprecated, to be repaced by weekly/monthly summary
+(defun org-dblock-write:journal-daily-summary (params)
+  ;;(jds:get-summary)
+  )
+(defun org-insert-dblock:journal-daily-summary ()
+  "Wizard to interactively insert a journal-daily-summary dynamic block."
+  (interactive)
+  (let* ((params (list :name "journal-daily-summary")))
+    (org-create-dblock params)
+    (org-update-dblock)))
+(if (fboundp 'org-dynamic-block-define)
+    (org-dynamic-block-define "journal-daily-summary" 'org-insert-dblock:journal-daily-summary))
+
+
+
 
 
 ;; clocking work
@@ -1632,55 +1863,32 @@ sys.path.insert(0, '')"))
 (setq org-clock-out-when-done t)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Compilation
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'compile)
-(defun my-compilation-finish (buf str)
-  "Make compilation window disappear after successful compilation"
+(defun xclip-set-selection-html (type data)
+  "TYPE is a symbol: primary, secondary and clipboard.
+fork of xclip-set-selection, to support '-t text/html'; stripped down to just xclip support"
+    (let* ((process-connection-type nil)
+           (proc
+            (when (getenv "DISPLAY")
+              (start-process "xclip" nil xclip-program
+                             "-t" "text/html"
+                             "-selection" (symbol-name type)))))
+      (when proc
+        (process-send-string proc data)
+        (process-send-eof proc))
+      data))
 
-  (if (string-match "*Compilation*" (buffer-name buf))
-      (unless (string-match "abnormally" str)
-
-        (message "*Compilation* OK")
-        (delete-windows-on buf)
-        (bury-buffer buf))))
-(add-to-list 'compilation-finish-functions 'my-compilation-finish)
-
-;;misc compilation settings
-(setq-default
- compile-command "make"
- compilation-read-command nil
- compilation-scroll-output 'first-error
- compilation-ask-about-save nil
- compilation-window-height nil
- compilation-auto-jump-to-first-error t
- compilation-disable-input t)
-
-;;compilation by C-c C-c in modes that don't shadow it
-(global-set-key (kbd "C-c C-c") 'compile)
-;;(global-set-key (kbd "C-M-c C-M-c") 'compile)
-
-;; term color in *Compilation*
-(require 'ansi-color)
-(defun colorize-compilation-buffer ()
-  (toggle-read-only)
-  (zenburn-with-color-variables
-    (let* ((ansi-color-names-vector
-	    (vector zenburn-bg+2
-		    "#e37170" zenburn-green
-		    zenburn-yellow zenburn-blue+1
-		    zenburn-magenta zenburn-cyan))
-	   (ansi-color-map (ansi-color-make-color-map)))
-      (ansi-color-apply-on-region (point-min) (point-max))))
-  (toggle-read-only))
-(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-(defun my-compile ()
+(defun org-copy-buffer-to-clipboard ()
+  "Export region to HTML, and copy it to the clipboard."
   (interactive)
-  ;; force non EMACS to bypass CMake check
-  (server-with-environment '("EMACS=nil") '("EMACS")
-    (call-interactively 'compile)))
-(global-set-key (kbd "C-c C-c") 'my-compile)
+  (let* ((org-export-show-temporary-export-buffer nil))
+    ;;                           async subtreep visible-only body-only ext-plist
+    (org-export-to-buffer
+        'html "*Org Formatted Copy*" nil nil t t nil
+        (lambda ()
+          (xclip-set-selection-html 'clipboard (buffer-string))
+          (kill-buffer (current-buffer))
+          (message "org formatted copied to clipboard")))))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
