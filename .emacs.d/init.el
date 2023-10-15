@@ -177,9 +177,22 @@ If the new path's directories does not exist, create them."
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package emacs
+(use-package solarized-theme
+  :ensure t
+  :init
+  ;; make the fringe stand out from the background
+  (setq solarized-distinct-fringe-background t)
+  ;; Don't change the font for some headings and titles
+  ;;(setq solarized-use-variable-pitch nil)
+  ;; Don't change size of org-mode headlines (but keep other size-changes)
+  ;;(setq solarized-scale-org-headlines nil)
+  ;; Change the size of markdown-mode headlines (off by default)
+  (setq solarized-scale-markdown-headlines t)
+  ;; make the modeline high contrast
+  (setq solarized-high-contrast-mode-line t)
+  ;; finally, load and enable the theme
   :config
-  (load-theme 'modus-vivendi))          ; for light theme, use modus-operandi
+  (load-theme 'solarized-light-high-contrast t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
@@ -225,7 +238,7 @@ If the new path's directories does not exist, create them."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
+   '(solarized-theme solaris-theme magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
