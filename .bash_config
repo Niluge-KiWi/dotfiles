@@ -384,7 +384,7 @@ function mkwork {
     cat > doc.org <<EOF
 #+TITLE: refs ${bug}: ${name}
 #+SETUPFILE: ~/Documents/theme-readtheorg.setup
-* commands
+* goal
 * TODO
 EOF
   fi
