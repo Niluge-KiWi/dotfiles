@@ -37,6 +37,7 @@
     ("00445e6f15d31e9afaa23ed0d765850e9cd5e929be5e8e63b114a3346236c44c" default)))
  '(elpy-rpc-python-command "python3")
  '(global-font-lock-mode t)
+ '(highlight-parentheses-colors (quote ("#11948b" "#a67c00" "#007ec4" "#5e65b6" "#778c00")))
  '(inhibit-startup-echo-area-message (user-login-name))
  '(inhibit-startup-screen t)
  '(initial-buffer-choice t)
@@ -53,6 +54,6 @@
     ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
  '(package-selected-packages
    (quote
-    (solarized-theme company-statistics highlight-parentheses highlight-symbol ivy forge company dockerfile-mode lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl terraform-doc company-terraform terraform-mode plantuml-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize graphql gnuplot git-link elpy docker company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
+    (hcl-mode terraform-doc keychain-environment xclip htmlize ox-pandoc plantuml-mode solarized-theme rg company-statistics highlight-parentheses highlight-symbol ivy company dockerfile-mode lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl company-terraform terraform-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize graphql gnuplot git-link elpy docker company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
  '(scroll-bar-mode nil)
  '(tool-bar-mode nil))
