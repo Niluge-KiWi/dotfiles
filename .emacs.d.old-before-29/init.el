@@ -190,8 +190,6 @@
                :type git
                :url "https://github.com/magnars/s.el")
         (:name smex :type elpa)
-        (:name solarized-theme :type elpa
-	       :repo ("melpa" . "https://melpa.org/packages/"))
         (:name sql-indent :type emacswiki)
         (:name terraform-doc :type elpa)
         (:name terraform-mode :type elpa)
@@ -340,20 +338,6 @@
    ))
 ;; finally, enable zenburn theme
 ;;(enable-theme 'zenburn)
-
-;; solarized
-;; make the fringe stand out from the background
-(setq solarized-distinct-fringe-background t)
-;; Don't change the font for some headings and titles
-;;(setq solarized-use-variable-pitch nil)
-;; Don't change size of org-mode headlines (but keep other size-changes)
-;;(setq solarized-scale-org-headlines nil)
-;; Change the size of markdown-mode headlines (off by default)
-(setq solarized-scale-markdown-headlines t)
-;; make the modeline high contrast
-(setq solarized-high-contrast-mode-line t)
-;; finally, load and enable the theme
-(load-theme 'solarized-light-high-contrast t)
 
 
 
