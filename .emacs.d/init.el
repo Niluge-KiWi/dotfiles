@@ -34,8 +34,7 @@
 (with-eval-after-load 'package
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
-;; If you want to turn off the welcome screen, uncomment this
-;(setq inhibit-splash-screen t)
+(setq inhibit-splash-screen t)
 
 (setq initial-major-mode 'fundamental-mode)  ; default mode for the *scratch* buffer
 (setq display-time-default-load-average nil) ; this information is useless for most
