@@ -38,8 +38,7 @@
 
 (setq initial-major-mode 'fundamental-mode)  ; default mode for the *scratch* buffer
 
-;; Automatically reread from disk if the underlying file changes
-(setq auto-revert-interval 1)
+;; Automatically reread from disk if the underlying file changes, using inotify
 (setq auto-revert-check-vc-info t)
 (global-auto-revert-mode)
 
