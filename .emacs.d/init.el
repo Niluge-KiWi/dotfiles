@@ -45,8 +45,8 @@
 ;; Save history of minibuffer
 (savehist-mode)
 
-;; Move through windows with Ctrl-<arrow keys>
-(windmove-default-keybindings 'control) ; You can use other modifiers here
+;; Move through windows with Alt-<arrow keys>
+(windmove-default-keybindings 'meta)
 
 ;; Fix archaic defaults
 (setq sentence-end-double-space nil)
