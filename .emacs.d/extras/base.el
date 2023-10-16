@@ -141,7 +141,11 @@
 (use-package orderless
   :ensure t
   :config
-  (setq completion-styles '(orderless)))
+  (setq completion-styles '(orderless basic))
+  ;; somehow needed for tramp, cf orderless readme
+  (setq completion-category-overrides '((file (styles basic partial-completion))))
+  ;; search for literals and fallback to flex
+  (setq orderless-matching-styles '(orderless-literal orderless-flex)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
