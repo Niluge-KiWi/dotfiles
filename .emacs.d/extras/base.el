@@ -43,6 +43,14 @@
   ;; Narrowing lets you restrict results to certain groups of candidates
   (setq consult-narrow-key "<"))
 
+;; track recent files, available in consult-buffer
+(use-package recentf
+  :config
+  ;; save more than 20 files on exit
+  (setq recentf-max-saved-items 1000)
+  ;; enable global minor mode
+  (recentf-mode t))
+
 (use-package embark
   :ensure t
   :demand t

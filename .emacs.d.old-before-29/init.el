@@ -872,46 +872,6 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Recent files
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;recent files, interaction with ido
-(require 'recentf)
-
-(defcustom recentf-ido-max-items 200
-  "Maximum number of items of the recent list selection with ido
-(recentf-ido-find-file-or-maybe-list).
-If nil, do not limit."
-  :group 'recentf)
-
-(defun recentf-ido-find-file-or-maybe-list (&optional arg)
-  "Find a recent file using Ido and uniquify,
-or list all recent files if prefixed"
-  (interactive "P")
-  (if arg
-	  (recentf-open-files)
-	(let* ((file-list (truncate-list
-					   (copy-list recentf-list)
-					   recentf-ido-max-items))
-		   (uniq-file-alist (uniquify-filename-list file-list))
-		   ;; ask user
-		   (file (ido-completing-read
-				  (format "%s: " recentf-menu-title)
-				  (mapcar (lambda (filename)
-							(cdr (assoc filename uniq-file-alist)))
-						  file-list)
-				  nil t)))
-	  ;; now find full filename back
-	  (when file
-		(find-file (car (rassoc file uniq-file-alist)))))))
-
-(setq recentf-max-saved-items nil
-      recentf-save-file "~/.emacs.d/recentf"
-      recentf-ido-max-items 300)
-(recentf-mode 1)
-(global-set-key (kbd "C-x C-r") 'recentf-ido-find-file-or-maybe-list)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Imenu: jump between indexes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'imenu)
