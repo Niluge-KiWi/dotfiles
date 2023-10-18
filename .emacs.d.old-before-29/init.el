@@ -420,9 +420,6 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
     (kill-new text)
     (message "Copied %s" text)))
 
-(defun reload-emacs () (interactive) (load-file "~/.emacs"))
-(defun edit-emacs () (interactive) (find-file "~/.emacs"))
-
 (defun indent-whole-buffer ()
   "Indent whole buffer"
   (interactive)
@@ -1960,7 +1957,6 @@ Ignores CHAR at point."
 (global-set-key (kbd "s-x") 'exchange-point-and-mark)
 (global-set-key (kbd "s-SPC") 'pop-global-mark)
 (global-set-key (kbd "s-;") 'edit-emacs)
-(global-set-key (kbd "s-k") 'kill-whitespace)
 (global-set-key (kbd "<s-left>") 'winner-undo)
 (global-set-key (kbd "<s-right>") 'winner-redo)
 (defun open-shell-here ()
