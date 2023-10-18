@@ -18,6 +18,7 @@
 ;;;  - Interface enhancements/defaults
 ;;;  - Tab-bar configuration
 ;;;  - Theme
+;;;  - Navigation/edition
 ;;;  - Optional extras
 ;;;  - Built-in customization framework
 
@@ -193,6 +194,27 @@ If the new path's directories does not exist, create them."
   ;; finally, load and enable the theme
   :config
   (load-theme 'solarized-light-high-contrast t))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;;   Navigation/edition
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun kill-whitespace ()
+  "Kill the whitespace between two non-whitespace characters"
+  (interactive "*")
+  (save-excursion
+    (save-restriction
+      (save-match-data
+	(progn
+	  (re-search-backward "[^ \t\r\n]" nil t)
+	  (re-search-forward "[ \t\r\n]+" nil t)
+	  (replace-match "" nil nil))))))
+;; kill-whitespace seems more usefull than kill-sentence
+(global-set-key (kbd "M-k") 'kill-whitespace)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
