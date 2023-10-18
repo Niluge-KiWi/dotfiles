@@ -426,17 +426,6 @@ From http://atomized.org/2011/01/toggle-between-root-non-root-in-emacs-with-tram
   (delete-trailing-whitespace)
   (indent-region (point-min) (point-max) nil))
 
-(defun kill-whitespace ()
-  "Kill the whitespace between two non-whitespace characters"
-  (interactive "*")
-  (save-excursion
-    (save-restriction
-      (save-match-data
-	(progn
-	  (re-search-backward "[^ \t\r\n]" nil t)
-	  (re-search-forward "[ \t\r\n]+" nil t)
-	  (replace-match "" nil nil))))))
-
 (defun truncate-list (list n)
   "Truncate LIST to at most N elements destructively."
   (when n
@@ -1880,8 +1869,6 @@ brake whatever split of windows we might have in the frame."
 ;;browse kill ring to look for forgotten copy/paste
 (global-set-key (kbd "C-c k") 'browse-kill-ring)
 
-;; kill-whitespace seems more usefull than kill-sentence
-(global-set-key (kbd "M-k") 'kill-whitespace)
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
 
