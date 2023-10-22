@@ -250,6 +250,7 @@ brake whatever split of windows we might have in the frame."
 ;; kill-whitespace seems more usefull than kill-sentence
 (global-set-key (kbd "M-k") 'kill-whitespace)
 
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
