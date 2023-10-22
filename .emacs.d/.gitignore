@@ -10,6 +10,7 @@
 /recentf
 /keyfreq
 /keyfreq.lock
+/emacs-backup/
 
 *~
 /doc.org
