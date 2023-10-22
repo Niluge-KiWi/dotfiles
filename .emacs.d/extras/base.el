@@ -155,11 +155,52 @@
 (use-package orderless
   :ensure t
   :config
+  ;; note to the future: this was the big hard new thing to configure when starting from scratch in 2023-10 with emacs-bedrock,
+  ;; main issue:
+  ;; - C-s bound to consult-line, instead of isearch-forward
+  ;; - I wanted flex search like I had with IDO (but not for string search in buffer)
+  ;; - completion-category-overrides does *not* override completion-styles, but preprends it
+  ;; this can be changed again:
+  ;; - check consult readme & wiki, orderless readme, possibly issues there too.
+  ;; - maybe just drop consult-line? or maybe change default orderless style around consult-line?
+
+  (orderless-define-completion-style orderless+initialism
+    (orderless-matching-styles '(orderless-initialism
+				                 orderless-literal
+                                 orderless-regexp)))
+
+  (orderless-define-completion-style orderless+initialism+flex
+    (orderless-matching-styles '(orderless-initialism
+				 orderless-flex
+				 orderless-literal
+				 orderless-regexp)))
+
+  ;; List of completion styles to use, everywhere, after the per-category styles
+  ;; (orderless readme: The 'basic' completion style is specified as fallback in addition to orderless in order to ensure that completion commands which rely on dynamic completion tables, e.g., completion-table-dynamic or completion-table-in-turn, work correctly)
   (setq completion-styles '(orderless basic))
-  ;; somehow needed for tramp, cf orderless readme
-  (setq completion-category-overrides '((file (styles basic partial-completion))))
-  ;; search for literals and fallback to flex
-  (setq orderless-matching-styles '(orderless-literal orderless-flex)))
+  ;; disable default specialization per category
+  (setq completion-category-defaults nil)
+  ;; Note that 'completion-category-overrides' is not really an override, but rather prepended to the default 'completion-styles'.
+  (setq completion-category-overrides
+	'(
+	  ;; for files:
+	  ;; - for TRAMP: need 'basic' *first*
+	  ;; - the 'partial-completion' style allows you to use wildcards for file completion and partial paths, e.g., '/u/s/l' for '/usr/share/local'.
+	  ;; - 'orderless' with flex after 'partial-completion'
+	  (file (styles basic partial-completion orderless+initialism+flex))
+
+	  ;; for buffer:
+	  ;; - since we have recentf in C-x b consult-buffers, strings that have matched when opening a file should still match the 'file' (recentf) source/group in consult-buffers
+	  ;;   => buffers should be (usually/almost) as verbose in matching as file
+	  ;; TODO fix, somehow setting orderless+initialism+flex (or any orderless style with flex) does *not* work for buffers, but do work for files, whyyy :cry:
+	  (buffer (styles partial-completion orderless+initialism+flex))
+
+      ;; for M-x: also flex
+	  (command (styles orderless+initialism+flex))
+      ;; for some other completions categories: initialism
+      (symbol (styles orderless+initialism))
+      (variable (styles orderless+initialism)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
