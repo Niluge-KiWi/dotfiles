@@ -6,19 +6,6 @@
 ;; Style
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; delete trailing white-spaces before save
-;; TODO toggle function
-;; TODO minor-mode
-(defun turn-on-delete-trailing-whitespace ()
-  (interactive)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace nil t))
-;; hack to run this on all buffers
-(add-hook 'after-change-major-mode-hook 'turn-on-delete-trailing-whitespace)
-(defun turn-off-delete-trailing-whitespace ()
-  (interactive)
-  (remove-hook 'before-save-hook 'delete-trailing-whitespace t))
-(add-hook 'markdown-mode-hook 'turn-off-delete-trailing-whitespace)
-
 (setq-default indent-tabs-mode nil)       ; space indentation
 (setq-default c-basic-offset 2)
 (setq-default tab-width 8)

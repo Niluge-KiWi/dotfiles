@@ -41,6 +41,12 @@
           (json-mode . json-ts-mode)
           (css-mode . css-ts-mode)
           (python-mode . python-ts-mode)))
+
+  ;; style
+
+  ;; delete trailing whitespaces before save; TODO replace with https://git.sr.ht/~bkhl/trimspace-mode
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
   :hook
   ;; Auto parenthesis matching
   ((prog-mode . electric-pair-mode)))
