@@ -1756,13 +1756,6 @@ fork of xclip-set-selection, to support '-t text/html'; stripped down to just xc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ergo emacs
-(require 'keyfreq)
-(setq keyfreq-file "~/.emacs.d/keyfreq"
-      keyfreq-file-lock "~/.emacs.d/keyfreq.lock")
-(keyfreq-mode 1)
-(keyfreq-autosave-mode 1)
-
 ;;see http://www.emacswiki.org/emacs/IgnacioKeyboardQuit , with a little bit of modifications
 (defun my-keyboard-quit()
   "Escape the minibuffer or cancel region consistently using 'Control-g'.
