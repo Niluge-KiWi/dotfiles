@@ -84,7 +84,6 @@
 (use-package vertico
   :ensure t
   :init
-  ;; You'll want to make sure that e.g. fido-mode isn't enabled
   (vertico-mode))
 
 (use-package vertico-directory

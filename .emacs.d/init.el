@@ -108,10 +108,7 @@ If the new path's directories does not exist, create them."
 
 (keymap-set minibuffer-mode-map "TAB" 'minibuffer-complete) ; TAB acts more like how it does in the shell
 
-;; For a fancier built-in completion option, try ido-mode or fido-mode. See also
-;; the file extras/base.el
-;(fido-vertical-mode)
-;(setq icomplete-delay-completions-threshold 4000)
+;; See also the file extras/base.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
