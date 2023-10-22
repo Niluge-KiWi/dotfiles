@@ -84,7 +84,14 @@
 (use-package vertico
   :ensure t
   :init
-  (vertico-mode))
+  (defun my/match-components-literally ()
+    "Components match literally for the rest of the session."
+    (interactive)
+    (setq-local orderless-matching-styles '(orderless-literal)
+		orderless-style-dispatchers nil))
+  (vertico-mode)
+  :bind (:map vertico-map
+              ("C-l" . my/match-components-literally)))
 
 (use-package vertico-directory
   :after vertico
