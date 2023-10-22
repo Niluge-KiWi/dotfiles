@@ -11,6 +11,7 @@
 /keyfreq
 /keyfreq.lock
 /emacs-backup/
+/tree-sitter/
 
 *~
 /doc.org
