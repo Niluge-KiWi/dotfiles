@@ -55,7 +55,12 @@
   :ensure t
   :demand t
   :after avy
-  :bind (("C-c a" . embark-act))        ; bind this to an easy key to hit
+  :bind (("C-." . embark-act)   ; doesn't work in terminal
+	 ("C-c a" . embark-act) ; backup for terminal
+	 ("M-." . embark-dwim)  ; unsure which to use yet
+	 ("C-;" . embark-dwim)  ; unsure which to use yet. back with M-, is unnatural with this
+	 ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
+
   :init
   ;; Add the option to run embark when using avy
   (defun bedrock/avy-action-embark (pt)
