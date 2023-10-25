@@ -105,7 +105,8 @@
 		orderless-style-dispatchers nil))
   (vertico-mode)
   :bind (:map vertico-map
-              ("C-l" . my/match-components-literally)))
+              ("C-l" . my/match-components-literally)
+	      ("C-o" . embark-export)))
 
 (use-package vertico-directory
   :after vertico
