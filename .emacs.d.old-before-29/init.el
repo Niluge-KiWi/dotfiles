@@ -2072,36 +2072,8 @@ Ignores CHAR at point."
 ;;; Isearch
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;zap to isearch
-(defun zap-to-isearch ()
-  (interactive)
-  (kill-region isearch-opoint isearch-other-end)
-  (isearch-done)
-  (if (> isearch-other-end isearch-opoint)
-      (backward-word)
-    (forward-word)))
-
-(define-key isearch-mode-map (kbd "M-z") 'zap-to-isearch)
-
 ;;C-o in isearch brings up every hit
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-
-;; isearch ends at the beginning of word
-(add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
-(defun my-goto-match-beginning ()
-  (when (and isearch-forward
-			 (not isearch-mode-end-hook-quit))
-    (goto-char isearch-other-end)))
-
-
-(defun my-isearch-yank-region ()
-  "Put selection from buffer into search string."
-  (interactive)
-  (when (region-active-p)
-    (deactivate-mark))  ;;fully optional, but I don't like unnecesary highlighting
-  (isearch-yank-internal (lambda () (mark))))
-(define-key isearch-mode-map (kbd "C-d") 'my-isearch-yank-region)
-
 
 (require 'thingatpt)
 (defun my-isearch-yank-symbol ()
