@@ -12,6 +12,7 @@
 /keyfreq.lock
 /emacs-backup/
 /tree-sitter/
+/multisession/
 
 *~
 /doc.org
