@@ -41,7 +41,16 @@
          ("C-s" . consult-line))     ; orig. isearch
   :config
   ;; Narrowing lets you restrict results to certain groups of candidates
-  (setq consult-narrow-key "<"))
+  (setq consult-narrow-key "<")
+
+  ;; https://github.com/minad/consult/wiki#add-command-local-keybinding
+  (defvar my-consult-line-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map "\C-s" #'previous-history-element)
+      map))
+  (consult-customize consult-line :keymap my-consult-line-map)
+
+  )
 
 ;; track recent files, available in consult-buffer
 (use-package recentf
