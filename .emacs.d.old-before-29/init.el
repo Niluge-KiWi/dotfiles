@@ -2126,35 +2126,6 @@ Ignores CHAR at point."
       (beginning-of-thing 'symbol))
   (my-isearch-yank-symbol))
 (define-key isearch-mode-map (kbd "C-w") 'my-isearch-yank-symbol-from-beginning)
-(define-key isearch-mode-map (kbd "C-x") 'isearch-yank-word-or-char)
-
-;; inspired from http://emacswiki.org/emacs/SearchAtPoint
-(defun my-isearch-whole-symbol ()
-  "Search for the current string as a whole symbol."
-  (interactive)
-  (unless isearch-regexp
-    (isearch-toggle-regexp))
-  (unless (string-match "^\\\\_<.*\\\\_>" isearch-string)
-    (setq isearch-string (concat "\\_<" isearch-string "\\_>")
-          isearch-message (mapconcat 'isearch-text-char-description
-                                     isearch-string "")
-          ;; Don't move cursor in reverse search.
-          isearch-yank-flag t))
-  (ding)
-  (isearch-search-and-update))
-
-(defun my-isearch-yank-search-symbol ()
-  "Yank and search symbol at point."
-  (interactive)
-  (my-isearch-yank-symbol-from-beginning)
-  (my-isearch-whole-symbol))
-
-(define-key isearch-mode-map (kbd "M-e") 'my-isearch-whole-symbol)
-(define-key isearch-mode-map (kbd "C-e") 'my-isearch-yank-search-symbol)
-
-;; merge regexp-search-ring and search-ring
-;;TODO make this work
-(defalias 'regexp-search-ring 'search-ring)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
