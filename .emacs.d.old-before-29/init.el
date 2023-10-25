@@ -2112,8 +2112,6 @@ Ignores CHAR at point."
 ;;; Isearch
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;C-o in isearch brings up every hit
-(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 (require 'thingatpt)
 (defun my-isearch-yank-symbol ()
