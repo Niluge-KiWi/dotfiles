@@ -130,8 +130,6 @@
         (:name highlight-indentation :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
         (:name highlight-parentheses :type elpa)
-        (:name highlight-symbol :type elpa
-               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name htmlize :type elpa)
         ido-completing-read-plus
         (:name iedit :type git
@@ -655,18 +653,6 @@ Optional depth is for internal use."
 (set-default 'undo-tree-visualizer-timestamps t)
 (add-hook 'erc-mode-hook #'(lambda () (setq undo-tree-dont-activate t)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Highligh symbol
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'highlight-symbol)
-
-
-
-(global-set-key (kbd "C-1") 'highlight-symbol-at-point)
-(global-set-key (kbd "C-2") 'highlight-symbol-next)
-(global-set-key (kbd "C-3") 'highlight-symbol-prev)
-(global-set-key (kbd "C-0") 'highlight-symbol-remove-all)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Parenthesis editing
