@@ -252,6 +252,23 @@ brake whatever split of windows we might have in the frame."
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
+
+(use-package symbol-overlay
+  :ensure t
+  :bind
+  (;; old, muscle-memory keybindings
+   ("C-1" . symbol-overlay-put)
+   ("C-2" . symbol-overlay-jump-next)
+   ("C-3" . symbol-overlay-jump-prev)
+   ("C-0" . symbol-overlay-remove-all)
+   ;; new, suggested keybindings; experimental key binding
+   ("M-i" . symbol-overlay-put)
+   ("M-n" . symbol-overlay-jump-next)
+   ("M-p" . symbol-overlay-jump-prev)
+   (:map symbol-overlay-map
+	     ;; TODO some key to remove-all
+	     )))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;   Various keybindings
@@ -305,7 +322,7 @@ brake whatever split of windows we might have in the frame."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(keyfreq rg solarized-theme solaris-theme magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
+   '(symbol-overlay keyfreq rg solarized-theme solaris-theme magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
