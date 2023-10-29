@@ -164,10 +164,9 @@ brake whatever split of windows we might have in the frame."
     (message "Clipboard")))
 
 
-;; We won't set these, but they're good to know about
-;;
-;; (setq-default indent-tabs-mode nil)
-;; (setq-default tab-width 4)
+;; default indent
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 
 ;; Misc. UI tweaks
 (blink-cursor-mode -1)                                ; Steady cursor
