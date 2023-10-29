@@ -79,6 +79,8 @@
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
   ;; intra line diff highlight
   (setq magit-diff-refine-hunk t)
+  ;; magit-status: try to go to corresponding hunk
+  (setq magit-status-goto-file-position t)
   ;; https://github.com/magit/magit/issues/2012#issuecomment-619366605 ; but not really used
   (transient-append-suffix 'magit-log "-A"
 			   '("-1" "First parent" "--first-parent"))
