@@ -60,7 +60,44 @@
 ;; Magit: best Git client to ever exist
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)))
+  :bind (("C-c s" . magit-status))      ; muscle memory
+  :bind (:map magit-mode-map
+	      ;; muscle memory legacy, maybe remove: use native ^ now that we use querty
+	      ;;("o" . magit-section-up)
+	      )
+
+  :config
+  ;; hide untracked section by default, in addition to stashes
+  (setq magit-section-initial-visibility-alist
+	'((stashes . hide)
+	  (untracked . hide)))
+  ;; no buffer saving when magit-status
+  (setq magit-save-repository-buffers nil)
+  ;; show process buffer for long operations
+  (setq magit-process-popup-time 5)
+  ;; magit-status: switch to buffer instead of pop to buffer
+  (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  ;; intra line diff highlight
+  (setq magit-diff-refine-hunk t)
+  ;; https://github.com/magit/magit/issues/2012#issuecomment-619366605 ; but not really used
+  (transient-append-suffix 'magit-log "-A"
+			   '("-1" "First parent" "--first-parent"))
+  )
+
+(use-package magit-wip
+  ;; Git WIP: https://github.com/bartman/git-wip
+  :after magit
+  :config
+  ;; enable on all repositories
+  ;; alternative: remove it and enable on per-repo basis:
+  ;;   git config --add magit.extension wip-save
+  (magit-wip-mode 1))
+
+
+(use-package git-commit
+  :ensure t
+  :hook ((git-commit-setup . git-commit-turn-on-flyspell))
+  )
 
 (use-package forge
   :ensure t
