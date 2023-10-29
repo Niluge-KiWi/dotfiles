@@ -316,24 +316,7 @@ Analogous to `mouse-position'."
 		   (/ (car x-y) (frame-char-width)))
 		(+ (car (cdr edges))
 		   (/ (cdr x-y) (frame-char-height)))))))
-;; control mouse clipboard. In particular, select-active-regions, activated in 23.2, sucks.
-;; window selection is put in the X primary selection
-(setq x-select-enable-primary t)
-;; and not in X clipboard
-(setq x-select-enable-clipboard nil)
-(setq x-selection-timeout 10)
-(setq mouse-drag-copy-region t)
-(defun toggle-clipboard-selection ()
-  "Toggle clipboard/primary selection"
-  (interactive)
-  (if x-select-enable-clipboard
-      (progn
-        (setq x-select-enable-clipboard nil
-              x-select-enable-primary t)
-        (message "Primary selection"))
-    (setq x-select-enable-clipboard t
-          x-select-enable-primary nil)
-    (message "Clipboard")))
+
 
 ;; disable moving mouse when changing frame focus (desktop shortcut for emacsclient)
 (setq focus-follows-mouse nil)
