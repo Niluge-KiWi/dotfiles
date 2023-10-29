@@ -150,7 +150,6 @@
                :repo ("melpa" . "https://melpa.org/packages/"))
         (:name lsp-docker :type elpa)
         lua-mode
-        (:name magit :type elpa)
         markdown-mode
         mediawiki
         (:name miniedit :type git
@@ -676,81 +675,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; deactivate
 (setq vc-handled-backends nil)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Magit
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'magit)
-
-;; hide untracked section by default
-(push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
-;; no buffer saving when magit-status
-(setq magit-save-repository-buffers nil)
-;; use ido in prompts
-;; (setq magit-completing-read-function 'magit-ido-completing-read)
-;; let's try ivy there
-(ivy-mode)
-(setq magit-completing-read-function 'magit-builtin-completing-read)
-
-;; show process buffer for long operations
-(setq magit-process-popup-time 5)
-;; magit-status: switch to buffer instead of pop to buffer
-(setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
-;; intra line diff highlight
-(setq magit-diff-refine-hunk t)
-;; "u" and "U" are already taken by unstage, set "o" in addition to uneasy "^" on azerty keyboards
-(define-key magit-mode-map (kbd "o") 'magit-section-up)
-
-(global-set-key (kbd "C-c s") 'magit-status)
-(global-set-key (kbd "C-c C-s") 'magit-status)
-
-(require 'git-commit)
-;; flyspell on log
-(add-hook 'git-commit-setup-hook '(lambda () (flyspell-lang "american")))
-
-;; https://github.com/magit/magit/issues/2012#issuecomment-619366605
-(with-eval-after-load 'magit
-  (transient-append-suffix 'magit-log "-A"
-    '("-1" "First parent" "--first-parent")))
-
-;; ignore whitespace
-;; TODO fix ignore whitespace
-;; (defun magit-toggle-whitespace ()
-;;   (interactive)
-;;   (if (member "-w" (magit-diff-refresh-arguments))
-;;       (magit-dont-ignore-whitespace)
-;;     (magit-ignore-whitespace)))
-
-;; (defun magit-ignore-whitespace ()
-;;   (interactive)
-;;   (message "Ignore whitespace diffs")
-;;   (let ((args (magit-diff-refresh-arguments)))
-;;     (add-to-list args "-w")
-;;     (add-to-list args "--ignore-blank-lines")
-;;     (magit-diff-refresh args)))
-
-
-;; (defun magit-dont-ignore-whitespace ()
-;;   (interactive)
-;;   (message "Display whitespace diffs")
-;;   (magit-diff-refresh (remove "-w" (remove "--ignore-blank-lines" (magit-diff-refresh-arguments)))))
-
-
-;;;(define-key magit-mode-map (kbd "W") 'magit-toggle-whitespace)
-
-
-;; magit-git-wip
-;; https://github.com/bartman/git-wip
-;; see magit-wip.el to enable on per repo basis:
-;;   git config --add magit.extension wip-save
-(require 'magit-wip)
-(magit-wip-after-save-mode 1)
-(magit-wip-after-apply-mode 1)
-(magit-wip-before-change-mode 1)
-
-;; magit-blame
-(require 'magit-blame)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Window management
