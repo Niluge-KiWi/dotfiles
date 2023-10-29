@@ -305,7 +305,6 @@
 ;;; Mouse
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;(setq mouse-yank-at-point t)
-(setq mouse-highlight t)
 
 ;; TODO better fix
 (defun mouse-avoidance-point-position ()
