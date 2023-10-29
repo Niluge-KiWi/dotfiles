@@ -299,24 +299,6 @@
 ;; (powerline-revert)
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Mouse
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;(setq mouse-yank-at-point t)
-
-;; TODO better fix
-(defun mouse-avoidance-point-position ()
-  "Return the position of point as (FRAME X . Y).
-Analogous to `mouse-position'."
-  (let* ((inhibit-point-motion-hooks t)
-         (edges (window-inside-edges))
-	(x-y (posn-x-y (posn-at-point))))
-    (cons (selected-frame)
-	  (cons (+ (car edges)
-		   (/ (car x-y) (frame-char-width)))
-		(+ (car (cdr edges))
-		   (/ (cdr x-y) (frame-char-height)))))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General-purpose functions
