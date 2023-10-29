@@ -77,6 +77,10 @@
 (use-package json-mode
   :ensure t)
 
+(use-package lua-mode
+  :ensure t
+  :mode "\\.lua$"
+  :interpreter "lua")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
