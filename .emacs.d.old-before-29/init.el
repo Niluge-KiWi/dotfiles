@@ -104,7 +104,6 @@
                :repo ("melpa" . "https://melpa.org/packages/"))
                :repo ("melpa" . "https://melpa.org/packages/"))
         fold-dwim
-        (:name git-link :type elpa)
         (:name gnuplot :type elpa)
         go-def
         go-eldoc

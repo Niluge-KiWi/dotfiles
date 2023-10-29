@@ -95,15 +95,17 @@
   ;;   git config --add magit.extension wip-save
   (magit-wip-mode 1))
 
-
-(use-package git-commit
-  :ensure t
-  :hook ((git-commit-setup . git-commit-turn-on-flyspell))
-  )
-
 (use-package forge
   :ensure t
   :after magit)
+
+(use-package git-commit
+  :ensure t
+  :hook ((git-commit-setup . git-commit-turn-on-flyspell)))
+
+(use-package git-link
+  :ensure t
+  :bind ("C-x v w" . git-link))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
