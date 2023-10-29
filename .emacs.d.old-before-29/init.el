@@ -104,7 +104,6 @@
                :repo ("melpa" . "https://melpa.org/packages/"))
                :repo ("melpa" . "https://melpa.org/packages/"))
         fold-dwim
-        (:name forge :type elpa)
         (:name git-link :type elpa)
         (:name gnuplot :type elpa)
         go-def
@@ -682,10 +681,6 @@ Optional depth is for internal use."
 ;;; Magit
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'magit)
-(require 'forge)
-
-(setq forge-pull-notifications nil)
-
 
 ;; hide untracked section by default
 (push (cons [untracked status] 'hide) magit-section-initial-visibility-alist)
