@@ -227,4 +227,7 @@
 (use-package rg
   :ensure t
   :config
-  (setq wgrep-auto-save-buffer t))
+  (setq wgrep-auto-save-buffer t)
+  ;; C-c s to open transient menu for ripgrep
+  (setq rg-keymap-prefix (kbd "C-c s"))
+  (rg-enable-default-bindings))
