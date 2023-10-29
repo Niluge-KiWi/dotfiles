@@ -130,6 +130,28 @@ If the new path's directories does not exist, create them."
 (setq mouse-wheel-tilt-scroll t)
 (setq mouse-wheel-flip-direction t)
 
+;; Mouse, clipboard, primary selection
+(setq x-selection-timeout 100)
+;; selection is put in the X primary selection
+(setq select-enable-primary t)
+;; and not in X clipboard
+(setq select-enable-clipboard nil)
+;; including transient mark
+(setq select-active-regions t)
+
+(defun toggle-clipboard-selection ()
+  "Toggle clipboard/primary selection"
+  (interactive)
+  (if select-enable-clipboard
+      (progn
+        (setq select-enable-clipboard nil
+              select-enable-primary t)
+        (message "Primary selection"))
+    (setq select-enable-clipboard t
+          select-enable-primary nil)
+    (message "Clipboard")))
+
+
 ;; We won't set these, but they're good to know about
 ;;
 ;; (setq-default indent-tabs-mode nil)
