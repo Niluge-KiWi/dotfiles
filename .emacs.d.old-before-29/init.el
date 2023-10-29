@@ -318,10 +318,6 @@ Analogous to `mouse-position'."
 		   (/ (cdr x-y) (frame-char-height)))))))
 
 
-;; disable moving mouse when changing frame focus (desktop shortcut for emacsclient)
-(setq focus-follows-mouse nil)
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; General-purpose functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
