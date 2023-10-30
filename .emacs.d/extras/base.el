@@ -38,18 +38,12 @@
   :bind (("C-x b" . consult-buffer)  ; orig. switch-to-buffer
          ("M-y" . consult-yank-pop)  ; orig. yank-pop
          ("M-s r" . consult-ripgrep)
-         ("C-s" . consult-line))     ; orig. isearch
+         ;; let's try ctrlf for now instead of consult-line: same keybindings as isearch
+         ;; ("C-s" . consult-line)  ; orig. isearch
+         )
   :config
   ;; Narrowing lets you restrict results to certain groups of candidates
   (setq consult-narrow-key "<")
-
-  ;; https://github.com/minad/consult/wiki#add-command-local-keybinding
-  (defvar my-consult-line-map
-    (let ((map (make-sparse-keymap)))
-      (define-key map "\C-s" #'previous-history-element)
-      map))
-  (consult-customize consult-line :keymap my-consult-line-map)
-
   )
 
 ;; track recent files, available in consult-buffer
@@ -223,6 +217,19 @@
 ;;;   Misc. editing enhancements
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package ctrlf
+  ;; same keybindings as isearch
+  :ensure t
+  :bind (:map ctrlf-minibuffer-mode-map
+              ;; muscle-memory; try to use "M-s o" instead?
+              ("C-o" . ctrlf-occur)
+              ;; muscle-memory; try to use "M-s ." instead?
+              ("C-w" . ctrlf-forward-symbol-at-point)
+              ;; TODO legacy, maybe remove that?; try to use "M-s _" instead?
+              ("C-e" . ctrlf-toggle-symbol))
+  :config
+  (ctrlf-mode 1))
 
 ;; Modify search results en masse, using ripgrep/rg instead of grep with wgrep
 (use-package rg
