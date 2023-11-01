@@ -97,9 +97,18 @@
     (setq-local orderless-matching-styles '(orderless-literal)
 		orderless-style-dispatchers nil))
   (vertico-mode)
-  :bind (:map vertico-map
-              ("C-l" . my/match-components-literally)
-	      ("C-o" . embark-export)))
+
+  :bind
+  (:map vertico-map
+        ("C-l" . my/match-components-literally)
+	    ("C-o" . embark-export))
+
+  :config
+  ;; needed with `read-file-name-completion-ignore-case'.
+  ;; cf:
+  ;; - https://github.com/minad/vertico/issues/341
+  ;; - https://debbugs.gnu.org/cgi/bugreport.cgi?bug=60264
+  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
 
 (use-package vertico-directory
   :after vertico
@@ -172,6 +181,12 @@
   ;; this can be changed again:
   ;; - check consult readme & wiki, orderless readme, possibly issues there too.
   ;; - maybe just drop consult-line? or maybe change default orderless style around consult-line?
+
+
+  ;; Make the stock file and buffer completion styles case insensitive, more coherent with 'orderless-smart-case'
+  (setq read-file-name-completion-ignore-case t)
+  (setq read-buffer-completion-ignore-case t)
+
 
   (orderless-define-completion-style orderless+initialism
     (orderless-matching-styles '(orderless-initialism
