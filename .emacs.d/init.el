@@ -295,9 +295,7 @@ brake whatever split of windows we might have in the frame."
 ;(load-file (expand-file-name "extras/vim-like.el" user-emacs-directory))
 
 ;; Org-mode configuration
-;; WARNING: need to customize things inside the elisp file before use! See
-;; the file extras/org-intro.txt for help.
-;(load-file (expand-file-name "extras/org.el" user-emacs-directory))
+(load-file (expand-file-name "extras/org.el" user-emacs-directory))
 
 ;; Tools for academic researchers
 ;(load-file (expand-file-name "extras/researcher.el" user-emacs-directory))
@@ -314,7 +312,7 @@ brake whatever split of windows we might have in the frame."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(symbol-overlay keyfreq rg solarized-theme solaris-theme magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
+   '(ox-pandoc symbol-overlay keyfreq rg solarized-theme solaris-theme magit wgrep orderless kind-icon cape corfu-terminal corfu marginalia vertico embark-consult embark consult avy which-key)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

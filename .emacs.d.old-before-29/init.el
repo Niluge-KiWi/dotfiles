@@ -39,12 +39,10 @@
       '(("gnu" . "https://elpa.gnu.org/packages/")
 	("melpa" . "https://melpa.org/packages/")
 	("melpa-stable" . "https://stable.melpa.org/packages/")
-	("org" . "http://orgmode.org/elpa/"))
       package-archive-priorities
       '(("gnu" . 5)
 	("melpa" . 0)
-	("melpa-stable" . 10)
-	("org" . 20)))
+	("melpa-stable" . 10)))
 (package-initialize)
 
 ;;-------el-get
@@ -164,8 +162,6 @@
         (:name org :type elpa)
         (:name org-journal :type elpa)
         (:name org-tree-slide :type elpa)
-        (:name ox-pandoc :type elpa
-               :repo ("melpa" . "https://melpa.org/packages/"))
         (:name plantuml-mode :type elpa)
         ;; (:name powerline :type git
         ;;        ;; :url "https://github.com/milkypostman/powerline.git"
@@ -1181,21 +1177,9 @@ sys.path.insert(0, '')"))
 ;;; Org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org)
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-;; (setq org-startup-indented t)
 ;; (require 'org-remember)
 ;; (org-remember-insinuate)
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
 ;;(global-set-key (kbd "C-c r") 'remember)
-(defun doc ()
-  "Open doc.org"
-  (interactive)
-  (find-file "~/doc/doc.org"))
-(defun notes ()
-  "Open notes.org"
-  (interactive)
-  (find-file "~/doc/notes.org"))
 
 (defun org-toggle-todo-with-timestamp-and-fold ()
   (interactive)
@@ -1246,58 +1230,34 @@ and variances (respectively) of the individual estimates."
 	    ;add
 	    (define-key org-mode-map (kbd "C-c C-r") 'org-refile)
 	    (define-key org-mode-map (kbd "C-c C-d") 'org-toggle-todo-with-timestamp-and-fold)
-	    ;just remove
-	    (define-key org-mode-map (kbd "<C-tab>") nil)
 	    )
 )
 
 ;; settings
 (setq
+ ;; TODO not used?
  org-directory "~/.emacs.d/org"
+ ;; TODO not used?
  org-agenda-files (list "~/doc/agenda.org" "~/.emacs.d/org/todo.org")
-
+ ;; TODO not used?
  org-default-notes-file "~/.emacs.d/org/notes.org"
+  ;; TODO not used?
  org-mobile-directory "~/android/org-mode"
 
- org-export-preserve-breaks t
- org-export-with-sub-superscripts '{}
-
- org-use-sub-superscripts '{}
-
- org-agenda-ndays 7
- org-log-done 'note
- ;; org-startup-folded 'content
- org-deadline-warning-days 4
  org-agenda-show-all-dates t
  ;; org-agenda-skip-deadline-if-done t
  ;; org-agenda-skip-scheduled-if-done t
  org-agenda-start-on-weekday 1
  org-agenda-repeating-timestamp-show-all t
- ;; org-reverse-note-order t
- org-startup-indented nil
+
  org-remember-store-without-prompt t
- ;; org-hierarchical-todo-statistics
  org-remember-templates (quote ((116 "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")))
  org-remember-templates '(("Tasks" ?t "* TODO %?" "~/.emacs.d/org/todo.org" "Tasks")
                           ("Work" ?w "* TODO %?" "~/.emacs.d/org/todo.org" "Work")
                           ("Emacs" ?e "* TODO %?" "~/.emacs.d/org/todo.org" "Emacs"))
- org-todo-keywords '((sequence "TODO(t)" "MAYBE(m)" "|" "PR(p)" "DONE(d)" "WONTDO(w)" "INISSUE(i)" "LATER(l)"))
+
  )
-(zenburn-with-color-variables
-  (setq org-todo-keyword-faces `(("MAYBE" . ,zenburn-yellow-2)
-                                 ("WONTDO" . ,zenburn-blue))))
 
-(setq
- org-pandoc-options
- '(
-   (standalone . t)
-   (atx-headers . t)
-   (wrap . "none")
-   (tab-stop . 2)
-   ))
-
-;; enable <sTAB to create source code block
-(require 'org-tempo)
 
 (add-hook 'org-load-hook
 	  (lambda ()
@@ -1313,8 +1273,6 @@ and variances (respectively) of the individual estimates."
    (gnuplot . t)
    (R . t)
    ))
-;; fontify in org mode
-(setq org-src-fontify-natively t)
 
 ;; (setq org-clock-persist 'history)
 ;; (org-clock-persistence-insinuate)
@@ -1328,10 +1286,6 @@ and variances (respectively) of the individual estimates."
 ;; disable end-of-visual-line in org-mode
 (setq line-move-visual nil)
 
-;; flyspell on org-mode
-(add-hook 'org-mode-hook
-          (lambda ()
-            (flyspell-mode 1)))
 
 ;; org-journal
 (require 'org-journal)
@@ -1696,11 +1650,6 @@ Ignores CHAR at point."
   (launch-command "gnome-terminal" ""))
 (global-set-key (kbd "s-h") 'open-shell-here)
 
-(defun todos ()
-  (interactive)
-  (find-file "~/.emacs.d/org/todo.org"))
-(global-set-key (kbd "s-n") 'note)
-(global-set-key (kbd "s-t") 'todos)
 (global-set-key (kbd "s-l") 'bury-buffer)
 ;; ghosts of past yanks
 (global-set-key (kbd "s-y") (lambda ()

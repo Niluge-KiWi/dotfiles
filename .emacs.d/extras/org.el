@@ -37,34 +37,33 @@
 ;;; what you're looking for.
 
 ;;; Phase 1 variables
+(setq org-startup-folded nil)
 
 ;;; Phase 2 variables
 
 ;; Agenda variables
+;; TODO review
 (setq org-directory "~/Documents/org/") ; Non-absolute paths for agenda and
                                         ; capture templates will look here.
 
 (setq org-agenda-files '("inbox.org" "work.org"))
 
 ;; Default tags
-(setq org-tag-alist '(
-                      ;; locale
-                      (:startgroup)
-                      ("home" . ?h)
-                      ("work" . ?w)
-                      ("school" . ?s)
-                      (:endgroup)
-                      (:newline)
-                      ;; scale
-                      (:startgroup)
-                      ("one-shot" . ?o)
-                      ("project" . ?j)
-                      ("tiny" . ?t)
-                      (:endgroup)
-                      ;; misc
-                      ("meta")
-                      ("review")
-                      ("reading")))
+(setq org-tag-persistent-alist
+      '((:startgrouptag)
+        ("priority" . ??) ; don't want 'p' as tag key
+        (:startgroup)     ; exclusive tags
+        ("p0" . ?0)
+        ("p0_5")
+        ("p1" . ?1)
+        ("p1_5")
+        ("p2" . ?2)
+        ("p3" . ?3)
+        ("p4" . ?4)
+        (:endgroup)
+        (:endgrouptag)))
+;; exit on first tag key; use C-c before to stay on tag selection
+(setq org-fast-tag-selection-single-key t)
 
 ;; Org-refile: where should org-refile look?
 (setq org-refile-targets 'FIXME)
@@ -93,18 +92,37 @@
   :hook ((org-mode . visual-line-mode)  ; wrap lines at word breaks
          (org-mode . flyspell-mode))    ; spell checking!
 
-  :bind (:map global-map
-              ("C-c l s" . org-store-link)          ; Mnemonic: link → store
-              ("C-c l i" . org-insert-link-global)) ; Mnemonic: link → insert
+  :bind
+  (:map global-map
+        ("C-c l" . org-store-link) ; use C-c C-l to insert link
+        )
+
   :config
-  (require 'oc-csl)                     ; citation support
   (add-to-list 'org-export-backends 'md)
 
   ;; Make org-open-at-point follow file links in the same window
   (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
-  ;; Make exporting quotes better
-  (setq org-export-with-smart-quotes t)
+  (setq org-export-preserve-breaks t)
+  ;; no sub-superscripts on export: I dont use them, and it messes html exports
+  (setq org-export-with-sub-superscripts nil)
+
+  ;; enable < s TAB to create source code block; see 'org-structure-tempalte-alist'
+  (require 'org-tempo)
+  )
+
+(use-package ox-pandoc
+  :ensure t
+  ;; TODO :ensure-system-package
+  :after org
+  :config
+  (setq org-pandoc-options
+        '(
+          (standalone . t)
+          (atx-headers . t)
+          (wrap . "none")
+          (tab-stop . 2)
+          ))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,7 +139,9 @@
   ;; Instead of just two states (TODO, DONE) we set up a few different states
   ;; that a task can be in.
   (setq org-todo-keywords
-        '((sequence "TODO(t)" "WAITING(w@/!)" "STARTED(s!)" "|" "DONE(d!)" "OBSOLETE(o@)")))
+        '((sequence "TODO(t)" "MAYBE(m)" "|" "PR(p)" "DONE(d)" "WONTDO(w)" "INISSUE(i)" "LATER(l)")))
+
+   (setq org-log-done 'note)
 
   ;; Refile configuration
   (setq org-outline-path-complete-in-steps nil)
@@ -155,17 +175,17 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package org-roam
-  :ensure t
-  :config
-  (org-roam-db-autosync-mode)
-  ;; Dedicated side window for backlinks
-  (add-to-list 'display-buffer-alist
-               '("\\*org-roam\\*"
-                 (display-buffer-in-side-window)
-                 (side . right)
-                 (window-width . 0.4)
-                 (window-height . fit-window-to-buffer))))
+;(use-package org-roam
+;  :ensure t
+;  :config
+;  (org-roam-db-autosync-mode)
+;  ;; Dedicated side window for backlinks
+;  (add-to-list 'display-buffer-alist
+;               '("\\*org-roam\\*"
+;                 (display-buffer-in-side-window)
+;                 (side . right)
+;                 (window-width . 0.4)
+;                 (window-height . fit-window-to-buffer))))
 
 ;; Pretty web interface for org-roam
 ;(use-package org-roam-ui
