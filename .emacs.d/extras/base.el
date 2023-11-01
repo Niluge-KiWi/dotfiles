@@ -221,6 +221,8 @@
 (use-package ctrlf
   ;; same keybindings as isearch
   :ensure t
+  :init
+  (ctrlf-mode 1)
   :bind (:map ctrlf-minibuffer-mode-map
               ;; muscle-memory; try to use "M-s o" instead?
               ("C-o" . ctrlf-occur)
@@ -228,8 +230,7 @@
               ("C-w" . ctrlf-forward-symbol-at-point)
               ;; TODO legacy, maybe remove that?; try to use "M-s _" instead?
               ("C-e" . ctrlf-toggle-symbol))
-  :config
-  (ctrlf-mode 1))
+  )
 
 ;; Modify search results en masse, using ripgrep/rg instead of grep with wgrep
 (use-package rg

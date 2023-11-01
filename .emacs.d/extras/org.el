@@ -127,6 +127,7 @@
   (setq org-outline-path-complete-in-steps nil)
   (setq org-refile-use-outline-path 'file)
 
+  ;; TODO review
   (setq org-capture-templates
         '(("c" "Default Capture" entry (file "inbox.org")
            "* TODO %?\n%U\n%i")
@@ -140,6 +141,7 @@
           ("wr" "Work report" entry (file+headline "work.org" "Reports")
            "** TODO %?\n%U\n%i\n%a")))
 
+  ;; TODO review
     (setq org-agenda-custom-commands
           '(("n" "Agenda and All Todos"
              ((agenda)
