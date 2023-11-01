@@ -109,6 +109,39 @@
 
   ;; enable < s TAB to create source code block; see 'org-structure-tempalte-alist'
   (require 'org-tempo)
+
+
+  ;; org-copy-buffer-to-clipboard: uses xclip binary to add Rich Formatted Text to clipboard (really: html)
+  ;; inspiration:
+  ;;   https://kitchingroup.cheme.cmu.edu/blog/2016/06/16/Copy-formatted-org-mode-text-from-Emacs-to-other-applications/
+  ;; issues:
+  ;; - xclip & X clipboard requires an alive process to serve the paste action, so use start-process instead of shell-command to not block emacs usage.
+  ;; - fork of xclip-set-selection, to support '-t text/html'; stripped down to just xclip support
+  (defun xclip-set-selection-html (type data)
+    "TYPE is a symbol: primary, secondary and clipboard.
+fork of xclip-set-selection, to support '-t text/html'; stripped down to just xclip support."
+    (let* ((process-connection-type nil)
+           (proc
+            (when (getenv "DISPLAY")
+              (start-process "xclip" nil xclip-program
+                             "-t" "text/html"
+                             "-selection" (symbol-name type)))))
+      (when proc
+        (process-send-string proc data)
+        (process-send-eof proc))
+      data))
+
+  (defun org-copy-buffer-to-clipboard ()
+    "Export region to HTML, and copy it to the clipboard."
+    (interactive)
+    (let* ((org-export-show-temporary-export-buffer nil))
+      ;;                           async subtreep visible-only body-only ext-plist
+      (org-export-to-buffer
+          'html "*Org Formatted Copy*" nil nil t t nil
+          (lambda ()
+            (xclip-set-selection-html 'clipboard (buffer-string))
+            (kill-buffer (current-buffer))
+            (message "org formatted copied to clipboard")))))
   )
 
 (use-package ox-pandoc

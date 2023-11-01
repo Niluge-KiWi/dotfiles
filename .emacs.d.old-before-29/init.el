@@ -1309,34 +1309,6 @@ and variances (respectively) of the individual estimates."
 (setq org-clock-out-when-done t)
 
 
-(defun xclip-set-selection-html (type data)
-  "TYPE is a symbol: primary, secondary and clipboard.
-fork of xclip-set-selection, to support '-t text/html'; stripped down to just xclip support"
-    (let* ((process-connection-type nil)
-           (proc
-            (when (getenv "DISPLAY")
-              (start-process "xclip" nil xclip-program
-                             "-t" "text/html"
-                             "-selection" (symbol-name type)))))
-      (when proc
-        (process-send-string proc data)
-        (process-send-eof proc))
-      data))
-
-(defun org-copy-buffer-to-clipboard ()
-  "Export region to HTML, and copy it to the clipboard."
-  (interactive)
-  (let* ((org-export-show-temporary-export-buffer nil))
-    ;;                           async subtreep visible-only body-only ext-plist
-    (org-export-to-buffer
-        'html "*Org Formatted Copy*" nil nil t t nil
-        (lambda ()
-          (xclip-set-selection-html 'clipboard (buffer-string))
-          (kill-buffer (current-buffer))
-          (message "org formatted copied to clipboard")))))
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
