@@ -169,6 +169,22 @@
             ("w" "Work" agenda ""
              ((org-agenda-files '("work.org")))))))
 
+(use-package org-journal
+  :ensure t
+  :after org
+  :config
+  (setq org-journal-dir "~/.emacs.d/journal/")
+  (setq org-journal-file-format "%Y-%m-%d.org")
+  (setq org-journal-tag-alist '(("manger" . ?m) ("home" . ?h) ("codereview" . ?r) ("ops" . ?o) ("meeting" . ?m) ("veille" . ?v)))
+  (setq org-journal-date-prefix "* ")
+  (setq org-journal-date-format "%Y-%m-%d, %A")
+  (setq org-journal-time-format "%R ")
+  (setq org-journal-find-file 'find-file)
+  (setq org-journal-carryover-items "")
+  ;; link org-journal with org-agenda
+  (add-to-list 'org-agenda-files org-journal-dir)
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;   Phase 3: extensions (org-roam, etc.)

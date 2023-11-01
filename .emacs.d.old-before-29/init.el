@@ -1287,20 +1287,6 @@ and variances (respectively) of the individual estimates."
 (setq line-move-visual nil)
 
 
-;; org-journal
-(require 'org-journal)
-(setq org-journal-dir "~/.emacs.d/journal/")
-(setq org-journal-file-format "%Y-%m-%d.org")
-(setq org-journal-tag-alist '(("manger" . ?1) ("home" . ?2) ("codereview" . ?r) ("ops" . ?o) ("meeting" . ?m) ("veille" . ?v)))
-(setq org-journal-date-prefix "* ")
-(setq org-journal-date-format "%Y-%m-%d, %A")
-(setq org-journal-time-format "%R ")
-(setq org-journal-find-file 'find-file)
-(setq org-journal-carryover-items "")
-;; link org-journal with org-agenda
-(add-to-list 'org-agenda-files org-journal-dir)
-
-
 
 
 (defun jds:human-time-to-seconds (human-time)
