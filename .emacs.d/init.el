@@ -30,6 +30,10 @@
 (with-eval-after-load 'package
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
+;; own code
+(add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
+
+
 (setq inhibit-splash-screen t)
 
 (setq initial-major-mode 'fundamental-mode)  ; default mode for the *scratch* buffer

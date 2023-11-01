@@ -185,6 +185,10 @@
   (add-to-list 'org-agenda-files org-journal-dir)
   )
 
+(use-package journal-daily-summary
+  :after org-journal
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;;   Phase 3: extensions (org-roam, etc.)
