@@ -38,8 +38,7 @@
   :bind (("C-x b" . consult-buffer)  ; orig. switch-to-buffer
          ("M-y" . consult-yank-pop)  ; orig. yank-pop
          ("M-s r" . consult-ripgrep)
-         ;; let's try ctrlf for now instead of consult-line: same keybindings as isearch
-         ;; ("C-s" . consult-line)  ; orig. isearch
+         ("M-s l" . consult-line)
          )
   :config
   ;; Narrowing lets you restrict results to certain groups of candidates
