@@ -13,6 +13,7 @@
 /emacs-backup/
 /tree-sitter/
 /multisession/
+/forge-database.sqlite
 
 *~
 /doc.org
