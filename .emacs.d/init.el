@@ -242,6 +242,15 @@ brake whatever split of windows we might have in the frame."
   :init
   (windswap-default-keybindings 'meta 'shift))
 
+;; resize windows
+(use-package emacs
+  :bind
+  (("S-C-<left>" . shrink-window-horizontally)
+   ("S-C-<right>" . enlarge-window-horizontally)
+   ("S-C-<down>" . shrink-window)
+   ("S-C-<up>" . enlarge-window))
+  )
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
