@@ -45,6 +45,9 @@
 ;; Save history of minibuffer
 (savehist-mode)
 
+;; Save and restore last cursor place in files
+(save-place-mode)
+
 ;; Move through windows with Alt-<arrow keys>
 (windmove-default-keybindings 'meta)
 
