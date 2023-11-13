@@ -675,9 +675,6 @@ Optional depth is for internal use."
 ;;; Window management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;move between windows with meta-keypad
-(windmove-default-keybindings 'meta)
-
 
 ;; resize windows
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)

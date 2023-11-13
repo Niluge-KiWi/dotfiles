@@ -48,9 +48,6 @@
 ;; Save and restore last cursor place in files
 (save-place-mode)
 
-;; Move through windows with Alt-<arrow keys>
-(windmove-default-keybindings 'meta)
-
 ;; Fix archaic defaults
 (setq sentence-end-double-space nil)
 
@@ -228,6 +225,16 @@ brake whatever split of windows we might have in the frame."
   ;; finally, load and enable the theme
   :config
   (load-theme 'solarized-light-high-contrast t))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; Window and buffer management
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Move through windows with Alt-<arrow keys>
+(windmove-default-keybindings 'meta)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
