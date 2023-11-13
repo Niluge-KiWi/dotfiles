@@ -39,6 +39,7 @@
          ("M-y" . consult-yank-pop)  ; orig. yank-pop
          ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
+         ("M-s o" . consult-outline)
          )
   :config
   ;; Narrowing lets you restrict results to certain groups of candidates
