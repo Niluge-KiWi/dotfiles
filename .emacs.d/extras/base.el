@@ -58,10 +58,10 @@
   :demand t
   :after avy
   :bind (("C-." . embark-act)   ; doesn't work in terminal
-	 ("C-c a" . embark-act) ; backup for terminal
-	 ("M-." . embark-dwim)  ; unsure which to use yet
-	 ("C-;" . embark-dwim)  ; unsure which to use yet. back with M-, is unnatural with this
-	 ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
+	     ("C-c a" . embark-act) ; backup for terminal
+	     ("M-." . embark-dwim)  ; unsure which to use yet
+	     ("C-;" . embark-dwim)  ; unsure which to use yet. back with M-, is unnatural with this
+	     ("C-h B" . embark-bindings)) ; alternative for `describe-bindings'
 
   :init
   ;; Add the option to run embark when using avy
@@ -95,7 +95,7 @@
     "Components match literally for the rest of the session."
     (interactive)
     (setq-local orderless-matching-styles '(orderless-literal)
-		orderless-style-dispatchers nil))
+		        orderless-style-dispatchers nil))
   (vertico-mode)
 
   :bind
@@ -195,9 +195,9 @@
 
   (orderless-define-completion-style orderless+initialism+flex
     (orderless-matching-styles '(orderless-initialism
-				 orderless-flex
-				 orderless-literal
-				 orderless-regexp)))
+				                 orderless-flex
+				                 orderless-literal
+				                 orderless-regexp)))
 
   ;; List of completion styles to use, everywhere, after the per-category styles
   ;; (orderless readme: The 'basic' completion style is specified as fallback in addition to orderless in order to ensure that completion commands which rely on dynamic completion tables, e.g., completion-table-dynamic or completion-table-in-turn, work correctly)
@@ -206,24 +206,24 @@
   (setq completion-category-defaults nil)
   ;; Note that 'completion-category-overrides' is not really an override, but rather prepended to the default 'completion-styles'.
   (setq completion-category-overrides
-	'(
-	  ;; for files:
-	  ;; - for TRAMP: need 'basic' *first*
-	  ;; - the 'partial-completion' style allows you to use wildcards for file completion and partial paths, e.g., '/u/s/l' for '/usr/share/local'.
-	  ;; - 'orderless' with flex after 'partial-completion'
-	  (file (styles basic partial-completion orderless+initialism+flex))
+	    '(
+	      ;; for files:
+	      ;; - for TRAMP: need 'basic' *first*
+	      ;; - the 'partial-completion' style allows you to use wildcards for file completion and partial paths, e.g., '/u/s/l' for '/usr/share/local'.
+	      ;; - 'orderless' with flex after 'partial-completion'
+	      (file (styles basic partial-completion orderless+initialism+flex))
 
-	  ;; for buffer:
-	  ;; - since we have recentf in C-x b consult-buffers, strings that have matched when opening a file should still match the 'file' (recentf) source/group in consult-buffers
-	  ;;   => buffers should be (usually/almost) as verbose in matching as file
-	  ;; TODO fix, somehow setting orderless+initialism+flex (or any orderless style with flex) does *not* work for buffers, but do work for files, whyyy :cry:
-	  (buffer (styles partial-completion orderless+initialism+flex))
+	      ;; for buffer:
+	      ;; - since we have recentf in C-x b consult-buffers, strings that have matched when opening a file should still match the 'file' (recentf) source/group in consult-buffers
+	      ;;   => buffers should be (usually/almost) as verbose in matching as file
+	      ;; TODO fix, somehow setting orderless+initialism+flex (or any orderless style with flex) does *not* work for buffers, but do work for files, whyyy :cry:
+	      (buffer (styles partial-completion orderless+initialism+flex))
 
-      ;; for M-x: also flex
-	  (command (styles orderless+initialism+flex))
-      ;; for some other completions categories: initialism
-      (symbol (styles orderless+initialism))
-      (variable (styles orderless+initialism)))))
+          ;; for M-x: also flex
+	      (command (styles orderless+initialism+flex))
+          ;; for some other completions categories: initialism
+          (symbol (styles orderless+initialism))
+          (variable (styles orderless+initialism)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

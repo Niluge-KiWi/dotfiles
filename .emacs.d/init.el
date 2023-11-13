@@ -77,7 +77,7 @@ of not being in the minibuffer but having it active. Otherwise simply doing the 
 brake whatever split of windows we might have in the frame."
   (interactive)
   (if (and (not (window-minibuffer-p (selected-window)))
-	   (or mark-active (active-minibuffer-window)))
+	       (or mark-active (active-minibuffer-window)))
       (keyboard-escape-quit)
     (keyboard-quit)))
 (define-key global-map (kbd "C-g") 'my-keyboard-quit)
@@ -239,10 +239,10 @@ brake whatever split of windows we might have in the frame."
   (save-excursion
     (save-restriction
       (save-match-data
-	(progn
-	  (re-search-backward "[^ \t\r\n]" nil t)
-	  (re-search-forward "[ \t\r\n]+" nil t)
-	  (replace-match "" nil nil))))))
+	    (progn
+	      (re-search-backward "[^ \t\r\n]" nil t)
+	      (re-search-forward "[ \t\r\n]+" nil t)
+	      (replace-match "" nil nil))))))
 ;; kill-whitespace seems more usefull than kill-sentence
 (global-set-key (kbd "M-k") 'kill-whitespace)
 

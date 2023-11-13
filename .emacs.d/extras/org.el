@@ -184,7 +184,7 @@ fork of xclip-set-selection, to support '-t text/html'; stripped down to just xc
   (setq org-todo-keywords
         '((sequence "TODO(t)" "MAYBE(m)" "|" "PR(p)" "DONE(d)" "WONTDO(w)" "INISSUE(i)" "LATER(l)")))
 
-   (setq org-log-done 'note)
+  (setq org-log-done 'note)
 
   ;; Refile configuration
   (setq org-outline-path-complete-in-steps nil)
@@ -205,12 +205,12 @@ fork of xclip-set-selection, to support '-t text/html'; stripped down to just xc
            "** TODO %?\n%U\n%i\n%a")))
 
   ;; TODO review
-    (setq org-agenda-custom-commands
-          '(("n" "Agenda and All Todos"
-             ((agenda)
-              (todo)))
-            ("w" "Work" agenda ""
-             ((org-agenda-files '("work.org")))))))
+  (setq org-agenda-custom-commands
+        '(("n" "Agenda and All Todos"
+           ((agenda)
+            (todo)))
+          ("w" "Work" agenda ""
+           ((org-agenda-files '("work.org")))))))
 
 (use-package org-journal
   :ensure t

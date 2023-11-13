@@ -63,15 +63,15 @@
   :ensure t
   :bind (("C-c C-s" . magit-status))      ; muscle memory
   :bind (:map magit-mode-map
-	      ;; muscle memory legacy, maybe remove: use native ^ now that we use querty
-	      ;;("o" . magit-section-up)
-	      )
+	          ;; muscle memory legacy, maybe remove: use native ^ now that we use querty
+	          ;;("o" . magit-section-up)
+	          )
 
   :config
   ;; hide untracked section by default, in addition to stashes
   (setq magit-section-initial-visibility-alist
-	'((stashes . hide)
-	  (untracked . hide)))
+	    '((stashes . hide)
+	      (untracked . hide)))
   ;; no buffer saving when magit-status
   (setq magit-save-repository-buffers nil)
   ;; show process buffer for long operations
@@ -84,7 +84,7 @@
   (setq magit-status-goto-file-position t)
   ;; https://github.com/magit/magit/issues/2012#issuecomment-619366605 ; but not really used
   (transient-append-suffix 'magit-log "-A"
-			   '("-1" "First parent" "--first-parent"))
+	'("-1" "First parent" "--first-parent"))
   )
 
 (use-package magit-wip
