@@ -689,13 +689,6 @@ Optional depth is for internal use."
 (setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
 (winner-mode t) ;; turn on the global minor mode
 
-;; buffer move
-(require 'buffer-move)
-(global-set-key (kbd "S-M-<left>")  'buf-move-left)
-(global-set-key (kbd "S-M-<right>") 'buf-move-right)
-(global-set-key (kbd "S-M-<up>")    'buf-move-up)
-(global-set-key (kbd "S-M-<down>")  'buf-move-down)
-
 ;; ace-window
 (global-set-key (kbd "M-o") 'ace-window)
 
