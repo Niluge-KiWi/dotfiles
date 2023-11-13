@@ -90,7 +90,9 @@
 
 (use-package org
   :hook ((org-mode . visual-line-mode)  ; wrap lines at word breaks
-         (org-mode . flyspell-mode))    ; spell checking!
+         (org-mode . flyspell-mode)     ; spell checking!
+         (org-mode . (lambda () (electric-indent-local-mode -1))) ; disable electric-indent in org-mode, so RET on headlines don't indent
+         )
 
   :bind
   (:map global-map
@@ -110,6 +112,8 @@
   ;; enable < s TAB to create source code block; see 'org-structure-tempalte-alist'
   (require 'org-tempo)
 
+  ;; indent headings like log notes, but not the rest of the text under the headline
+  (setq org-adapt-indentation 'headline-data)
 
   ;; org-copy-buffer-to-clipboard: uses xclip binary to add Rich Formatted Text to clipboard (really: html)
   ;; inspiration:
