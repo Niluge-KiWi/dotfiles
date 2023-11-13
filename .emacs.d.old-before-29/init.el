@@ -678,15 +678,6 @@ Optional depth is for internal use."
 ;;move between windows with meta-keypad
 (windmove-default-keybindings 'meta)
 
-;; TODO test this
-;; widen window : widen selected window
-;; (global-widen-window-mode t)
-;; ;; et on ajoute les fonctions utilisées par windmove, comme ça on a tout ce qu'il faut!
-;; (add-to-list 'ww-advised-functions 'windmove-up)
-;; (add-to-list 'ww-advised-functions 'windmove-down)
-;; (add-to-list 'ww-advised-functions 'windmove-right)
-;; (add-to-list 'ww-advised-functions 'windmove-left)
-
 
 ;; resize windows
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
