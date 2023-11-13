@@ -100,14 +100,16 @@
         )
 
   :config
+  ;; export
   (add-to-list 'org-export-backends 'md)
-
-  ;; Make org-open-at-point follow file links in the same window
-  (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
   (setq org-export-preserve-breaks t)
   ;; no sub-superscripts on export: I dont use them, and it messes html exports
   (setq org-export-with-sub-superscripts nil)
+
+  ;; edit
+  ;; Make org-open-at-point follow file links in the same window
+  (setf (cdr (assoc 'file org-link-frame-setup)) 'find-file)
 
   ;; enable < s TAB to create source code block; see 'org-structure-tempalte-alist'
   (require 'org-tempo)
