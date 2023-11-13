@@ -251,6 +251,12 @@ brake whatever split of windows we might have in the frame."
    ("S-C-<up>" . enlarge-window))
   )
 
+;; Cancel and redo windows configurations
+(use-package winner
+  :init
+  ;; C-c left/right to undo/redo changes in window configuration
+  (winner-mode))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;

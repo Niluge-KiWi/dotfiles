@@ -675,14 +675,6 @@ Optional depth is for internal use."
 ;;; Window management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-
-;; Cancel and redo windows configurations
-;;C-c left/right to undo/redo changes in window configuration
-(require 'winner)
-(setq winner-dont-bind-my-keys t) ;; default bindings conflict with org-mode
-(winner-mode t) ;; turn on the global minor mode
-
 ;; ace-window
 (global-set-key (kbd "M-o") 'ace-window)
 
@@ -1401,8 +1393,6 @@ Ignores CHAR at point."
 (global-set-key (kbd "s-x") 'exchange-point-and-mark)
 (global-set-key (kbd "s-SPC") 'pop-global-mark)
 (global-set-key (kbd "s-;") 'edit-emacs)
-(global-set-key (kbd "<s-left>") 'winner-undo)
-(global-set-key (kbd "<s-right>") 'winner-redo)
 (defun open-shell-here ()
   (interactive)
   (launch-command "gnome-terminal" ""))
