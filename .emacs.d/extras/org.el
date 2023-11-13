@@ -115,6 +115,10 @@
   ;; indent headings like log notes, but not the rest of the text under the headline
   (setq org-adapt-indentation 'headline-data)
 
+  ;; don't indent text in src blocks
+  (setq org-src-preserve-indentation nil) ; the default
+  (setq org-edit-src-content-indentation 0) ; maybe alternative: set 'org-src-preserve-indentation' to 't', but it did strange things when trying to indent in the src block
+
   ;; org-copy-buffer-to-clipboard: uses xclip binary to add Rich Formatted Text to clipboard (really: html)
   ;; inspiration:
   ;;   https://kitchingroup.cheme.cmu.edu/blog/2016/06/16/Copy-formatted-org-mode-text-from-Emacs-to-other-applications/
