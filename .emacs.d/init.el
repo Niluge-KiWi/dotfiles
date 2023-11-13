@@ -167,6 +167,11 @@ brake whatever split of windows we might have in the frame."
           select-enable-primary nil)
     (message "Clipboard")))
 
+(defun focus-new-frames (&optional frame)
+  "Focus new frames."
+  (select-frame-set-input-focus frame))
+(add-hook 'after-make-frame-functions 'focus-new-frames)
+
 
 ;; default indent
 (setq-default indent-tabs-mode nil)

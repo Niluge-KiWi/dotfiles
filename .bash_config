@@ -107,12 +107,7 @@ function ec
         # no x term
         emacs-client --tty "$@"
     else
-        # x term: get focus, and don't wait
-        if [ -z "$*" ]; then
-            emacs-client -e "(select-frame-set-input-focus (selected-frame))" > /dev/null &
-        else
-            emacs-client "$@" > /dev/null &
-        fi
+        emacs-client "$@" > /dev/null &
     fi
 }
 function ecs
