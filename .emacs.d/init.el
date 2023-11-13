@@ -172,11 +172,6 @@ brake whatever split of windows we might have in the frame."
   (select-frame-set-input-focus frame))
 (add-hook 'after-make-frame-functions 'focus-new-frames)
 
-
-;; default indent
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-
 ;; Misc. UI tweaks
 (blink-cursor-mode -1)                                ; Steady cursor
 (pixel-scroll-precision-mode)                         ; Smooth scrolling
@@ -252,7 +247,6 @@ brake whatever split of windows we might have in the frame."
 (global-set-key (kbd "M-k") 'kill-whitespace)
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
-
 
 (use-package symbol-overlay
   :ensure t

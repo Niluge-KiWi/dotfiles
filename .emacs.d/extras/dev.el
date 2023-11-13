@@ -44,12 +44,13 @@
 
   ;; style
 
+  ;; default indent
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 4)
+
   ;; delete trailing whitespaces before save; TODO replace with https://git.sr.ht/~bkhl/trimspace-mode
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-  :hook
-  ;; Auto parenthesis matching
-  ((prog-mode . electric-pair-mode)))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
