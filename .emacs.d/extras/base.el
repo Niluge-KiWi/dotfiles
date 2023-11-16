@@ -114,7 +114,12 @@
 (use-package vertico-directory
   :after vertico
   :bind (:map vertico-map
-              ("M-DEL" . vertico-directory-delete-word)))
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+
+  ;; Tidy shadowed file names: from vertico doc, no idea what it does
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 ;; Marginalia: annotations for minibuffer
 (use-package marginalia
