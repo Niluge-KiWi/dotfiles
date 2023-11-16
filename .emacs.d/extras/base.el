@@ -113,13 +113,35 @@
 
 (use-package vertico-directory
   :after vertico
+
+  :init
+  (defun my/vertico-directory-exit-delete-char (&optional arg)
+    "Delete the following N characters or exit completion with current candidate if at end of user input during file completion.
+  Like vertico-exit, exit with current input if prefix ARG is given.
+  Inspired by ido-magic-delete-char, bound to C-d."
+    (interactive "P")
+    (if (and (eobp)
+             (eq 'file (vertico--metadata-get 'category)))
+        (vertico-exit arg)
+      (call-interactively 'delete-char)))
+
   :bind (:map vertico-map
+              ;; like ido: C-d to exit (e.g. to directory/dired) if at end user input, else standard C-d: delete-char
+              ("C-d" . my/vertico-directory-exit-delete-char) ;
+              ;; like ido: RET to insert directory if selection is directory
               ("RET" . vertico-directory-enter)
+              ;; like ido: DEL to delete directory if at a directory (/), else standard DEL: backward-delete-char
               ("DEL" . vertico-directory-delete-char)
+              ;; like ido: DEL to delete directory if at a directory (/), else standard M-DEL: backward-kill-word
               ("M-DEL" . vertico-directory-delete-word))
 
   ;; Tidy shadowed file names: from vertico doc, no idea what it does
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy)
+
+  :config
+  ;; always preselect first candidate; (vs default: 'directory which preselects the prompt if it is a directory), so C-x f RET opens first directory, like with ido
+  (setq vertico-preselect 'first)
+  )
 
 ;; Marginalia: annotations for minibuffer
 (use-package marginalia
