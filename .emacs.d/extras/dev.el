@@ -61,7 +61,7 @@
 ;; Magit: best Git client to ever exist
 (use-package magit
   :ensure t
-  :bind (("C-c C-s" . magit-status))      ; muscle memory
+  :bind (("C-c s" . magit-status))      ; muscle memory
   :bind (:map magit-mode-map
 	          ;; muscle memory legacy, maybe remove: use native ^ now that we use querty
 	          ;;("o" . magit-section-up)

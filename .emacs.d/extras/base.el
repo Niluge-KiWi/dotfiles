@@ -280,5 +280,5 @@
   :config
   (setq wgrep-auto-save-buffer t)
   ;; C-c s to open transient menu for ripgrep
-  (setq rg-keymap-prefix (kbd "C-c s"))
+  (setq rg-keymap-prefix (kbd "C-c C-s"))
   (rg-enable-default-bindings))
