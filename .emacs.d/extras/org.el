@@ -51,18 +51,20 @@
 ;; Default tags
 (setq org-tag-persistent-alist
       '((:startgrouptag)
-        ("priority" . ??) ; don't want 'p' as tag key
+        ;; don't want 'p' as tag key (to work on old muscle-memory without fast-tag-selection: e.g. C-c C-c p1 RET), so manually set tag key for all tags
+        ;; TODO ideally patch 'org-fast-tag-selection' to just avoid automatically assign 'p'
+        ("priority" . ??)
         (:startgroup)     ; exclusive tags
         ("p0" . ?0)
-        ("p0_5")
+        ("p0_5" . ?q)
         ("p1" . ?1)
-        ("p1_5")
+        ("p1_5" . ?w)
         ("p2" . ?2)
         ("p3" . ?3)
         ("p4" . ?4)
         (:endgroup)
         (:endgrouptag)))
-;; exit on first tag key; use C-c before to stay on tag selection
+;; exit on first tag key; use 3rd C-c before to stay on tag selection; use TAB to enter custom tags
 (setq org-fast-tag-selection-single-key t)
 
 ;; Org-refile: where should org-refile look?
