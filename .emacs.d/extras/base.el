@@ -281,6 +281,13 @@
   :ensure t
   :config
   (setq wgrep-auto-save-buffer t)
+
   ;; C-c s to open transient menu for ripgrep
   (setq rg-keymap-prefix (kbd "C-c C-s"))
-  (rg-enable-default-bindings))
+  (rg-enable-default-bindings)
+
+  ;; add 'w' short key to search literal word
+  (rg-define-search rg-word
+    :format literal
+    :flags ("--word-regexp")
+    :menu ("Custom" "w" "Word")))
