@@ -195,10 +195,6 @@
   :config
   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-(use-package eshell
-  :bind (:map eshell-mode-map
-              ("C-r" . consult-history)))
-
 ;; Orderless: powerful completion style
 (use-package orderless
   :ensure t
