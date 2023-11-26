@@ -35,10 +35,14 @@
   :ensure t
   ;; Other good things to bind: consult-line-multi, consult-history,
   ;; consult-outline, consult-org-agenda, etc.
-  :bind (("C-x b" . consult-buffer)  ; orig. switch-to-buffer
-         ("M-y" . consult-yank-pop)  ; orig. yank-pop
+  :bind (
+         ;; Drop-in replacements
+         ("C-x b" . consult-buffer)     ; orig. switch-to-buffer
+         ("M-y"   . consult-yank-pop)   ; orig. yank-pop
+         ;; Searching
          ("M-s r" . consult-ripgrep)
          ("M-s l" . consult-line)
+         ("M-s L" . consult-line-multi)
          ("M-s o" . consult-outline)
          )
   :config
