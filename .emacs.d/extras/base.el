@@ -262,18 +262,15 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package ctrlf
-  ;; same keybindings as isearch
-  :ensure t
-  :init
-  (ctrlf-mode 1)
-  :bind (:map ctrlf-minibuffer-mode-map
-              ;; muscle-memory; try to use "M-s o" instead?
-              ("C-o" . ctrlf-occur)
-              ;; muscle-memory; try to use "M-s ." instead?
-              ("C-w" . ctrlf-forward-symbol-at-point)
-              ;; TODO legacy, maybe remove that?; try to use "M-s _" instead?
-              ("C-e" . ctrlf-toggle-symbol))
+(use-package isearch
+  :bind
+  (:map isearch-mode-map
+        ;; muscle-memory; try to use "M-s o" instead?
+        ("C-o" . isearch-occur)
+        ;; muscle-memory; try to use "M-s ." instead?
+        ("C-w" . isearch-forward-symbol-at-point)
+        ;; TODO legacy, maybe remove that?; try to use "M-s _" instead?
+        ("C-e" . isearch-toggle-symbol))
   )
 
 ;; Modify search results en masse, using ripgrep/rg instead of grep with wgrep
