@@ -198,8 +198,8 @@ brake whatever split of windows we might have in the frame."
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Show the tab-bar as soon as tab-bar functions are invoked
-(setq tab-bar-show 0)
+;; Hide the tab bar when it has only one tab
+(setq tab-bar-show 1)
 
 ;; Add the time to the tab-bar, if visible
 (add-to-list 'tab-bar-format 'tab-bar-format-align-right 'append)
