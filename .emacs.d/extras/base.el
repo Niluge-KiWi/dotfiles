@@ -131,7 +131,9 @@
 
   :bind (:map vertico-map
               ;; muscle-memory: like ido: C-d to exit (e.g. to directory/dired) if at end user input, else standard C-d: delete-char
-              ;; should learn C-j instead
+              ;; maybe should learn M-RET instead? or C-u C-d?
+              ;; *even better*: stop using find-file to open dirs:
+              ;; => C-x C-j opens current dir in dired
               ("C-d" . my/vertico-directory-exit-delete-char) ;
               ;; like ido: RET to insert directory in prompt (~enters into directory) if selection is directory
               ("RET" . vertico-directory-enter)

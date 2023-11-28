@@ -115,6 +115,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package project
+  ;; C-x p prefix keybinding
   :init
   (setq project-vc-extra-root-markers '(".project.el")))
 

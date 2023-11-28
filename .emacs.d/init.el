@@ -83,7 +83,7 @@ brake whatever split of windows we might have in the frame."
 	       (or mark-active (active-minibuffer-window)))
       (keyboard-escape-quit)
     (keyboard-quit)))
-(define-key global-map (kbd "C-g") 'my-keyboard-quit)
+(keymap-global-set "C-g" 'my-keyboard-quit)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
