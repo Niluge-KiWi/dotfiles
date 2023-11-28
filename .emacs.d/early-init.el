@@ -21,8 +21,12 @@
 (setq warning-suppress-log-types '((comp) (bytecomp)))
 (setq native-comp-async-report-warnings-errors 'silent)
 
-;; Silence stupid startup message
+;; Silence startup message
 (setq inhibit-startup-echo-area-message (user-login-name))
+;; No help needed in scratch buffer, thx
+(setq initial-scratch-message nil)
+;; Do start with scratch buffer
+(setq initial-buffer-choice t)
 
 ;; Default frame configuration: full screen, good-looking title bar on macOS
 (setq frame-resize-pixelwise t)

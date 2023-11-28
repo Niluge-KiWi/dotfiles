@@ -39,8 +39,6 @@
 (add-to-list 'load-path (expand-file-name "lisp/" user-emacs-directory))
 
 
-(setq inhibit-splash-screen t)
-
 (setq initial-major-mode 'fundamental-mode)  ; default mode for the *scratch* buffer
 
 ;; Automatically reread from disk if the underlying file changes, using inotify
