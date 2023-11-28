@@ -85,6 +85,12 @@ brake whatever split of windows we might have in the frame."
     (keyboard-quit)))
 (keymap-global-set "C-g" 'my-keyboard-quit)
 
+;; remove useless default global keybindings
+(keymap-global-unset "C-x C-r")         ; find-file-read-only; muscle-memory to unlearn: open recent file; merged into ~consult-file C-x C-f
+(keymap-global-unset "C-x f")           ; set-fill-column
+(keymap-global-unset "C-x C-d")         ; list-directory: use dired C-x d instead
+(keymap-global-unset "C-x C-q")         ; read-only-mode
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
