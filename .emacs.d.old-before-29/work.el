@@ -92,19 +92,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Auto Complete Clang
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq ac-clang-executable "/usr/local/bin/clang")
-(defadvice ac-clang-build-complete-args (around my-ac-clang-flags (pos))
-  "Set clang-flags using CMake compile db."
-  (let* ((flags (shell-command-to-string
-                 (format "~/scripts/clang-args.sh %s %s" my-clang-build-dir buffer-file-name)))
-         (ac-clang-flags (split-string flags "\n")))
-    ad-do-it))
-(ad-activate 'ac-clang-build-complete-args)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
