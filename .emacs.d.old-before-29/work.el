@@ -89,16 +89,3 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (add-to-list 'yas/snippet-dirs "~/.emacs.d/work-snippets")
 ;; (yas/reload-all)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Misc
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; force c++-mode for .h files and .l files (flex)
-(add-to-list 'auto-mode-alist '("\\.\\(h\\|l\\)\\'" . c++-mode))
-
-;; fast open main doc.org file
-(defun doc ()
-  (interactive)
-  (find-file "~/doc/doc.org"))
