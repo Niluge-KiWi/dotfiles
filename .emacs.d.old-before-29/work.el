@@ -11,7 +11,6 @@
 (setq-default tab-width 8)
 (setq-default espresso-indent-level 3)
 (setq-default groovy-indent-offset 4)
-(setq-default js2-basic-offset 2)
 (setq-default sh-basic-offset 2)
 (setq-default sh-indentation 2)
 
@@ -83,60 +82,6 @@
                              (current-buffer) 'replace
                              (get-buffer-create "*sqllint errors*")
                              'display-error-buffer)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; js2-mode
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; from http://nodejs.org/api/globals.html
-(require 'js2-mode)
-(setq my-js2-global-externs-nodejs
-      '("global"
-        "process"
-        "console"
-        "Buffer"
-        "require"
-        "__filename"
-        "__dirname"
-        "module"
-        "exports"
-        "setTimeout"
-        "clearTimeout"
-        "setInterval"
-        "clearInterval"
-        ))
-(setq js2-global-externs (append js2-global-externs my-js2-global-externs-nodejs))
-;; mocha globals
-(setq my-js2-global-externs-mocha
-      '("after"
-        "afterEach"
-        "before"
-        "beforeEach"
-        "describe"
-        "it"
-        "setup"
-        "suite"
-        "teardown"
-        "test"
-        ))
-(setq js2-global-externs (append js2-global-externs my-js2-global-externs-mocha))
-
-;; from http://emacswiki.org/emacs/Js2Mode
-;; After js2 has parsed a js file, we look for jslint globals decl comment ("/* global Fred, _, Harry */") and
-;; add any symbols to a buffer-local var of acceptable global vars
-;; Note that we also support the "symbol: true" way of specifying names via a hack (remove any ":true"
-;; to make it look like a plain decl, and any ':false' are left behind so they'll effectively be ignored as
-;; you can;t have a symbol called "someName:false"
-(defun my-js2-globals-comment ()
-  (when (> (buffer-size) 0)
-    (let ((btext (replace-regexp-in-string
-                  ": *true" " "
-                  (replace-regexp-in-string "[\n\t ]+" " " (buffer-substring-no-properties 1 (buffer-size)) t t))))
-      (mapc (apply-partially 'add-to-list 'js2-additional-externs)
-            (split-string
-             (if (string-match "/\\* *global *\\(.*?\\) *\\*/" btext) (match-string-no-properties 1 btext) "")
-             " *, *" t)))))
-(add-hook 'js2-post-parse-callbacks 'my-js2-globals-comment)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

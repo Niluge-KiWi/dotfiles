@@ -136,10 +136,6 @@
         (:name jade :type git
                :url "https://github.com/brianc/jade-mode.git")
         (:name jinja2-mode :type elpa)
-        (:name js2 :type git
-               :url "https://github.com/mooz/js2-mode.git")
-        (:name jshint-mode :type git
-               :url "https://github.com/daleharvey/jshint-mode.git")
         json-mode
         (:name keychain-environment :type elpa)
         keyfreq
@@ -856,16 +852,9 @@ sys.path.insert(0, '')"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Javascript
+;;; Json
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(autoload 'js2-mode "js2-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
-
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (setq js2-enter-indents-newline t)
-            (modify-syntax-entry ?` "\"" js2-mode-syntax-table)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
