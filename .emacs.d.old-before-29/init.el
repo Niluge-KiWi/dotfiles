@@ -1237,16 +1237,6 @@ and variances (respectively) of the individual estimates."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;find file at point
 (global-set-key (kbd "<C-return>") 'ffap)
-
-;;I just want C-x k to kill the buffer instead of just prompting me
-;;for it
-(defun kill-current-buffer ()
-  (interactive)
-  (when (or (not (and (fboundp 'erc-server-buffer-live-p)
-                      (erc-server-buffer-live-p)))
-            (y-or-n-p "Really kill erc buffer?"))
-    (kill-buffer)))
-(global-set-key (kbd "C-x k") 'kill-current-buffer)
 ;;like C-x k, but nicer :-)
 (global-set-key (kbd "C-x l") 'bury-buffer)
 ;;could not live without
@@ -1260,9 +1250,6 @@ and variances (respectively) of the individual estimates."
 ;;by default, so ...
 (global-set-key (kbd "M-n") 'scroll-up)
 (global-set-key (kbd "M-p") 'scroll-down)
-;;shortcuts for region commenting
-(global-set-key (kbd "C-c u") 'uncomment-region)
-(global-set-key (kbd "C-c c") 'comment-region)
 ;;M-g defaults to a prefix, I just rebind next/previous error and bind
 ;;M-g to goto
 (global-set-key (kbd "M-g") 'goto-line)

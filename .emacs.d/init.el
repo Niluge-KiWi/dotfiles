@@ -279,20 +279,25 @@ brake whatever split of windows we might have in the frame."
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun kill-whitespace ()
-  "Kill the whitespace between two non-whitespace characters"
-  (interactive "*")
-  (save-excursion
-    (save-restriction
-      (save-match-data
-	    (progn
-	      (re-search-backward "[^ \t\r\n]" nil t)
-	      (re-search-forward "[ \t\r\n]+" nil t)
-	      (replace-match "" nil nil))))))
-;; kill-whitespace seems more usefull than kill-sentence
-(global-set-key (kbd "M-k") 'kill-whitespace)
+;; global key bindings for edition
+(use-package emacs
+  :init
+  (defun my/kill-whitespace ()
+    "Kill the whitespace between two non-whitespace characters"
+    (interactive "*")
+    (save-excursion
+      (save-restriction
+        (save-match-data
+	      (progn
+	        (re-search-backward "[^ \t\r\n]" nil t)
+	        (re-search-forward "[ \t\r\n]+" nil t)
+	        (replace-match "" nil nil))))))
+  :bind
+  (("M-k" . my/kill-whitespace)           ; kill-whitespace seems more usefull than kill-sentence
+   ("C-x k" . kill-this-buffer)           ; no need to ask which buffer to kill
+   ("C-c u" . uncomment-region)
+   ("C-c c" . comment-region)))
 
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 (use-package symbol-overlay
   :ensure t
