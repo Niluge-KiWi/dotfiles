@@ -270,10 +270,17 @@
   (:map isearch-mode-map
         ;; muscle-memory; try to use "M-s o" instead?
         ("C-o" . isearch-occur)
-        ;; muscle-memory; try to use "M-s ." instead?
-        ("C-w" . isearch-forward-symbol-at-point)
+        ("C-w" . my/isearch-yank-symbol-from-beginning)
         ;; TODO legacy, maybe remove that?; try to use "M-s _" instead?
         ("C-e" . isearch-toggle-symbol))
+  :config
+  (require 'thingatpt)
+  (defun my/isearch-yank-symbol-from-beginning (&optional arg)
+    "Move to beginning of symbol before yanking symbol in isearch-mode if search string is empty."
+    (interactive "p")
+    (if (= 0 (length isearch-string))
+        (beginning-of-thing 'symbol))
+    (isearch-yank-symbol-or-char arg))
   )
 
 ;; Modify search results en masse, using ripgrep/rg instead of grep with wgrep

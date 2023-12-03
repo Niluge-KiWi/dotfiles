@@ -1547,26 +1547,6 @@ Ignores CHAR at point."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Isearch
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(require 'thingatpt)
-(defun my-isearch-yank-symbol ()
-  "Pull next symbol from buffer into search string."
-  (interactive)
-  (isearch-yank-internal (lambda () (forward-symbol 1) (point))))
-
-(defun my-isearch-yank-symbol-from-beginning ()
-  "Move to beginning of symbol before yanking symbol in isearch-mode if search string is empty."
-  (interactive)
-  (if (= 0 (length isearch-string))
-      (beginning-of-thing 'symbol))
-  (my-isearch-yank-symbol))
-(define-key isearch-mode-map (kbd "C-w") 'my-isearch-yank-symbol-from-beginning)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Regions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
