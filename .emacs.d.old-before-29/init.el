@@ -714,27 +714,6 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Ag, the silver surfer, faster ack
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require 'ag)
-;; (setq ag-highlight-search t) ;; doesn't work on emacs 23:
-;;;; error in process filter: run-hooks: Symbol's value as variable is void: compilation-filter-start
-;;;; error in process filter: Symbol's value as variable is void: compilation-filter-start
-(add-to-list 'ag-arguments "--word-regexp")
-(add-to-list 'ag-arguments "--ignore=*~")
-(add-to-list 'ag-arguments "--ignore=*/*~")
-(add-to-list 'ag-arguments "--ignore-dir=node_modules")
-(defun vc-svn-root (arg)
-  nil)
-(defun vc-hg-root (arg)
-  nil)
-;; enable follow minor mode by default
-(defun my-ag-config ()
-  (next-error-follow-minor-mode t))
-(add-hook 'ag-mode-hook 'my-ag-config)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; CMake
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq auto-mode-alist
