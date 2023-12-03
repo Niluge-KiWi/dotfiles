@@ -279,6 +279,12 @@ brake whatever split of windows we might have in the frame."
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; global key bindings for navigation
+(use-package emacs
+  :bind
+  (("C-M-<" . end-of-buffer)))            ; easier on typematrix
+
+
 ;; global key bindings for edition
 (use-package emacs
   :init
@@ -298,7 +304,6 @@ brake whatever split of windows we might have in the frame."
    ("C-x k" . kill-this-buffer) ; no need to ask which buffer to kill
    ("C-c u" . uncomment-region)
    ("C-c c" . comment-region)))
-
 
 (use-package symbol-overlay
   :ensure t

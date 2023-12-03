@@ -1298,10 +1298,6 @@ Ignores CHAR at point."
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 (global-set-key (kbd "C-M-z") 'zap-up-to-char-back)
 
-;; typematrix
-(global-set-key (kbd "C-M-<") 'end-of-buffer)
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Super keybindings
