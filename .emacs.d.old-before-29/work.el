@@ -22,69 +22,6 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Xmllint
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun xmllint ()
-  "Prettify xml buffer"
-  (interactive)
-  (xmllint-region (point-min) (point-max))
-  (message "Buffer has been xmllint-ed."))
-
-(defun xmllint-region (pmin pmax)
-  "Prettify xml region"
-  (interactive "r")
-  (save-excursion
-    (shell-command-on-region pmin pmax
-                             "xmllint --format --recover -"
-                             (current-buffer) 'replace
-                             (get-buffer-create "*Xmllint Errors*")
-                             'display-error-buffer)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; jsonlint
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun jsonlint ()
-  "Prettify json buffer"
-  (interactive)
-  (jsonlint-region (point-min) (point-max))
-  (message "Buffer has been jsonlint-ed."))
-
-
-(defun jsonlint-region (pmin pmax)
-  "Prettify json region"
-  (interactive "r")
-  (save-excursion
-    (shell-command-on-region pmin pmax
-                             "python -m json.tool"
-                             (current-buffer) 'replace
-                             (get-buffer-create "*jsonlint errors*")
-                             'display-error-buffer)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; sqllint
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun sqllint ()
-  "Prettify sql buffer"
-  (interactive)
-  (sqllint-region (point-min) (point-max))
-  (message "Buffer has been sqllint-ed."))
-
-
-(defun sqllint-region (pmin pmax)
-  "Prettify sql region"
-  (interactive "r")
-  (save-excursion
-    (shell-command-on-region pmin pmax
-                             "sqlformat --reindent_aligned -"
-                             (current-buffer) 'replace
-                             (get-buffer-create "*sqllint errors*")
-                             'display-error-buffer)))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; YASnippet
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (add-to-list 'yas/snippet-dirs "~/.emacs.d/work-snippets")
