@@ -1459,33 +1459,6 @@ Ignores CHAR at point."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Ediff
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;vertical split (terminology is confusing)
-(setq ediff-split-window-function 'split-window-horizontally)
-;;no separate frame
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-;;kill variants
-(setq ediff-keep-variants nil)
-
-;; restore window config on ediff, found on emacswiki
-(add-hook 'ediff-load-hook
-		  (lambda ()
-			(add-hook 'ediff-before-setup-hook
-					  (lambda ()
-						(setq ediff-saved-window-configuration (current-window-configuration))))
-
-			(let ((restore-window-configuration
-				   (lambda ()
-					 (set-window-configuration ediff-saved-window-configuration))))
-			  (add-hook 'ediff-quit-hook restore-window-configuration 'append)
-			  (add-hook 'ediff-suspend-hook restore-window-configuration 'append))))
-
-;; LANG=Fr breaks ediff on some output ("\ Pas de fin de ligne \303\240 la fin du fichier.")
-(add-hook 'ediff-mode-hook '(lambda () (setenv "LANG" "C")))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Regions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

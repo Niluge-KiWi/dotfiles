@@ -121,6 +121,31 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
+;;; Ediff
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package ediff
+  :init
+  (defvar my/ediff-saved-window-configuration nil)
+  (defun my/save-pre-ediff-window-configuration ()
+    (setq my/ediff-saved-window-configuration (current-window-configuration)))
+  (defun my/restore-pre-ediff-window-configuration ()
+    (set-window-configuration my/ediff-saved-window-configuration))
+  :hook
+  ((ediff-before-setup . my/save-pre-ediff-window-configuration)
+   (ediff-quit . my/restore-pre-ediff-window-configuration)
+   (ediff-suspend . my/restore-pre-ediff-window-configuration))
+  :config
+  ;; vertical split (terminology is confusing)
+  (setq ediff-split-window-function 'split-window-horizontally)
+  ;; no separate frame
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain)
+  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
 ;;; Common file types
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
