@@ -682,26 +682,6 @@ Optional depth is for internal use."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Ibuffer
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; dired for buffers
-(require 'ibuffer)
-(setq ibuffer-default-sorting-mode 'recency)
-
-(setq ibuffer-always-show-last-buffer t)
-(setq ibuffer-view-ibuffer t)
-
-;; TODO make this work: it does not...
-;;(add-to-list 'ibuffer-never-show-regexps "^\\*Minibuf-1\\*$")
-;; for emacs <= 23
-(require 'ibuf-ext)
-(add-to-list 'ibuffer-never-show-predicates "^\\*Minibuf-1\\*$")
-
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-;; TODO import al-ibuffer.el
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Programming modes
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;ignore case when matching a suffix (such as .F90)

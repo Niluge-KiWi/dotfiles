@@ -267,6 +267,12 @@ brake whatever split of windows we might have in the frame."
   (winner-mode))
 
 
+;; buffer management
+(use-package ibuffer
+  :bind
+  (("C-x C-b" . ibuffer)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Navigation/edition
