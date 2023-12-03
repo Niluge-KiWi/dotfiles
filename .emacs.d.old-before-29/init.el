@@ -688,48 +688,6 @@ Optional depth is for internal use."
 ;;tags
 (setq tags-table-list '("~/.emacs.d")
       tags-revert-without-query t)
-;;indent yanked code in programming languages modes
-(load-library "yank-indent")
-(add-to-list 'yank-indent-modes 'python-mode)
-
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; RTags
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; https://github.com/Andersbakken/rtags
-;; (add-to-list 'load-path (expand-file-name "~/tmp/rtags/rtags/src"))
-;; ;; (setenv "PATH"
-;; ;;         (concat
-;; ;;          (expand-file-name "~/tmp/rtags/bin") ";"
-;; ;;          (getenv "PATH")))
-;; (require 'rtags)
-;; (setq rtags-path (expand-file-name "~/tmp/rtags")) ;; rtags appends /bin to this path
-;; ;; prefix: C-x r
-;; (rtags-enable-standard-keybindings c-mode-base-map)
-;; ;;(setq rtags-rc-log-enabled nil)
-;; (define-key c-mode-base-map (kbd "C-j") (function rtags-find-symbol-at-point))
-;; (define-key c-mode-base-map (kbd "M-j") (function rtags-location-stack-back))
-;; (define-key c-mode-base-map (kbd "C-M-j") (function rtags-location-stack-forward))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; CMake
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq auto-mode-alist
-      (append '(("CMakeLists\\.txt\\'" . cmake-mode)
-                ("\\.cmake\\'" . cmake-mode)
-                ("CMakeLists-install.txt" . cmake-mode))
-              auto-mode-alist))
-
-;; better font-lock
-(autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
-(add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
-
-;; add underscore to work split syntax table, like it's everywhere else
-(defun my-cmake-fix-underscore ()
-  (modify-syntax-entry ?_  "_" cmake-mode-syntax-table))
-(add-hook 'cmake-mode-hook 'my-cmake-fix-underscore)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -769,26 +727,6 @@ Optional depth is for internal use."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'auto-mode-alist '("\\.ipp$" . c++-mode))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Ruby
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("\\.ru$" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Rakefile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Gemfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Guardfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Vagrantfile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Cheffile" . ruby-mode))
-(add-to-list 'auto-mode-alist '("Berksfile" . ruby-mode))
-
-(require 'ruby-block)
-(require 'ruby-end)
-
-(defun my-ruby-mode-config ()
-   (ruby-block-mode t))
-(add-hook 'ruby-mode-hook 'my-ruby-mode-config)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
