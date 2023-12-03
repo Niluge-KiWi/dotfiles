@@ -208,8 +208,8 @@
   :config
   ;; note to the future: this was the big hard new thing to configure when starting from scratch in 2023-10 with emacs-bedrock,
   ;; main issue:
-  ;; - C-s bound to consult-line, instead of isearch-forward
-  ;; - I wanted flex search like I had with IDO (but not for string search in buffer)
+  ;; - C-s bound to consult-line, instead of isearch-forward; after a while went back to C-s bound to isearch though
+  ;; - I wanted flex search like I had with IDO, but not everywhere (e.g. not for string search in buffer: consult-line)
   ;; - completion-category-overrides does *not* override completion-styles, but preprends it
   ;; this can be changed again:
   ;; - check consult readme & wiki, orderless readme, possibly issues there too.
