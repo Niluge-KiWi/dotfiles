@@ -293,8 +293,9 @@ brake whatever split of windows we might have in the frame."
 	        (re-search-forward "[ \t\r\n]+" nil t)
 	        (replace-match "" nil nil))))))
   :bind
-  (("M-k" . my/kill-whitespace)           ; kill-whitespace seems more usefull than kill-sentence
-   ("C-x k" . kill-this-buffer)           ; no need to ask which buffer to kill
+  (("<C-return>" . ffap)        ; find file (or url) at point
+   ("M-k" . my/kill-whitespace) ; kill-whitespace seems more usefull than kill-sentence
+   ("C-x k" . kill-this-buffer) ; no need to ask which buffer to kill
    ("C-c u" . uncomment-region)
    ("C-c c" . comment-region)))
 

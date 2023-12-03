@@ -1234,8 +1234,6 @@ and variances (respectively) of the individual estimates."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;find file at point
-(global-set-key (kbd "<C-return>") 'ffap)
 ;;like C-x k, but nicer :-)
 (global-set-key (kbd "C-x l") 'bury-buffer)
 ;;could not live without
