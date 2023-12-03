@@ -68,7 +68,6 @@
         apache-mode
         (:name bpftrace-mode :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        browse-kill-ring
         buffer-move
 
         cmake-mode
@@ -1270,9 +1269,6 @@ and variances (respectively) of the individual estimates."
 (global-set-key (kbd "M-\"") 'split-window-horizontally)
 (global-set-key (kbd "M-&") 'delete-other-windows)
 (global-set-key (kbd "M-à") 'delete-window)
-
-;;browse kill ring to look for forgotten copy/paste
-(global-set-key (kbd "C-c k") 'browse-kill-ring)
 
 ;; Join this line to previous and fix up whitespace at join.
 (global-set-key (kbd "C-c j") 'join-line)
