@@ -1234,15 +1234,11 @@ and variances (respectively) of the individual estimates."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;like C-x k, but nicer :-)
-(global-set-key (kbd "C-x l") 'bury-buffer)
 ;;could not live without
 (global-set-key (kbd "M-q") 'backward-kill-word)
 (global-set-key (kbd "C-M-q") 'backward-kill-sexp)
 (global-set-key (kbd "C-q") 'backward-delete-char)
 (global-set-key (kbd "C-Q") 'quoted-insert)
-;;rebind previous M-q binding to M-s
-(global-set-key (kbd "M-s") 'fill-paragraph)
 ;;nice to have, coherent with other keybindings, and bound to nothing
 ;;by default, so ...
 (global-set-key (kbd "M-n") 'scroll-up)
@@ -1256,20 +1252,6 @@ and variances (respectively) of the individual estimates."
 (global-set-key (kbd "C-c o") 'ff-find-other-file)
 ;;handy, but buggy on terminals
 (global-set-key (kbd "C-,") 'undo)
-(defun my-kill-whole-line ()
-  (interactive)
-  (let ((col (current-column)))
-    (kill-whole-line 1)
-    (move-to-column col)))
-(global-set-key (kbd "C-S-k") 'my-kill-whole-line)
-;;easy window management for azerty keyboards
-(global-set-key (kbd "M-é") 'split-window-vertically)
-(global-set-key (kbd "M-\"") 'split-window-horizontally)
-(global-set-key (kbd "M-&") 'delete-other-windows)
-(global-set-key (kbd "M-à") 'delete-window)
-
-;; Join this line to previous and fix up whitespace at join.
-(global-set-key (kbd "C-c j") 'join-line)
 
 ;; miniedit: edit minibuffer in real buffer
 (autoload 'miniedit "miniedit" nil t)
