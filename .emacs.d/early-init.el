@@ -28,9 +28,11 @@
 ;; Do start with scratch buffer
 (setq initial-buffer-choice t)
 
-;; Default frame configuration: full screen, good-looking title bar on macOS
+;; Default frame configuration: full screen, no menu
 (setq frame-resize-pixelwise t)
-(tool-bar-mode -1)                      ; All these tools are in the menu-bar anyway
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
 (setq default-frame-alist '((fullscreen . maximized)
 
                             ;; You can turn off scroll bars by uncommenting these lines:
