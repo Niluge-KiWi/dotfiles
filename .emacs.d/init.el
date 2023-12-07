@@ -366,3 +366,20 @@ brake whatever split of windows we might have in the frame."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load-file custom-file)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Personal config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq personal-config-file (expand-file-name "perso.el" user-emacs-directory))
+(if (file-exists-p personal-config-file)
+    (load-file personal-config-file)
+  (message "No personal config file found."))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Work config
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(setq work-config-file (expand-file-name "work.el" user-emacs-directory))
+(if (file-exists-p work-config-file)
+    (load work-config-file)
+  (message "No work config file found."))
