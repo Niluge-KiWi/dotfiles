@@ -250,7 +250,8 @@ fork of xclip-set-selection, to support '-t text/html'; stripped down to just xc
 ;                 (display-buffer-in-side-window)
 ;                 (side . right)
 ;                 (window-width . 0.4)
-;                 (window-height . fit-window-to-buffer))))
+;                 (window-height . fit-window-to-buffer)))
+;  (org-roam-db-autosync-mode))
 
 ;; Pretty web interface for org-roam
 ;(use-package org-roam-ui
