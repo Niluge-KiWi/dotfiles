@@ -1479,67 +1479,6 @@ Ignores CHAR at point."
 ;; (setq yas/trigger-key nil)
 
 
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Notification framework (used in ERC)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun get-frame-name (&optional frame)
-  "Return the string that names FRAME (a frame).  Default is selected frame."
-  (unless frame (setq frame (selected-frame)))
-  (if (framep frame)
-      (cdr (assq 'name (frame-parameters frame)))
-    (error "Function `get-frame-name': Argument not a frame: `%s'" frame)))
-
-(defun frame-focus-p (&optional frame)
-  "Return t iff the given frame has the X focus.
-If frame is a non X terminal frame, return (frame-visible-p frame)."
-  (unless frame (setq frame (selected-frame)))
-  (if (not (string= 'x (framep frame)))
-      ;; not a X terminal frame
-      (frame-visible-p frame)
-    (let ((focus-result (shell-command-to-string "~/bin/getInputFocus"))
-          (frame-name (get-frame-name frame)))
-      (member frame-name (split-string focus-result "\n")))))
-
-(defun window-focus-p (&optional window)
-  "Return t iff the given window has the X focus.
-That is, the window is the selected window, and the frame
-displaying it has the focus."
-  (unless window (setq window (selected-window)))
-  (and (eq window (selected-window))
-	   ;; The selected window always resides on the selected frame.
-	   (frame-focus-p (selected-frame))))
-
-(defun buffer-focus-p (&optional buffer-or-name)
-  "Returns t iff the given buffer-or-name is displayed in a
-  window that has the focus."
-  (let ((window (get-buffer-window buffer-or-name)))
-	(if window
-		(window-focus-p window)
-	  nil)))
-
-;;notification
-(defvar do-not-disturb nil
-  "Set this if you don't want to be disturbed by notifications")
-;;(require 'notifications)
-;; (defmacro notify (&rest PARAM)
-;;   "Notify user by graphical display"
-;;   (unless do-not-disturb
-;;     `(notifications-notify ,@PARAM)))
-;; temporary macro with notify-send, because there is a bug with utf8 and dbus in emacs
-(defun notify-raw (title message &optional backshash-escape html-escape)
-  "Notify user by graphical display.
-If escape is not nil, then disable interpretation of backshash escapes.
-If html is not nil, then disable interpretation of html code."
-  (unless do-not-disturb
-    (call-process "notify-send" nil nil nil
-                  title message (format "--icon=%s" "emacs"))))
-(defun notify (title message)
-  "Notify user by graphical display"
-  (notify-raw title message nil t))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; ERC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
