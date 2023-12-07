@@ -958,61 +958,6 @@ sys.path.insert(0, '')"))
 (add-to-list 'auto-mode-alist '("/bash-fc-[0-9]*$" . sh-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Shell
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq comint-scroll-to-bottom-on-input 'all)
-(setq comint-move-point-for-output t)
-
-(ansi-color-for-comint-mode-on)
-
-;; TODO clean
-(add-hook 'shell-mode-hook 'n-shell-mode-hook)
-(defun n-shell-mode-hook ()
-  "12Jan2002 - sailor, shell mode customizations."
-  ;; (local-set-key '[up] 'comint-previous-input)
-  ;; (local-set-key '[down] 'comint-next-input)
-  ;; (local-set-key '[(shift tab)] 'comint-next-matching-input-from-input)
-  (setq comint-input-sender 'n-shell-simple-send)
-  )
-
-(defun n-shell-simple-send (proc command)
-  "17Jan02 - sailor. Various commands pre-processing before sending to shell."
-  (cond
-   ;; Checking for clear command and execute it.
-   ((string-match "^[ \t]*clear[ \t]*$" command)
-    (comint-send-string proc "\n")
-    (erase-buffer)
-    )
-   ;; Checking for man command and execute it.
-   ((string-match "^[ \t]*man[ \t]*" command)
-    (comint-send-string proc "\n")
-    (setq command (replace-regexp-in-string "^[ \t]*man[ \t]*" "" command))
-    (setq command (replace-regexp-in-string "[ \t]+$" "" command))
-    ;;(message (format "command %s command" command))
-    (funcall 'man command)
-    )
-   ;; TODO add check for ec, less : open file in emacs
-   ;; Send other commands to the default handler.
-   (t (comint-simple-send proc command))
-   )
-  )
-
-
-;;dirtrack
-(setq dirtrack-list '("^\\([^@]*\\)@\\([^:]*\\):\\([^$]*\\)" 3))
-(add-hook 'shell-mode-hook 'dirtrack-mode)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Eshell
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq multi-eshell-shell-function '(eshell))
-(setq multi-eshell-name "*eshell*")
-(global-set-key (kbd "M-<f1>") 'multi-eshell)
-(setq eshell-aliases-file "~/.emacs.d/eshell/alias")
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'org)
