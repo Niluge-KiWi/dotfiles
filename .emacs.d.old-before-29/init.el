@@ -1237,71 +1237,13 @@ Ignores CHAR at point."
 (global-set-key (kbd "s-i") 'indent-whole-buffer)
 (global-set-key (kbd "s-x") 'exchange-point-and-mark)
 (global-set-key (kbd "s-SPC") 'pop-global-mark)
-(global-set-key (kbd "s-;") 'edit-emacs)
-(defun open-shell-here ()
-  (interactive)
-  (launch-command "gnome-terminal" ""))
-(global-set-key (kbd "s-h") 'open-shell-here)
-
 (global-set-key (kbd "s-l") 'bury-buffer)
-;; ghosts of past yanks
-(global-set-key (kbd "s-y") (lambda ()
-			      (interactive)
-			      (popup-menu 'yank-menu)))
-(defun duplicate-current-line ()
-  (interactive)
-  "Duplicate current line"
-  (let ((text (buffer-substring (line-beginning-position) (line-end-position))))
-    (save-excursion
-      (end-of-line)
-      (newline)
-      (insert text))))
-(global-set-key (kbd "s-d") 'duplicate-current-line)
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Easy buffer switching
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar switch-include-erc t
-  "Do we include erc buffers in buffer switching?")
-(defun toggle-switch-to-erc ()
-  (interactive)
-  (toggle-variable 'switch-include-erc)
-  (message "Now %s"
-	   (if switch-include-erc "including erc" "excluding erc")))
-;;quickly switch buffers
-(defun switch-to-nth-buffer (n arg)
-  "Switches to nth most recent buffer. Ignores erc buffers unless switch-include-erc is non-nil."
-  (catch 'tag
-    (mapcar (lambda (b)
-	      (if (or switch-include-erc
-		      (not (eq (buffer-local-value 'major-mode b) 'erc-mode)))
-		  (unless (minibufferp b)
-					;(unless (string-match "^\\*" (buffer-name b))
-		    (if (= n 1)
-			(progn
-			  (switch-to-buffer b)
-			  (throw 'tag nil))
-		      (setq n (- n 1))))));)
-	    (cdr (buffer-list)))))
 
-(defun switch-to-most-recent-buffer (&optional arg)
-  (interactive "P")
-  (switch-to-nth-buffer 1 arg))
-(defun switch-to-second-most-recent-buffer (&optional arg)
-  (interactive "P")
-  (switch-to-nth-buffer 2 arg))
-(defun switch-to-third-most-recent-buffer (&optional arg)
-  (interactive "P")
-  (switch-to-nth-buffer 3 arg))
-
-;;fast switching between two buffers
-(global-set-key (kbd "<s-tab>") 'switch-to-most-recent-buffer)
-(global-set-key (kbd "s-TAB") 'switch-to-most-recent-buffer)
-;;fast switching between three buffers
-;; (global-set-key (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
-;; (global-set-key (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
 ;; switch like alt+tab in standard wm
 (global-set-key (kbd "<C-tab>") 'next-buffer)
 (global-set-key (kbd "<C-S-iso-lefttab>") 'previous-buffer)
@@ -1310,53 +1252,6 @@ Ignores CHAR at point."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Misc editing commands without keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun duplicate-region (beg end &optional sep)
-  "Duplicate the region"
-  (interactive "*r")
-  (let ((p (point)))
-    (copy-region-as-kill beg end)
-    (message "%d" (point))
-    (goto-char end)
-    (if (stringp sep) (insert sep))
-    (yank)
-    (goto-char p)))
-
-(defun exchange-lines ()
-  "Exchanges line at point with line at mark"
-  (interactive)
-  (save-excursion
-    (transpose-lines 0)))
-
-;;huge hack, but emacs internals are quite messy concerning
-;;this. Don't even try to use regexps in the arguments :)
-(defun query-exchange (str1 str2 &optional delimited start end)
-  "Exchange str1 and str2 with a regexp replace"
-  (interactive
-   (let ((common
-	  (query-replace-read-args
-	   (concat "Query exchange"
-		   (if current-prefix-arg " word" "")
-		   " regexp"
-		   (if (and transient-mark-mode mark-active) " in region" ""))
-	   t)))
-     (list (nth 0 common) (nth 1 common) (nth 2 common)
-	   ;; These are done separately here
-	   ;; so that command-history will record these expressions
-	   ;; rather than the values they had this time.
-	   (if (and transient-mark-mode mark-active)
-	       (region-beginning))
-	   (if (and transient-mark-mode mark-active)
-	       (region-end)))))
-  (defun my-aux-fun (match1 match2)
-    (if (match-string 1) str2 str1))
-  (defun my-add-word-boundary (str)
-    (if current-prefix-arg (concat "\\<" str "\\>") str))
-  (query-replace-regexp (format "\\(%s\\)\\|\\(%s\\)"
-				(my-add-word-boundary str1)
-				(my-add-word-boundary str2))
-			'(my-aux-fun) delimited start end))
-
 
 (defun increment-number-at-point ()
   "Increment the number at point, if any."
@@ -1432,27 +1327,6 @@ Ignores CHAR at point."
       (delq 'font-lock-string-face
             flyspell-prog-text-faces))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; W3M
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; w3m
-;; TODO load emacs-w3m with el-get
-;; (require 'w3m)
-;; (setq w3m-use-cookies t)
-;; (setq w3m-use-title-buffer-name t)
-;; (setq w3m-default-display-inline-images t)
-;; (setq w3m-toggle-inline-images-permanently nil)
-;; (setq mm-w3m-safe-url-regexp nil)
-;; (define-key w3m-minor-mode-map "m"
-;;   'w3m-view-url-with-external-browser)
-;; (defun w3m-switch ()
-;;   (interactive "")
-;;   (if (eq 'w3m-mode (current-mm))
-;;       (w3m-close-window)
-;;     (w3m)))
-;; (defalias 'w3m-ems-create-image 'create-image) ; this is only a workaround for emacs24, will be fixed
-;; (global-set-key (kbd "s-w") 'w3m-switch)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
