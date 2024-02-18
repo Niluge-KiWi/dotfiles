@@ -159,6 +159,12 @@ brake whatever split of windows we might have in the frame."
 (setq x-selection-timeout 100)
 ;; selection is put in the X primary selection
 (setq select-enable-primary t)
+;; testing meow-mode, where every move is a selection/active region, polluting X primary selection with select-enable-primary t
+;; solution: select-active-regions not t: don't set X primary selection for emacs active regions
+;; - when I explicitly want active region emacs to X primary: OK: kill-ring-save (M-w), meow-save (y): natural: I want to save for anything: emacs or X
+;; - bonus: select-active-regions 'only to still get emacs mouse-dragging selection to X primary selection, like in any X program
+(setq select-active-regions 'only)
+
 ;; and not in X clipboard
 (setq select-enable-clipboard nil)
 ;; including transient mark
@@ -364,8 +370,8 @@ brake whatever split of windows we might have in the frame."
 ;; Packages for software development
 (load-file (expand-file-name "extras/dev.el" user-emacs-directory))
 
-;; Vim-bindings in Emacs (evil-mode configuration)
-;(load-file (expand-file-name "extras/vim-like.el" user-emacs-directory))
+;; Modal editing, à-la-vim, but for emacs natives, not vim transfuges
+(load-file (expand-file-name "extras/modal.el" user-emacs-directory))
 
 ;; Org-mode configuration
 (load-file (expand-file-name "extras/org.el" user-emacs-directory))
