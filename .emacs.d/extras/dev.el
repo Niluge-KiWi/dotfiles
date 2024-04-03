@@ -36,10 +36,12 @@
   (setq major-mode-remap-alist
         '((yaml-mode . yaml-ts-mode)
           (bash-mode . bash-ts-mode)
+          (hcl-mode . hcl-ts-mode)
           (js2-mode . js-ts-mode)
           (typescript-mode . typescript-ts-mode)
           (json-mode . json-ts-mode)
           (css-mode . css-ts-mode)
+          (markdown-mode . markdown-ts-mode)
           (python-mode . python-ts-mode)))
 
   ;; style
@@ -164,6 +166,9 @@
   :mode "\\.lua$"
   :interpreter "lua")
 
+(use-package terraform-mode
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
 ;;; Various file types
@@ -172,6 +177,15 @@
 
 (use-package php-mode
   :ensure t)
+
+(use-package groovy-mode
+  :ensure t)
+
+(use-package mermaid-mode
+  :ensure t
+  :config
+  (setq mermaid-mmdc-location "docker")
+  (setq mermaid-flags (format "run -i --rm -u %s:%s -v /tmp:/tmp ghcr.io/mermaid-js/mermaid-cli/mermaid-cli:latest" (user-uid) (group-gid))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
