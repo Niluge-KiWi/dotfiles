@@ -167,7 +167,8 @@
   :interpreter "lua")
 
 (use-package terraform-mode
-  :ensure t)
+  :ensure t
+  :custom (terraform-format-on-save t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;
