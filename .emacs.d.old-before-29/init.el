@@ -89,7 +89,6 @@
                :url "https://github.com/michaelklishin/cucumber.el.git")
         (:name dash :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
-        (:name dockerfile-mode :type elpa)
         (:name elpy :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
         erc-view-log

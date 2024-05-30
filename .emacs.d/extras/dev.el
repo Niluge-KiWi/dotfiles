@@ -166,6 +166,9 @@
   :mode "\\.lua$"
   :interpreter "lua")
 
+(use-package dockerfile-mode
+  :ensure t)
+
 (use-package terraform-mode
   :ensure t
   :custom (terraform-format-on-save t))

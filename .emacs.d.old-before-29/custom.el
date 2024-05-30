@@ -45,5 +45,5 @@
     ("~/doc/agenda.org" "~/.emacs.d/org/todo.org" "~/.emacs.d/journal/")))
  '(package-selected-packages
    (quote
-    (hcl-mode terraform-doc keychain-environment xclip htmlize ox-pandoc plantuml-mode solarized-theme rg company-statistics highlight-parentheses highlight-symbol ivy company dockerfile-mode lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl company-terraform terraform-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize graphql gnuplot git-link elpy docker company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
+    (hcl-mode terraform-doc keychain-environment xclip htmlize ox-pandoc plantuml-mode solarized-theme rg company-statistics highlight-parentheses highlight-symbol ivy company lsp-ui flycheck lsp-docker kubernetes lsp-mode jinja2-mode epl company-terraform terraform-mode writeroom-mode typescript-mode smex rainbow-mode popwin org-tree-slide org-journal org nginx-mode modern-cpp-font-lock memoize graphql gnuplot git-link elpy docker company-quickhelp company-irony company-c-headers command-log-mode bpftrace-mode arduino-mode)))
 )
