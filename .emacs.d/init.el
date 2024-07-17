@@ -15,6 +15,8 @@
 ;;;  - Tab-bar configuration
 ;;;  - Theme
 ;;;  - Navigation/edition
+;;;  - Various keybindings
+;;;  - System
 ;;;  - Optional extras
 ;;;  - Built-in customization framework
 
@@ -348,6 +350,17 @@ brake whatever split of windows we might have in the frame."
   (keyfreq-mode 1)
   (keyfreq-autosave-mode 1))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;
+;;; System
+;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package keychain-environment
+  :ensure t
+  ;; run keychain-refresh-environment when starting emacs outside X/KDE session, e.g. from ssh
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;

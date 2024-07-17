@@ -135,7 +135,6 @@
                :url "https://github.com/brianc/jade-mode.git")
         (:name jinja2-mode :type elpa)
         json-mode
-        (:name keychain-environment :type elpa)
         keyfreq
         (:name lsp-mode :type elpa
                :repo ("melpa" . "https://melpa.org/packages/"))
