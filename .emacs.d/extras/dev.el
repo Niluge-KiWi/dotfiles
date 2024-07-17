@@ -155,6 +155,9 @@
 (use-package markdown-mode
   :hook ((markdown-mode . visual-line-mode)))
 
+(use-package markdown-ts-mode
+  :ensure t)
+
 (use-package yaml-mode
   :ensure t)
 
