@@ -182,6 +182,13 @@
 ;;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package python
+  :config
+  ;; remove conflicting C-c C-s rg-menu keybinding from python mode map to give rg-menu precedence
+  (when (boundp 'rg-keymap-prefix)
+    (define-key python-mode-map rg-keymap-prefix nil)
+    (define-key python-ts-mode-map rg-keymap-prefix nil)))
+
 (use-package php-mode
   :ensure t)
 
