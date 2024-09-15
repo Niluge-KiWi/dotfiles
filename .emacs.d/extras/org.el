@@ -37,7 +37,7 @@
 ;;; what you're looking for.
 
 ;;; Phase 1 variables
-(setq org-startup-folded nil)
+(setq org-startup-folded t)
 
 ;;; Phase 2 variables
 
