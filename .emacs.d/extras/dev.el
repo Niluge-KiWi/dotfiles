@@ -103,7 +103,7 @@
   :after magit)
 
 (use-package git-commit
-  :ensure t
+  :after magit
   :hook ((git-commit-setup . git-commit-turn-on-flyspell)))
 
 (use-package git-link
