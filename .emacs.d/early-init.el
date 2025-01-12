@@ -31,9 +31,6 @@
 ;; Default frame configuration: full screen, no menu
 (setq frame-resize-pixelwise t)
 (menu-bar-mode -1)
-(when (display-graphic-p)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1))
 (setq default-frame-alist '((fullscreen . maximized)
 
                             ;; You can turn off scroll bars by uncommenting these lines:
