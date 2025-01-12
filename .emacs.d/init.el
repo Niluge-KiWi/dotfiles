@@ -60,10 +60,6 @@
 (when (display-graphic-p)
   (context-menu-mode))
 
-;; Disable tool bar and scroll bar; moved out of early-init as it's broken when starting emacs from ssh; cf https://emacs.stackexchange.com/questions/78275/how-can-i-detect-whether-im-running-on-a-graphical-system-within-early-init-el
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-
 ;; Don't litter file system with *~ backup files; put them all inside
 ;; ~/.emacs.d/backup or wherever
 (defun bedrock--backup-file-name (fpath)
